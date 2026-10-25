@@ -12,11 +12,11 @@ import {
 } from '../chess/position';
 import { addMove, deleteEdge, updateEdge, updateNode } from '../db/repo';
 import { useCards, useGraphs, useSettings } from '../db/hooks';
-import { engine, formatEval, type EngineLine } from '../engine/stockfish';
 import { fetchExplorer, type ExplorerDb, type ExplorerResult } from '../integrations/lichess';
 import { mastery } from '../srs/stats';
 import type { MoveEdge } from '../types';
 import { arrow, Board } from '../ui/Board';
+import { EnginePanel } from '../ui/EnginePanel';
 import { Banner, Button, MoveLine, Screen, Section, Segmented, sideLabel, Toggle } from '../ui/kit';
 import { openingName, useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
@@ -307,23 +307,6 @@ function MoveNotes({ edge }: { edge: MoveEdge }) {
         />
       </label>
     </Section>
-  );
-}
-
-function EnginePanel({ epd }: { epd: string }) {
-  const [line, setLine] = useState<EngineLine>();
-  useEffect(() => {
-    setLine(undefined);
-    return engine.analyze(epd, setLine, 22);
-  }, [epd]);
-  return (
-    <div className="mt-2 flex items-baseline gap-3 rounded-xl bg-surface px-3 py-2.5 ring-1 ring-line">
-      <span className="min-w-14 font-semibold tabular-nums">{formatEval(line)}</span>
-      <span className="truncate text-sm text-muted">
-        {line ? <MoveLine moves={line.pv.slice(0, 8).map((san, i) => ({ san, id: String(i) }))} startPly={epd.includes(' w ') ? 0 : 1} /> : 'Calculando…'}
-      </span>
-      {line && <span className="ml-auto shrink-0 text-xs text-muted">prof. {line.depth}</span>}
-    </div>
   );
 }
 

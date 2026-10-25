@@ -3,10 +3,10 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { CavallDB } from '../db/db';
 import { commitImport, ensureRoots, loadGraph } from '../db/repo';
 import { buildImportPlan } from '../chess/pgnImport';
-import { epdOf, nodeId } from '../chess/position';
+import { epdOf, figurine, nodeId } from '../chess/position';
 import { edgeAt, emptyRepo, graphOf, importInto, repoFrom } from '../test/helpers';
 import type { Note } from '../types';
-import { parseRich } from '../ui/RichText';
+import { figurineText, parseRich } from '../ui/RichText';
 import { addFicha } from './add';
 import { groupFichas, parseLibrary, searchFichas } from './catalog';
 import { FICHA_PRUEBA } from './fixture';
@@ -196,5 +196,17 @@ describe('texto de las fichas', () => {
     expect(parseRich('**Avance (`3.e5`):** espacio')).toEqual([
       { kind: 'p', parts: [{ kind: 'bold', value: 'Avance (`3.e5`):' }, { kind: 'text', value: ' espacio' }] },
     ]);
+  });
+});
+
+describe('figurineText', () => {
+  it('pasa a figurines las jugadas de pieza y deja peones y enroques', () => {
+    expect(figurineText('Nc7+ gana la torre, tras O-O y e4; luego Nbd7, Qxd5 y Rxe1#.')).toBe(
+      `${figurine('Nc7+')} gana la torre, tras O-O y e4; luego ${figurine('Nbd7')}, ${figurine('Qxd5')} y ${figurine('Rxe1#')}.`,
+    );
+    expect(figurineText('b8=Q es coronación; Bishop y Rey no cambian')).toBe('b8=Q es coronación; Bishop y Rey no cambian');
+  });
+  it('no toca palabras que empiezan con letra de pieza', () => {
+    expect(figurineText('Bb5 pero Bad4x y Nada')).toBe(`${figurine('Bb5')} pero Bad4x y Nada`);
   });
 });

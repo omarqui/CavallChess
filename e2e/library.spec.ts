@@ -98,3 +98,14 @@ test('ficha: vaciar una nota de una línea que ya no está la borra recién al s
   await page.getByLabel('Sobre la apertura').waitFor();
   await expect(page.getByText('Notas de líneas que ya no están')).toBeHidden();
 });
+
+test('visor: recorrer una línea y analizar', async ({ page }) => {
+  await page.goto('/#/biblioteca/caro-kann?tab=variantes');
+  await page.getByRole('button', { name: 'Ver en el tablero' }).first().click();
+  await page.getByRole('button', { name: 'Siguiente' }).click();
+  await page.getByRole('button', { name: 'Siguiente' }).click();
+  await page.getByRole('button', { name: 'Anterior' }).click();
+  await page.getByLabel('Analizar').check();
+  await expect(page.getByText(/Calculando|[+−-]\d/)).toBeVisible();
+  await shot(page, '22-visor');
+});

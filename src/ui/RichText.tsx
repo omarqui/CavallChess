@@ -47,6 +47,16 @@ export function parseRich(text: string): RichBlock[] {
   return blocks.map((b) => ({ kind: b.kind, parts: parseInline(b.lines.join(' ')) }));
 }
 
+const SAN_TOKEN = /(?<![\p{L}\p{N}])[KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?(?![\p{L}\p{N}])/gu;
+
+/**
+ * Pasa a figurines las jugadas de pieza que aparecen sueltas en un texto plano ("tras Nc7+"). Las de peón y
+ * los enroques se dejan como están.
+ */
+export function figurineText(text: string): string {
+  return text.replace(SAN_TOKEN, (m) => figurine(m));
+}
+
 function Move({ san }: { san: string }) {
   return <span className="notation whitespace-nowrap">{figurine(san)}</span>;
 }
