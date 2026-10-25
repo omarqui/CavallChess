@@ -38,11 +38,16 @@ async function importPgn(pgn: string, side: 'white' | 'black' = 'white', resolut
   const mine = new Map<string, { uci: string; san: string }>();
   for (const e of g.edges.values()) if (e.mine) mine.set(e.fromId, { uci: e.uci, san: e.san });
   const plan = buildImportPlan(pgn, side, { mine, nodeIds: new Set(g.nodes.keys()) }, resolutions);
-  await commitImport(plan, resolutions, new Map(), d);
-  return plan;
+  const counts = await commitImport(plan, resolutions, new Map(), d);
+  return Object.assign(plan, { counts });
 }
 
 describe('repositorio', () => {
+  it('commitImport cuenta solo las jugadas nuevas', async () => {
+    expect((await importPgn('1. e4 e5 2. Nf3 *')).counts).toEqual({ mine: 2, rival: 1 });
+    expect((await importPgn('1. e4 e5 2. Nf3 *')).counts).toEqual({ mine: 0, rival: 0 });
+  });
+
   it('importa y crea una tarjeta por jugada propia', async () => {
     await importPgn('1. e4 e5 (1... c5 2. Nf3) 2. Nf3 Nc6 3. Bb5 *');
     const g = await loadGraph('white', d);

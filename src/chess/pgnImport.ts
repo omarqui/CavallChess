@@ -4,7 +4,7 @@ import { makeSquare, makeUci } from 'chessops/util';
 import type { Chess } from 'chessops/chess';
 import type { Move } from 'chessops/types';
 import { edgeId, epdOf, INITIAL_EPD, nodeId, turnOf, type Side } from './position';
-import type { Shape } from '../types';
+import type { Shape, TrapMark } from '../types';
 
 export interface ImportedEdge {
   id: string;
@@ -16,6 +16,8 @@ export interface ImportedEdge {
   explanation?: string;
   shapes?: Shape[];
   nags?: number[];
+  hint?: string;
+  trap?: TrapMark;
 }
 
 export interface ImportConflict {
@@ -59,11 +61,28 @@ export type Resolutions = Map<string, 'keep' | 'replace'>;
 
 const STRIP_TAGS = /\[%(anno|clk|emt|eval)[^\]]*\]/g;
 
-function commentOf(data: PgnNodeData): { text?: string; shapes: Shape[] } {
+/** `[%hint <texto>]`: pista para la jugada. */
+const HINT_TAG = /\[%hint\s+([^\]]*)\]/g;
+/** `[%trap <favor|contra> <fichaId>/<trapId> <nombre>]`: marca de trampa. */
+const TRAP_TAG = /\[%trap\s+(favor|contra)\s+([^/\s\]]+)\/([^\s\]]+)\s+([^\]]*)\]/g;
+
+function commentOf(data: PgnNodeData): { text?: string; shapes: Shape[]; hint?: string; trap?: TrapMark } {
   const parts: string[] = [];
   const shapes: Shape[] = [];
+  let hint: string | undefined;
+  let trap: TrapMark | undefined;
   for (const raw of [...(data.startingComments ?? []), ...(data.comments ?? [])]) {
-    const c = parseComment(raw);
+    // Las marcas propias se leen y se sacan antes de que parseComment y STRIP_TAGS vean el texto.
+    const sinMarcas = raw
+      .replace(HINT_TAG, (_, t: string) => {
+        hint ??= t.replace(/\s+/g, ' ').trim() || undefined;
+        return '';
+      })
+      .replace(TRAP_TAG, (_, kind: string, fichaId: string, trapId: string, name: string) => {
+        trap ??= { kind: kind as TrapMark['kind'], fichaId, trapId, name: name.trim() };
+        return '';
+      });
+    const c = parseComment(sinMarcas);
     const text = c.text.replace(STRIP_TAGS, '').replace(/\s+/g, ' ').trim();
     if (text) parts.push(text);
     for (const s of c.shapes) {
@@ -71,7 +90,7 @@ function commentOf(data: PgnNodeData): { text?: string; shapes: Shape[] } {
       shapes.push(s.from === s.to ? { orig, brush: s.color } : { orig, dest: makeSquare(s.to), brush: s.color });
     }
   }
-  return { text: parts.length ? parts.join('\n') : undefined, shapes };
+  return { text: parts.length ? parts.join('\n') : undefined, shapes, hint, trap };
 }
 
 function chapterName(headers: Map<string, string>, index: number): string {
@@ -179,7 +198,7 @@ export function buildImportPlan(
         const toEpd = epdOf(next);
         addNode(toEpd);
         const id = edgeId(side, epd, uci);
-        const { text, shapes } = commentOf(child.data);
+        const { text, shapes, hint, trap } = commentOf(child.data);
         const prev = plan.edges.get(id);
         if (!prev) {
           plan.edges.set(id, {
@@ -192,10 +211,14 @@ export function buildImportPlan(
             explanation: text,
             shapes: shapes.length ? shapes : undefined,
             nags: child.data.nags?.length ? child.data.nags : undefined,
+            hint,
+            trap,
           });
         } else {
           if (!prev.explanation && text) prev.explanation = text;
           if (!prev.shapes && shapes.length) prev.shapes = shapes;
+          if (!prev.hint && hint) prev.hint = hint;
+          if (!prev.trap && trap) prev.trap = trap;
         }
         walk(child, next, [...line, san]);
       }

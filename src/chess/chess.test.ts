@@ -158,6 +158,27 @@ describe('importación de PGN', () => {
     expect(changes.upsertNodes.find((n) => n.epd === rootEpd)?.name).toBe('Siciliana');
     expect(changes.newMineEdgeIds.length).toBeGreaterThan(0);
   });
+  it('lee [%hint] y [%trap] y los saca de la explicación', () => {
+    const pgn = `1. e4 { Centro. [%hint Ocupá el centro.] } e5 2. Nf3 Nc6? { [%trap favor t/x Trampa X] } 3. Bc4 *`;
+    const plan = buildImportPlan(pgn, 'white', existingOf(emptyRepo('white')));
+    const e4 = [...plan.edges.values()].find((e) => e.san === 'e4')!;
+    expect(e4.explanation).toBe('Centro.');
+    expect(e4.hint).toBe('Ocupá el centro.');
+    const nc6 = [...plan.edges.values()].find((e) => e.san === 'Nc6')!;
+    expect(nc6.trap).toEqual({ kind: 'favor', fichaId: 't', trapId: 'x', name: 'Trampa X' });
+    expect(nc6.explanation).toBeUndefined();
+  });
+
+  it('no pisa la pista ni la marca existentes, pero completa las que faltan', () => {
+    const { repo } = repoFrom('1. e4 { [%hint Mía.] } *', 'white');
+    importInto(repo, '1. e4 { [%hint Otra.] [%trap contra a/b Nueva] } *', 'white');
+    let e4 = edgeAt(graphOf(repo, 'white'), ['e4']);
+    expect(e4.hint).toBe('Mía.');
+    expect(e4.trap).toEqual({ kind: 'contra', fichaId: 'a', trapId: 'b', name: 'Nueva' });
+    importInto(repo, '1. e4 { [%trap favor c/d Otra] } *', 'white');
+    e4 = edgeAt(graphOf(repo, 'white'), ['e4']);
+    expect(e4.trap?.name).toBe('Nueva');
+  });
 });
 
 describe('grafo', () => {

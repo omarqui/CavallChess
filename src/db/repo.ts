@@ -46,8 +46,9 @@ export async function commitImport(
   resolutions: Resolutions,
   names: Map<string, string>,
   d: CavallDB = db,
-) {
+): Promise<{ mine: number; rival: number }> {
   const now = Date.now();
+  const counts = { mine: 0, rival: 0 };
   await d.transaction('rw', d.nodes, d.edges, d.cards, async () => {
     const [nodes, edges] = await Promise.all([
       d.nodes.where('side').equals(plan.side).toArray(),
@@ -61,11 +62,19 @@ export async function commitImport(
       names,
       now,
     );
+    // Jugadas que no existían antes (las modificadas no cuentan).
+    const previas = new Set(edges.map((e) => e.id));
+    for (const e of ch.upsertEdges) {
+      if (previas.has(e.id)) continue;
+      if (e.mine) counts.mine++;
+      else counts.rival++;
+    }
     await d.edges.bulkDelete(ch.deleteEdgeIds);
     await d.nodes.bulkPut(ch.upsertNodes);
     await d.edges.bulkPut(ch.upsertEdges);
     for (const e of ch.upsertEdges) await ensureCard(d, e, now);
   });
+  return counts;
 }
 
 /**
