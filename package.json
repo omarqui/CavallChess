@@ -15,7 +15,8 @@
     "eco": "node scripts/build-eco.mjs",
     "icons": "pwa-assets-generator",
     "e2e": "playwright test",
-    "test:live": "vitest run src/integrations/live.test.ts"
+    "test:live": "vitest run src/integrations/live.test.ts",
+    "biblioteca:motor": "vitest run src/library/motor.test.ts"
   },
   "dependencies": {
     "@fontsource/spectral": "^5.3.0",
