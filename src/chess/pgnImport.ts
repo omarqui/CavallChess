@@ -4,7 +4,8 @@ import { makeSquare, makeUci } from 'chessops/util';
 import type { Chess } from 'chessops/chess';
 import type { Move } from 'chessops/types';
 import { edgeId, epdOf, INITIAL_EPD, nodeId, turnOf, type Side } from './position';
-import type { Shape } from '../types';
+import type { Shape, TrapMark } from '../types';
+import type { RepertoireGraph } from './graph';
 
 export interface ImportedEdge {
   id: string;
@@ -16,6 +17,8 @@ export interface ImportedEdge {
   explanation?: string;
   shapes?: Shape[];
   nags?: number[];
+  hint?: string;
+  trap?: TrapMark;
 }
 
 export interface ImportConflict {
@@ -54,16 +57,44 @@ export interface ExistingRepertoire {
   nodeIds: Set<string>;
 }
 
+/** Lo que ya tiene el repertorio (también lo archivado), en la forma que espera `buildImportPlan`. */
+export function existingOf(g: RepertoireGraph): ExistingRepertoire {
+  const mine = new Map<string, { uci: string; san: string }>();
+  for (const e of g.edges.values()) if (e.mine) mine.set(e.fromId, { uci: e.uci, san: e.san });
+  return { mine, nodeIds: new Set(g.nodes.keys()) };
+}
+
 /** Resolución por conflicto: 'keep' conserva lo existente, 'replace' adopta lo del PGN. */
 export type Resolutions = Map<string, 'keep' | 'replace'>;
 
 const STRIP_TAGS = /\[%(anno|clk|emt|eval)[^\]]*\]/g;
 
-function commentOf(data: PgnNodeData): { text?: string; shapes: Shape[] } {
+/** `[%hint <texto>]`: pista para la jugada. */
+const HINT_TAG = /\[%hint\s+([^\]]*)\]/g;
+/** `[%trap <favor|contra> <fichaId>/<trapId> <nombre>]`: marca de trampa. */
+const TRAP_TAG = /\[%trap\s+(favor|contra)\s+([^/\s\]]+)\/([^\s\]]+)\s+([^\]]+)\]/g;
+/** Restos de marcas propias mal formadas (sin nombre, `kind` inválido o en mayúsculas): no deben quedar crudos. */
+const LEFTOVER_TAG = /\[%(?:hint|trap)[^\]]*(?:\]|$)/g;
+
+export function commentOf(data: PgnNodeData): { text?: string; shapes: Shape[]; hint?: string; trap?: TrapMark } {
   const parts: string[] = [];
   const shapes: Shape[] = [];
+  let hint: string | undefined;
+  let trap: TrapMark | undefined;
   for (const raw of [...(data.startingComments ?? []), ...(data.comments ?? [])]) {
-    const c = parseComment(raw);
+    // Las marcas propias se leen y se sacan antes de que parseComment y STRIP_TAGS vean el texto.
+    const sinMarcas = raw
+      .replace(HINT_TAG, (_, t: string) => {
+        hint ??= t.replace(/\s+/g, ' ').trim() || undefined;
+        return '';
+      })
+      .replace(TRAP_TAG, (_, kind: string, fichaId: string, trapId: string, name: string) => {
+        const clean = name.replace(/\s+/g, ' ').trim();
+        if (clean) trap ??= { kind: kind as TrapMark['kind'], fichaId, trapId, name: clean };
+        return '';
+      })
+      .replace(LEFTOVER_TAG, '');
+    const c = parseComment(sinMarcas);
     const text = c.text.replace(STRIP_TAGS, '').replace(/\s+/g, ' ').trim();
     if (text) parts.push(text);
     for (const s of c.shapes) {
@@ -71,7 +102,7 @@ function commentOf(data: PgnNodeData): { text?: string; shapes: Shape[] } {
       shapes.push(s.from === s.to ? { orig, brush: s.color } : { orig, dest: makeSquare(s.to), brush: s.color });
     }
   }
-  return { text: parts.length ? parts.join('\n') : undefined, shapes };
+  return { text: parts.length ? parts.join('\n') : undefined, shapes, hint, trap };
 }
 
 function chapterName(headers: Map<string, string>, index: number): string {
@@ -179,7 +210,7 @@ export function buildImportPlan(
         const toEpd = epdOf(next);
         addNode(toEpd);
         const id = edgeId(side, epd, uci);
-        const { text, shapes } = commentOf(child.data);
+        const { text, shapes, hint, trap } = commentOf(child.data);
         const prev = plan.edges.get(id);
         if (!prev) {
           plan.edges.set(id, {
@@ -192,10 +223,14 @@ export function buildImportPlan(
             explanation: text,
             shapes: shapes.length ? shapes : undefined,
             nags: child.data.nags?.length ? child.data.nags : undefined,
+            hint,
+            trap,
           });
         } else {
           if (!prev.explanation && text) prev.explanation = text;
           if (!prev.shapes && shapes.length) prev.shapes = shapes;
+          if (!prev.hint && hint) prev.hint = hint;
+          if (!prev.trap && trap) prev.trap = trap;
         }
         walk(child, next, [...line, san]);
       }

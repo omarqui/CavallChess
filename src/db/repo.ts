@@ -10,6 +10,7 @@ import {
   type Gap,
   type GameRow,
   type MoveEdge,
+  type Note,
   type PositionNode,
   type ReviewEvent,
   type ReviewSource,
@@ -45,8 +46,9 @@ export async function commitImport(
   resolutions: Resolutions,
   names: Map<string, string>,
   d: CavallDB = db,
-) {
+): Promise<{ mine: number; rival: number }> {
   const now = Date.now();
+  const counts = { mine: 0, rival: 0 };
   await d.transaction('rw', d.nodes, d.edges, d.cards, async () => {
     const [nodes, edges] = await Promise.all([
       d.nodes.where('side').equals(plan.side).toArray(),
@@ -60,11 +62,19 @@ export async function commitImport(
       names,
       now,
     );
+    // Jugadas que no existían antes (las modificadas no cuentan).
+    const previas = new Set(edges.map((e) => e.id));
+    for (const e of ch.upsertEdges) {
+      if (previas.has(e.id)) continue;
+      if (e.mine) counts.mine++;
+      else counts.rival++;
+    }
     await d.edges.bulkDelete(ch.deleteEdgeIds);
     await d.nodes.bulkPut(ch.upsertNodes);
     await d.edges.bulkPut(ch.upsertEdges);
     for (const e of ch.upsertEdges) await ensureCard(d, e, now);
   });
+  return counts;
 }
 
 /**
@@ -183,11 +193,25 @@ export async function recordGame(row: GameRow, gap: Omit<Gap, 'count' | 'lastSee
   });
 }
 
+// ─── Notas ───────────────────────────────────────────────────────────────────
+
+/** Id de la nota de una ficha, o de una línea dentro de ella. */
+export function noteId(fichaId: string, lineId?: string): string {
+  return lineId ? `${fichaId}|${lineId}` : fichaId;
+}
+
+/** Guarda la nota; si el texto queda vacío, la borra. */
+export async function saveNote(id: string, text: string, d: CavallDB = db) {
+  const clean = text.trim();
+  if (!clean) await d.notes.delete(id);
+  else await d.notes.put({ id, text: clean, updatedAt: Date.now() });
+}
+
 // ─── Respaldo ────────────────────────────────────────────────────────────────
 
 export interface Backup {
   app: 'cavallchess';
-  version: 1;
+  version: 1 | 2;
   exportedAt: string;
   nodes: PositionNode[];
   edges: MoveEdge[];
@@ -196,11 +220,12 @@ export interface Backup {
   gaps: Gap[];
   games: GameRow[];
   days: string[];
+  notes?: Note[]; // desde la versión 2
   settings: Omit<Settings, 'lichessToken'>;
 }
 
 export async function exportBackup(d: CavallDB = db): Promise<Backup> {
-  const [nodes, edges, cards, events, gaps, games, days, settings] = await Promise.all([
+  const [nodes, edges, cards, events, gaps, games, days, notes, settings] = await Promise.all([
     d.nodes.toArray(),
     d.edges.toArray(),
     d.cards.toArray(),
@@ -208,12 +233,13 @@ export async function exportBackup(d: CavallDB = db): Promise<Backup> {
     d.gaps.toArray(),
     d.games.toArray(),
     d.days.toArray(),
+    d.notes.toArray(),
     getSettings(d),
   ]);
   const { lichessToken: _omit, ...safeSettings } = settings;
   return {
     app: 'cavallchess',
-    version: 1,
+    version: 2,
     exportedAt: new Date().toISOString(),
     nodes,
     edges,
@@ -222,13 +248,14 @@ export async function exportBackup(d: CavallDB = db): Promise<Backup> {
     gaps,
     games,
     days: days.map((x) => x.day),
+    notes,
     settings: safeSettings,
   };
 }
 
 /** Restaura un respaldo reemplazando todo. Las tarjetas se recalculan desde el log. */
 export async function importBackup(b: Backup, d: CavallDB = db) {
-  if (b.app !== 'cavallchess' || b.version !== 1) throw new Error('El archivo no es un respaldo de CavallChess.');
+  if (b.app !== 'cavallchess' || ![1, 2].includes(b.version)) throw new Error('El archivo no es un respaldo de CavallChess.');
   const events = b.events.map((e) => ({ ...e, at: new Date(e.at) }));
   const byCard = new Map<string, ReviewEvent[]>();
   for (const e of events) {
@@ -238,7 +265,7 @@ export async function importBackup(b: Backup, d: CavallDB = db) {
   }
   const cards: CardRow[] = b.cards.map((c) => ({ ...c, card: replay(c.createdAt, byCard.get(c.id) ?? []) }));
   const token = (await getSettings(d)).lichessToken;
-  await d.transaction('rw', [d.nodes, d.edges, d.cards, d.events, d.gaps, d.games, d.days, d.kv], async () => {
+  await d.transaction('rw', [d.nodes, d.edges, d.cards, d.events, d.gaps, d.games, d.days, d.notes, d.kv], async () => {
     await Promise.all([
       d.nodes.clear(),
       d.edges.clear(),
@@ -247,6 +274,7 @@ export async function importBackup(b: Backup, d: CavallDB = db) {
       d.gaps.clear(),
       d.games.clear(),
       d.days.clear(),
+      d.notes.clear(),
     ]);
     await d.nodes.bulkAdd(b.nodes);
     await d.edges.bulkAdd(b.edges);
@@ -255,6 +283,7 @@ export async function importBackup(b: Backup, d: CavallDB = db) {
     await d.gaps.bulkAdd(b.gaps);
     await d.games.bulkAdd(b.games);
     await d.days.bulkAdd(b.days.map((day) => ({ day })));
+    await d.notes.bulkAdd(b.notes ?? []);
     await d.kv.put({ key: 'settings', value: { ...DEFAULT_SETTINGS, ...b.settings, lichessToken: token } });
   });
   await ensureRoots(d);

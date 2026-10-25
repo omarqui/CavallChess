@@ -6,6 +6,9 @@ Las decisiones de diseño están en [PLAN.md](PLAN.md).
 
 ## Qué hace
 
+- **Biblioteca de aperturas:** 46 fichas en español (con blancas y con negras) con ideas, consejos, variantes y trampas, un visor de líneas con análisis de Stockfish, apuntes propios y un botón para agregar la apertura a tu repertorio.
+- **Bienvenida y tips:** la primera vez te guía para instalar la app, probar un repaso y elegir tus primeras aperturas; después, un aviso corto por pantalla.
+- **Trampas:** las jugadas de las trampas de la biblioteca quedan marcadas y el entrenamiento te avisa cuando el rival cayó o cuando evitaste una.
 - **Repertorio por posición.** Un grafo por color; las transposiciones se resuelven solas. Una jugada propia por posición, todas las del rival que quieras.
 - **Importación** de PGN (pegado o archivo) y de estudios de Lichess por URL, con vista previa: choques con lo que ya tenés, variantes propias ignoradas y nombre de apertura por capítulo.
 - **Entrenamiento** guiado por tarjetas: la app reproduce la línea, vos jugás tu jugada y el rival responde con la que lleva a lo pendiente. Modo aprender para las nuevas, pista "¿por qué?", "fue un error de dedo", práctica a demanda por apertura.

@@ -6,11 +6,13 @@ import { useCards, useEvents, useGraphs, useSettings, type Graphs } from '../db/
 import { buildDailyQueue } from '../srs/queue';
 import { State } from '../srs/scheduler';
 import { weakSpots } from '../srs/stats';
-import { TrainingSession, type Step } from '../trainer/session';
+import { TrainingSession, type Feedback, type Step } from '../trainer/session';
 import type { CardRow, MoveEdge, ReviewEvent } from '../types';
 import { arrow, Board, toShapes, type Flash } from '../ui/Board';
 import { playCorrect, playMoveSound, playWrong } from '../ui/feedback';
-import { Button, MoveLine } from '../ui/kit';
+import { Banner, Button, MoveLine } from '../ui/kit';
+import { figurineText } from '../ui/RichText';
+import { Tip } from '../ui/Tip';
 import { openingName, useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
 
@@ -93,7 +95,7 @@ function TrainView({
   const [syncKey, setSyncKey] = useState(0);
   const [flash, setFlash] = useState<Flash>();
   const [shake, setShake] = useState(0);
-  const [note, setNote] = useState<MoveEdge | undefined>();
+  const [note, setNote] = useState<Feedback | undefined>();
   const timers = useRef<number[]>([]);
   const skipRef = useRef<(() => void) | null>(null);
 
@@ -178,7 +180,7 @@ function TrainView({
       setFlash({ square: dest, kind: 'good', key: Date.now() });
       if (good) playCorrect();
       else playMoveSound(false);
-      setNote(next.feedback.edge);
+      setNote(next.feedback);
       present(next, next.replay ? 900 : 0);
       return;
     }
@@ -253,7 +255,11 @@ function TrainView({
 
       <div className="flex-1 overflow-y-auto px-4 pb-6 pt-4 safe-bottom">
         {step.phase === 'done' ? (
-          <Summary step={step} mode={mode} />
+          <>
+            {/* La última tarjeta suele ser la trampa: el aviso no se puede perder al cerrar la sesión. */}
+            {note?.trap && <Note feedback={note} />}
+            <Summary step={step} mode={mode} />
+          </>
         ) : (
           <>
             <div className="min-h-6 text-sm text-muted">
@@ -265,10 +271,14 @@ function TrainView({
               onHint={() => setStep(session.useHint())}
               onUndo={() => setStep(session.undoMisclick())}
             />
-            {note && step.phase !== 'fail' && <Note edge={note} />}
+            {note && step.phase !== 'fail' && <Note feedback={note} />}
             <div className="mt-4 text-[15px]">
               <MoveLine moves={step.line} />
             </div>
+            {/* Debajo del tablero y los controles: mostrarlo o cerrarlo no mueve el tablero. */}
+            <Tip id="entrenar" className="mt-4">
+              Tocá el tablero para saltar la línea. «Pista» te da la idea sin decir la jugada, y «Fue un error de dedo» anula un fallo.
+            </Tip>
           </>
         )}
       </div>
@@ -293,8 +303,8 @@ function Prompt({
     return (
       <div className="mt-1">
         <p className="font-book text-xl font-semibold">Posición nueva: jugá {figurine(t.san)}</p>
-        {t.explanation && <p className="mt-2 font-book text-[17px] leading-relaxed">{t.explanation}</p>}
-        {t.hint && <p className="mt-2 text-[15px] text-muted">Idea: {t.hint}</p>}
+        {t.explanation && <p className="mt-2 font-book text-[17px] leading-relaxed">{figurineText(t.explanation)}</p>}
+        {t.hint && <p className="mt-2 text-[15px] text-muted">Idea: {figurineText(t.hint)}</p>}
       </div>
     );
   }
@@ -303,7 +313,7 @@ function Prompt({
       <div className="mt-1">
         <p className="font-book text-xl font-semibold text-bad">No es esa. Tu jugada es {figurine(t.san)}.</p>
         <p className="mt-1 text-[15px] text-muted">Jugala para seguir.</p>
-        {t.explanation && <p className="mt-3 font-book text-[17px] leading-relaxed">{t.explanation}</p>}
+        {t.explanation && <p className="mt-3 font-book text-[17px] leading-relaxed">{figurineText(t.explanation)}</p>}
         <Button variant="ghost" className="mt-3 -ml-3 text-muted" onClick={onUndo}>
           Fue un error de dedo
         </Button>
@@ -315,7 +325,7 @@ function Prompt({
       <p className="font-book text-xl font-semibold">¿Qué jugás acá?</p>
       {t.hint &&
         (step.hintUsed ? (
-          <p className="mt-2 rounded-xl bg-brass-soft px-3 py-2 font-book text-[17px]">{t.hint}</p>
+          <p className="mt-2 rounded-xl bg-brass-soft px-3 py-2 font-book text-[17px]">{figurineText(t.hint)}</p>
         ) : (
           <Button variant="ghost" className="mt-2 -ml-3 text-brass" onClick={onHint}>
             ¿Por qué? Ver la idea
@@ -325,12 +335,37 @@ function Prompt({
   );
 }
 
-function Note({ edge }: { edge: MoveEdge }) {
-  if (!edge.explanation && !edge.hint) return null;
+/** Aviso de trampa según el tipo y si la respuesta fue un fallo (en ese caso la correcta ya se mostró). */
+function trapNotice({ kind, trap }: Feedback): { text: string; tone: 'good' | 'brass' | 'bad' } | null {
+  if (!trap) return null;
+  const wrong = kind === 'wrong';
+  if (trap.kind === 'favor') {
+    return wrong
+      ? { text: `Trampa: ${trap.name}. El rival cayó, pero no encontraste el castigo a la primera.`, tone: 'brass' }
+      : { text: `Trampa: ${trap.name}. El rival cayó.`, tone: 'good' };
+  }
+  return wrong
+    ? { text: `Caíste en la trampa: ${trap.name}. Ya viste la correcta.`, tone: 'bad' }
+    : { text: `Evitaste la trampa: ${trap.name}.`, tone: 'good' };
+}
+
+function Note({ feedback }: { feedback: Feedback }) {
+  const { edge } = feedback;
+  const notice = trapNotice(feedback);
+  const hasText = !!(edge.explanation || edge.hint);
+  if (!hasText && !notice) return null;
   return (
+    // La jugada respondida encabeza la nota: el aviso de trampa y el texto son sobre esa jugada, no sobre la pregunta nueva.
     <div className="mt-4 border-l-2 border-good pl-3">
       <p className="text-sm text-muted">{figurine(edge.san)}</p>
-      <p className="font-book text-[17px] leading-relaxed">{edge.explanation ?? edge.hint}</p>
+      {notice && (
+        <div className="mt-1.5">
+          <Banner tone={notice.tone}>{notice.text}</Banner>
+        </div>
+      )}
+      {hasText && (
+        <p className="mt-1.5 font-book text-[17px] leading-relaxed">{figurineText((edge.explanation ?? edge.hint)!)}</p>
+      )}
     </div>
   );
 }

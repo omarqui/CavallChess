@@ -70,6 +70,35 @@ describe('cola diaria', () => {
     expect(q.fresh).toEqual([ids[0], ids[1]]);
     expect(q.freshWaiting).toBe(1);
   });
+
+  describe('nuevas alternando colores', () => {
+    const armar = () => {
+      const w = repoFrom('1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 *', 'white').graph;
+      const b = repoFrom('1. e4 e5 2. Nf3 Nc6 *', 'black').graph;
+      const cards = new Map<string, CardRow>();
+      for (const [g, side] of [[w, 'white'], [b, 'black']] as const) {
+        for (const id of g.trainableCardIds()) cards.set(id, { id, side, createdAt: 0, card: newCard(0) });
+      }
+      return { w, b, cards, wi: w.trainableCardIds(), bi: b.trainableCardIds() };
+    };
+    const now = new Date(2026, 9, 24, 9, 0);
+
+    it('las nuevas alternan colores y respetan el orden DFS de cada uno', () => {
+      const { w, b, cards, wi, bi } = armar();
+      expect(wi).toHaveLength(4);
+      expect(bi).toHaveLength(2);
+      const q = buildDailyQueue([w, b], cards, [], now, 10);
+      expect(q.fresh).toEqual([wi[0], bi[0], wi[1], bi[1], wi[2], wi[3]]);
+      expect(q.freshWaiting).toBe(0);
+    });
+
+    it('el límite diario corta la alternancia', () => {
+      const { w, b, cards, wi, bi } = armar();
+      const q = buildDailyQueue([w, b], cards, [], now, 3);
+      expect(q.fresh).toEqual([wi[0], bi[0], wi[1]]);
+      expect(q.freshWaiting).toBe(3);
+    });
+  });
 });
 
 describe('estadísticas', () => {

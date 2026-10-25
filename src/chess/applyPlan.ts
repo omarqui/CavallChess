@@ -54,11 +54,15 @@ export function applyPlan(
         explanation: prev.explanation || e.explanation,
         shapes: prev.shapes?.length ? prev.shapes : e.shapes,
         nags: prev.nags?.length ? prev.nags : e.nags,
+        hint: prev.hint || e.hint,
+        trap: prev.trap ?? e.trap,
       };
       if (
         merged.explanation !== prev.explanation ||
         merged.shapes !== prev.shapes ||
-        merged.nags !== prev.nags
+        merged.nags !== prev.nags ||
+        merged.hint !== prev.hint ||
+        merged.trap !== prev.trap
       ) {
         upsertEdges.push(merged);
       }
@@ -76,6 +80,8 @@ export function applyPlan(
       ...(e.explanation ? { explanation: e.explanation } : {}),
       ...(e.shapes ? { shapes: e.shapes } : {}),
       ...(e.nags ? { nags: e.nags } : {}),
+      ...(e.hint ? { hint: e.hint } : {}),
+      ...(e.trap ? { trap: e.trap } : {}),
     };
     upsertEdges.push(edge);
     if (edge.mine) newMineEdgeIds.push(edge.id);

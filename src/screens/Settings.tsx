@@ -5,6 +5,7 @@ import type { Settings } from '../types';
 import { Banner, Button, Screen, Section, Segmented, Toggle } from '../ui/kit';
 import { Board } from '../ui/Board';
 import { INITIAL_EPD } from '../chess/position';
+import { navigate } from '../ui/router';
 
 export function SettingsScreen() {
   const s = useSettings();
@@ -12,7 +13,8 @@ export function SettingsScreen() {
   const [confirmWipe, setConfirmWipe] = useState(false);
   const [restore, setRestore] = useState<Backup | null>(null);
   if (!s) return null;
-  const set = (patch: Partial<Settings>) => void setSettings(patch);
+  const fail = (e: unknown) => setMsg({ text: `No se pudo guardar el ajuste: ${(e as Error).message}`, tone: 'bad' });
+  const set = (patch: Partial<Settings>) => void setSettings(patch).catch(fail);
 
   const backup = async () => {
     const data = await exportBackup();
@@ -160,7 +162,7 @@ export function SettingsScreen() {
           {s.lastBackupAt
             ? `Último respaldo: ${new Date(s.lastBackupAt).toLocaleDateString('es', { dateStyle: 'medium' })}.`
             : 'Todavía no hiciste ningún respaldo.'}{' '}
-          Incluye tu repertorio y todo el historial de repasos.
+          Incluye tu repertorio, todo el historial de repasos y tus apuntes.
         </p>
         <div className="mt-3 flex flex-col gap-3">
           <Button variant="primary" onClick={() => void backup()}>
@@ -184,6 +186,11 @@ export function SettingsScreen() {
                 {new Date(restore.exportedAt).toLocaleDateString('es', { dateStyle: 'medium' })} ({restore.edges.length}{' '}
                 jugadas, {restore.events.length} repasos).
               </p>
+              {restore.version === 1 && (
+                <p className="mt-2">
+                  Es un respaldo de una versión anterior y no trae apuntes: se borran los que tenés en este dispositivo.
+                </p>
+              )}
               <div className="mt-3 flex gap-2">
                 <Button
                   variant="primary"
@@ -208,6 +215,27 @@ export function SettingsScreen() {
         )}
       </Section>
 
+      <Section title="Ayuda">
+        <p className="text-[15px] text-muted">
+          Volvé a ver la bienvenida: cómo se estudia y aperturas para empezar. Lo que elijas se suma a tu repertorio sin
+          pisar lo que ya jugás.
+        </p>
+        <div className="mt-3 flex flex-col">
+          <Button
+            onClick={async () => {
+              try {
+                await setSettings({ introSeenAt: undefined, tipsSeen: [] });
+                navigate('/intro');
+              } catch (e) {
+                fail(e);
+              }
+            }}
+          >
+            Ver la introducción
+          </Button>
+        </div>
+      </Section>
+
       <Section title="Borrar datos">
         {!confirmWipe ? (
           <Button variant="danger" onClick={() => setConfirmWipe(true)}>
@@ -215,7 +243,7 @@ export function SettingsScreen() {
           </Button>
         ) : (
           <Banner tone="bad">
-            <p>Se borran el repertorio, el historial y los ajustes de este dispositivo. No se puede deshacer.</p>
+            <p>Se borran el repertorio, el historial, tus apuntes y los ajustes de este dispositivo. No se puede deshacer.</p>
             <div className="mt-3 flex gap-2">
               <Button
                 variant="primary"

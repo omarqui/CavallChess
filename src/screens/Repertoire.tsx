@@ -12,12 +12,13 @@ import {
 } from '../chess/position';
 import { addMove, deleteEdge, updateEdge, updateNode } from '../db/repo';
 import { useCards, useGraphs, useSettings } from '../db/hooks';
-import { engine, formatEval, type EngineLine } from '../engine/stockfish';
 import { fetchExplorer, type ExplorerDb, type ExplorerResult } from '../integrations/lichess';
 import { mastery } from '../srs/stats';
 import type { MoveEdge } from '../types';
 import { arrow, Board } from '../ui/Board';
+import { EnginePanel } from '../ui/EnginePanel';
 import { Banner, Button, MoveLine, Screen, Section, Segmented, sideLabel, Toggle } from '../ui/kit';
+import { Tip } from '../ui/Tip';
 import { openingName, useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
 
@@ -92,6 +93,11 @@ export function RepertoireScreen({ side, nodeParam, gapSan }: { side: Side; node
         </div>
       }
     >
+      {cards.size > 0 && (
+        <Tip id="repertorio">
+          Tu repertorio es un árbol de posiciones: «Cortar aquí» marca el final de una línea, y borrar archiva sin perder el historial.
+        </Tip>
+      )}
       {gapSan && (
         <div className="mb-3">
           <Banner>
@@ -310,23 +316,6 @@ function MoveNotes({ edge }: { edge: MoveEdge }) {
   );
 }
 
-function EnginePanel({ epd }: { epd: string }) {
-  const [line, setLine] = useState<EngineLine>();
-  useEffect(() => {
-    setLine(undefined);
-    return engine.analyze(epd, setLine, 22);
-  }, [epd]);
-  return (
-    <div className="mt-2 flex items-baseline gap-3 rounded-xl bg-surface px-3 py-2.5 ring-1 ring-line">
-      <span className="min-w-14 font-semibold tabular-nums">{formatEval(line)}</span>
-      <span className="truncate text-sm text-muted">
-        {line ? <MoveLine moves={line.pv.slice(0, 8).map((san, i) => ({ san, id: String(i) }))} startPly={epd.includes(' w ') ? 0 : 1} /> : 'Calculando…'}
-      </span>
-      {line && <span className="ml-auto shrink-0 text-xs text-muted">prof. {line.depth}</span>}
-    </div>
-  );
-}
-
 function ExplorerPanel({
   epd,
   token,
@@ -449,6 +438,15 @@ function Tree({ graph, current, onPick }: { graph: RepertoireGraph; current: str
             <span className="text-muted">{moveNumberLabel(ply)}</span>
             {figurine(e.san)}
           </button>
+          {e.trap && (
+            <span
+              title={e.trap.name}
+              className={`shrink-0 whitespace-nowrap rounded-full px-1.5 text-xs ${e.trap.kind === 'favor' ? 'bg-good-soft text-good' : 'bg-bad-soft text-bad'}`}
+            >
+              {e.trap.kind === 'favor' ? 'trampa' : 'ojo'}
+              <span className="sr-only">{`: ${e.trap.name}`}</span>
+            </span>
+          )}
           {transposes && <span className="text-sm text-muted">↪ transpone</span>}
           {graph.node(e.toId)?.name && !transposes && (
             <span className="ml-1 truncate text-sm text-brass">{graph.node(e.toId)!.name}</span>

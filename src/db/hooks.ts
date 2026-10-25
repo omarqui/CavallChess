@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo } from 'react';
 import { RepertoireGraph } from '../chess/graph';
-import { DEFAULT_SETTINGS, type CardRow, type Settings, type Side } from '../types';
+import { DEFAULT_SETTINGS, type CardRow, type Note, type Settings, type Side } from '../types';
 import { db } from './db';
 
 export type Graphs = Record<Side, RepertoireGraph>;
@@ -25,6 +25,11 @@ export function useGraphs(): Graphs | undefined {
 
 export function useCards(): Map<string, CardRow> | undefined {
   const rows = useLiveQuery(() => db.cards.toArray());
+  return useMemo(() => rows && new Map(rows.map((r) => [r.id, r])), [rows]);
+}
+
+export function useNotes(): Map<string, Note> | undefined {
+  const rows = useLiveQuery(() => db.notes.toArray());
   return useMemo(() => rows && new Map(rows.map((r) => [r.id, r])), [rows]);
 }
 

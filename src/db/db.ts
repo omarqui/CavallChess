@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
-import type { CardRow, Gap, GameRow, MoveEdge, PositionNode, ReviewEvent, StudyDay } from '../types';
+import type { CardRow, Gap, GameRow, MoveEdge, Note, PositionNode, ReviewEvent, StudyDay } from '../types';
 
 export interface KV {
   key: string;
@@ -15,6 +15,7 @@ export class CavallDB extends Dexie {
   games!: EntityTable<GameRow, 'id'>;
   days!: EntityTable<StudyDay, 'day'>;
   kv!: EntityTable<KV, 'key'>;
+  notes!: EntityTable<Note, 'id'>;
 
   constructor(name = 'cavallchess') {
     super(name);
@@ -27,6 +28,17 @@ export class CavallDB extends Dexie {
       games: 'id, endTime',
       days: 'day',
       kv: 'key',
+    });
+    this.version(2).stores({
+      nodes: 'id, side',
+      edges: 'id, side, fromId, toId',
+      cards: 'id, side',
+      events: '++seq, cardId, at',
+      gaps: 'id, side, count',
+      games: 'id, endTime',
+      days: 'day',
+      kv: 'key',
+      notes: 'id',
     });
   }
 }

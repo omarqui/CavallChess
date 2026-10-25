@@ -42,7 +42,7 @@ export function Segmented<T extends string>({
           role="radio"
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`min-h-9 rounded-lg px-3 text-sm font-medium transition ${
+          className={`min-h-11 rounded-lg px-3 text-sm font-medium transition ${
             value === o.value ? 'bg-raised text-ink shadow-sm ring-1 ring-line' : 'text-muted'
           }`}
         >
@@ -110,7 +110,9 @@ export function MoveLine({
             {onPick ? (
               <button
                 onClick={() => onPick(i)}
-                className={`rounded px-0.5 hover:bg-surface ${active === i ? 'bg-brass-soft text-ink' : ''}`}
+                aria-current={active === i ? 'true' : undefined}
+                // Toque de 44 px de alto; sigue siendo inline-block, así que la lista fluye en líneas.
+                className={`min-h-11 rounded px-0.5 align-middle hover:bg-surface ${active === i ? 'bg-brass-soft text-ink' : ''}`}
               >
                 {label}
               </button>

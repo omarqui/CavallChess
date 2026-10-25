@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
+import Dexie from 'dexie';
 import { CavallDB } from './db';
 import {
   addMove,
@@ -11,10 +12,13 @@ import {
   getSettings,
   importBackup,
   loadGraph,
+  noteId,
   purgeNodes,
   rate,
   recordGame,
+  saveNote,
   setSettings,
+  wipeAll,
 } from './repo';
 import { buildImportPlan } from '../chess/pgnImport';
 import { INITIAL_EPD, nodeId } from '../chess/position';
@@ -34,11 +38,16 @@ async function importPgn(pgn: string, side: 'white' | 'black' = 'white', resolut
   const mine = new Map<string, { uci: string; san: string }>();
   for (const e of g.edges.values()) if (e.mine) mine.set(e.fromId, { uci: e.uci, san: e.san });
   const plan = buildImportPlan(pgn, side, { mine, nodeIds: new Set(g.nodes.keys()) }, resolutions);
-  await commitImport(plan, resolutions, new Map(), d);
-  return plan;
+  const counts = await commitImport(plan, resolutions, new Map(), d);
+  return Object.assign(plan, { counts });
 }
 
 describe('repositorio', () => {
+  it('commitImport cuenta solo las jugadas nuevas', async () => {
+    expect((await importPgn('1. e4 e5 2. Nf3 *')).counts).toEqual({ mine: 2, rival: 1 });
+    expect((await importPgn('1. e4 e5 2. Nf3 *')).counts).toEqual({ mine: 0, rival: 0 });
+  });
+
   it('importa y crea una tarjeta por jugada propia', async () => {
     await importPgn('1. e4 e5 (1... c5 2. Nf3) 2. Nf3 Nc6 3. Bb5 *');
     const g = await loadGraph('white', d);
@@ -143,5 +152,61 @@ describe('repositorio', () => {
     expect((await getSettings(other)).newPerDay).toBe(7);
     expect((await getSettings(other)).lichessToken).toBe('otro');
     expect(await other.nodes.get(nodeId('black', INITIAL_EPD))).toBeDefined();
+  });
+});
+
+describe('notas y respaldo v2', () => {
+  it('guarda y borra notas', async () => {
+    await saveNote(noteId('caro-kann', 'avance'), '  ojo con h4  ', d);
+    expect((await d.notes.get('caro-kann|avance'))?.text).toBe('ojo con h4');
+    await saveNote('caro-kann|avance', '   ', d);
+    expect(await d.notes.get('caro-kann|avance')).toBeUndefined();
+  });
+
+  it('noteId arma el id de ficha y de línea', () => {
+    expect(noteId('caro-kann')).toBe('caro-kann');
+    expect(noteId('caro-kann', 'avance')).toBe('caro-kann|avance');
+  });
+
+  it('el respaldo incluye las notas y las restaura', async () => {
+    await saveNote('caro-kann', 'mi idea', d);
+    const b = await exportBackup(d);
+    expect(b.version).toBe(2);
+    await wipeAll(d);
+    await importBackup(b, d);
+    expect((await d.notes.get('caro-kann'))?.text).toBe('mi idea');
+  });
+
+  it('importa un respaldo versión 1 sin notas', async () => {
+    await saveNote('caro-kann', 'se pierde', d);
+    const b = { ...(await exportBackup(d)), version: 1 as const, notes: undefined };
+    await expect(importBackup(b, d)).resolves.toBeUndefined();
+    expect(await d.notes.count()).toBe(0);
+  });
+
+  it('rechaza versiones desconocidas', async () => {
+    const b = { ...(await exportBackup(d)), version: 3 as unknown as 2 };
+    await expect(importBackup(b, d)).rejects.toThrow('no es un respaldo');
+  });
+
+  it('abrir la versión 2 conserva los datos de la versión 1', async () => {
+    const name = `upgrade-test-${n++}`;
+    const old = new Dexie(name);
+    old.version(1).stores({
+      nodes: 'id, side',
+      edges: 'id, side, fromId, toId',
+      cards: 'id, side',
+      events: '++seq, cardId, at',
+      gaps: 'id, side, count',
+      games: 'id, endTime',
+      days: 'day',
+      kv: 'key',
+    });
+    await old.table('nodes').put({ id: 'white|x', side: 'white', epd: 'x', myTurn: true });
+    old.close();
+    const up = new CavallDB(name);
+    expect((await up.nodes.get('white|x'))?.epd).toBe('x');
+    await saveNote('a', 'hola', up);
+    expect(await up.notes.count()).toBe(1);
   });
 });

@@ -1,6 +1,6 @@
 import type { RepertoireGraph } from '../chess/graph';
 import { INITIAL_EPD, epdFromNodeId, playUci, sideFromId, type Side } from '../chess/position';
-import type { MoveEdge } from '../types';
+import type { MoveEdge, TrapMark } from '../types';
 import { Rating, type Grade } from '../srs/scheduler';
 
 export type SessionMode = 'review' | 'practice';
@@ -16,6 +16,8 @@ export interface SessionCallbacks {
 export interface Feedback {
   kind: 'correct' | 'hard' | 'wrong';
   edge: MoveEdge;
+  /** La tarjeta venía de una trampa: la propia (en contra) o la que el rival acaba de jugar (a favor). */
+  trap?: TrapMark;
 }
 
 export interface Step {
@@ -111,7 +113,7 @@ export class TrainingSession {
       if (this.mode === 'review') this.cb.rate(t.id, rating);
       this.tally.correct++;
       this.finish(t.id, false);
-      return this.advance(t, { kind: this.hintUsed ? 'hard' : 'correct', edge: t });
+      return this.advance(t, { kind: this.hintUsed ? 'hard' : 'correct', edge: t, trap: this.trapOf(t) });
     }
 
     // fail: tiene que jugar la correcta para seguir
@@ -120,7 +122,14 @@ export class TrainingSession {
     else this.cb.forceDue(t.id);
     this.tally.wrong++;
     this.finish(t.id, true);
-    return this.advance(t, { kind: 'wrong', edge: t });
+    return this.advance(t, { kind: 'wrong', edge: t, trap: this.trapOf(t) });
+  }
+
+  /** Marca de trampa de la tarjeta `t`; se llama antes de `advance`, cuando la línea termina en la jugada del rival. */
+  private trapOf(t: MoveEdge): TrapMark | undefined {
+    if (t.trap?.kind === 'contra') return t.trap;
+    const prev = this.line[this.line.length - 1];
+    return prev?.trap?.kind === 'favor' ? prev.trap : undefined;
   }
 
   useHint(): Step {
