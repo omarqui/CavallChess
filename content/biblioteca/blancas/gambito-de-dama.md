@@ -22,7 +22,7 @@ Hay tres respuestas principales:
 ## Ideas y planes
 - **Rehusado:** cambiás en d5 y llegás a la estructura del cambio. Tu plan es el **ataque de minorías**: con los peones a y b (dos contra tres) avanzás b4-b5 para dejarle al negro un peón débil en c6 o en d5.
 - **Eslava:** si el alfil negro sale a f5, lo perseguís con el caballo desde h4 y te quedás con la pareja de alfiles. Después, la ruptura e4 abre el juego a tu favor.
-- **Aceptado:** recuperás el peón con el alfil y, si el negro ataca tu centro con ...c5, simplificás cambiando damas. Quedás con mejor desarrollo y el rey negro sin enroque.
+- **Aceptado:** recuperás el peón con el alfil y, si el negro ataca tu centro con ...c5, simplificás cambiando damas. Quedás con mejor desarrollo y, si el negro retoma con el rey, sin enroque para él.
 - En las tres, el caballo de b1 va a c3 o d2 y el alfil de f1 sale cuando su diagonal se abre.
 
 ## Consejos
@@ -65,13 +65,13 @@ El negro toma el peón, pero no puede quedárselo. Lo recuperás con el alfil y,
 1. d4 d5 2. c4 dxc4 { El Aceptado: toma el peón y cede el centro. } 3. e3 { [%hint Abrí la diagonal del alfil que va a recuperar el peón.] Si 3...e5, tomá en c4 con el alfil y, después de ...exd4, recapturá con el peón. } Nf6 4. Bxc4 e6 5. Nf3 c5 6. O-O a6 7. dxc5 { [%hint Simplificá: cambiá peones y damas, y jugá con mejor desarrollo.] } Bxc5 8. Qxd8+ Kxd8 { Su rey ya no puede enrocar. } 9. Be2 { Lo retirás antes de que ...b5 lo eche con tiempo. } Ke7 10. Nbd2 b6 11. b3 Bb7 12. Bb2
 ```
 
-Es un final sin damas con una ventaja chica pero cómoda: torres a c1 y d1, caballo a c4 o e5, y el rey negro tiene que cuidarse de las columnas abiertas.
+Es una posición sin damas, cómoda y simple: torres a c1 y d1, caballo a c4 o e5, y el rey negro tiene que cuidarse de las columnas abiertas.
 
 ## Trampa a favor: Defender el peón con b5 {#peon-c4-con-b5} [básica]
 El intento más natural de quedarse con el peón de c4 es sostenerlo con ...b5. Con a4 lo atacás, y si el negro insiste, pierde una pieza.
 
 ```pgn
-1. d4 d5 2. c4 dxc4 3. e3 b5?! { Intenta quedarse con el peón. } 4. a4 { [%hint Atacá desde abajo la cadena que sostiene c4.] } c6 5. axb5 cxb5?? { Natural, pero deja abierta la diagonal hacia a8. } 6. Qf3 { [%hint Doble ataque: la torre de a8 no tiene adónde ir.] } Nc6 7. Qxc6+
+1. d4 d5 2. c4 dxc4 3. e3 b5?! { Intenta quedarse con el peón. } 4. a4 { [%hint Atacá desde abajo la cadena que sostiene c4.] } c6 5. axb5 cxb5?? { Natural, pero deja abierta la diagonal hacia a8. } 6. Qf3 { [%hint La diagonal larga quedó abierta y la torre no tiene salida.] } Nc6 7. Qxc6+
 ```
 
 Ganaste una pieza. Después de `7...Bd7` no tomes la torre: la defiende la dama negra. Retirá la dama con calma y seguí desarrollando.
@@ -80,7 +80,7 @@ Ganaste una pieza. Después de `7...Bd7` no tomes la torre: la defiende la dama 
 El Contragambito Albin (`2...e5`) es poco común, pero tramposo: el peón que llega a d4 molesta mucho. La respuesta sana es desarrollar el caballo.
 
 ```pgn
-1. d4 d5 2. c4 e5 3. dxe5 d4 { El peón se instala en el centro y te quita e3 y c3. } 4. Nf3 { [%hint Desarrollá una pieza que vigile d4 en lugar de abrirle a tu rey una diagonal.] } (4. e3? { Parece lógico atacar el peón, pero abre tu rey. } Bb4+ 5. Bd2 dxe3! 6. Bxb4?? exf2+ 7. Ke2 fxg1=N+! { Corona en caballo y con jaque. } 8. Rxg1 Bg4+ { Jaque, y la dama de d1 cae. }) Nc6 5. g3 { [%hint Prepará el alfil en la gran diagonal para presionar d4.] }
+1. d4 d5 2. c4 e5 3. dxe5 d4 { El peón se instala en el centro y te quita e3 y c3. } 4. Nf3 { [%hint Desarrollá una pieza que vigile d4 en lugar de abrirle a tu rey una diagonal.] } (4. e3? { Parece lógico atacar el peón, pero abre tu rey. } Bb4+ 5. Bd2 dxe3! 6. Bxb4?? exf2+ 7. Ke2 fxg1=N+! { Corona en caballo y con jaque. } 8. Rxg1 Bg4+ { Jaque, y la dama de d1 cae. }) Nc6 5. g3 { [%hint Prepará el alfil en la gran diagonal para presionar el flanco de dama y al caballo que defiende d4.] }
 ```
 
-Con Bg2, enroque y Nbd2-b3 vas a ganar el peón de d4. Si caíste en `4.e3`, lo menos malo es `6.fxe3`: el negro tiene iniciativa, pero no hay desastre.
+Con Bg2, enroque y Nbd2-b3 vas a presionar d4 con el peón de más. Si caíste en `4.e3`, lo menos malo es `6.fxe3`: el negro tiene iniciativa, pero no hay desastre.
