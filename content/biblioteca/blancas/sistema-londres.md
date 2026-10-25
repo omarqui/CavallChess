@@ -27,8 +27,8 @@ Con el alfil afuera, completás una estructura que se repite partida tras partid
 
 **La presión sobre b2.** Contra `...c5` y `...Qb6` la respuesta depende de dónde está tu peón de c:
 
-- **Si todavía está en c2**, no defendés b2: desarrollás el caballo a c3. Con un peón negro en d5, el caballo ya lo ataca y comer en b2 pierde material enseguida; sin ese peón, comer es arriesgado para las negras, aunque la mejor defensa alcanza para igualar.
-- **Si ya jugaste `c3`**, el caballo no tiene esa casilla. Lo normal es `Qb3`: cuida b2 y ofrece el cambio de damas. Si las negras cambian en b3, recapturás con el peón de a y la columna queda para tu torre; si cambiás vos en b6, los peones doblados son de ellas. Según la posición, también sirven `Qc2` o `b3`.
+- **Si todavía está en c2** (contra `1...d5 2.Bf4 c5 3.e3 Qb6`), no defendés b2: desarrollás el caballo a c3, que ataca d5, y comer en b2 pierde material enseguida.
+- **Si ya jugaste `c3`**, o lo jugás justamente para esto (contra `1...Nf6 2.Bf4 c5`), el caballo no tiene esa casilla. Lo normal es `Qb3`: cuida b2 y ofrece el cambio de damas. Si las negras cambian en b3, recapturás con el peón de a y la columna queda para tu torre; si cambiás vos en b6, los peones doblados son de ellas. Según la posición, también sirven `Qc2` o `b3`.
 
 **Las rupturas.** Cuando terminás el desarrollo, el juego se abre con `e4` (si tenés la torre en e1 y el centro preparado) o con `c4`, para ganar espacio en el flanco de dama.
 
@@ -85,10 +85,12 @@ Con `1...Nf6`, `...g6` y `...Bg7` las negras arman un fianchetto. Vos seguís co
 Con todo desarrollado, la posición es equilibrada y de maniobras. Retirá el alfil a h2 o g3 antes de que lo molesten con `...Nh5` o con la ruptura `...e5`, y pensá en llevar la dama a b3 para presionar el flanco de dama.
 
 ## Variante: Contra 1...Nf6 y 2...c5 {#nf6-c5} [club]
-La misma idea de `...c5` y `...Qb6`, pero sin el peón en d5. Igual dejás b2 y desarrollás, y esta vez las negras sí pueden comer: hay que saber qué hacer.
+Sin peón negro en d5, el caballo a c3 ya no ataca nada y comer en b2 deja de ser un error claro. Por eso, contra `2...c5` jugás `3.c3`: sostenés d4 y, si la dama sale a b6, la tuya va a b3, igual que en la variante contra `3...Nc6`. El cambio de damas lleva a un final tranquilo y parejo.
 
 ```pgn
-1. d4 Nf6 2. Bf4 c5 3. e3 Qb6 4. Nc3 { [%hint Igual que contra 1...d5: desarrollá antes que defender el peón atacado.] } Qxb2 { Las negras aceptan el peón. } 5. Nb5 { [%hint La dama negra se fue lejos: amenazá un jaque doble con el caballo.] Amenazás Nc7+, que ataca al rey y a la torre de a8 a la vez. [%cal Gb5c7] } Nd5 { La única defensa buena: el caballo cubre c7 y ataca tu alfil. Ojo, la natural 5...Na6? pierde: 6.a3! prepara encerrar a la dama, por ejemplo con Bc4 y Ra2. } 6. Rb1 { [%hint Echá a la dama con una torre.] } Qxa2 7. Ra1 { Otra vez a la dama. } Qb2 8. Nf3 { [%hint En vez de repetir, sumá una pieza más al juego.] Si preferís el empate, podés repetir con 8.Rb1. }
+1. d4 Nf6 2. Bf4 c5 3. c3 { [%hint Sostené el peón de d4 con otro peón antes de que lo cambien.] Con c3 sostenés d4 y le dejás a tu dama la casilla b3. } Qb6 { Ataca b2. } 4. Qb3 { [%hint Cuidá b2 con una pieza que además ofrezca un cambio.] La misma idea que en la variante contra 3...Nc6. } Qxb3 5. axb3 { Recapturás hacia el centro: la columna a queda abierta para tu torre. } cxd4 6. cxd4 Nc6 { Ataca d4. } 7. Nf3 { [%hint Defendé el peón atacado desarrollando una pieza.] Primero este caballo: si jugás 7.Nc3, el peón de d4 queda colgando. } e6 8. Nc3 Bb4 { Clava tu caballo. } 9. Bd2 { El alfil vuelve a defender el caballo de c3. } b6 10. e3 Bb7 11. Be2 { Desarrollo tranquilo: en la próxima jugada enrocás. }
 ```
 
-Las negras ganaron dos peones, pero su dama está lejos y a vos te queda todo el desarrollo por delante. Según el motor la posición está pareja, y es muy filosa. Si en la cuarta jugada no comen y cambian con `4...cxd4`, recapturá con `5.exd4` y seguí con `Nf3`, `Be2`, el enroque y `Na4` para echar a la dama. Si más adelante comen en b2, el salto `Nb5` vuelve a ser la respuesta.
+Es un final sin damas y parejo. Tus peones doblados en b se compensan con la columna a abierta: enrocá y llevá las torres a las columnas a y c. Si cambian primero en d4 (`3...cxd4 4.cxd4`) y después la dama sale a b6, `5.Qc1` cuida b2 sin complicaciones.
+
+Con `3.e3` en vez de `3.c3`, también podés contestar `3...Qb6` con `4.Nc3` y entregar el peón de b2: `4...Qxb2 5.Nb5` amenaza `Nc7+`, la única defensa buena es `5...Nd5` y la partida queda filosa y pareja. Si después de `5.Nb5` las negras juegan `5...Na6?`, `6.a3!` prepara encerrar a la dama. Esta ficha prefiere `3.c3`, que es más tranquilo.

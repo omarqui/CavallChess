@@ -15,7 +15,7 @@
     }
   },
   "sistema-londres": {
-    "hash": "db2828ed202f571544fee2b44ac079a5d7f001e1026585200835b8ba4791fb28",
+    "hash": "3319a767c7f05ec3c86dd45377998d4da32fb30d50cfa1eec72ae7afd48696a4",
     "profundidad": 18,
     "fecha": "2026-10-24",
     "evals": {
@@ -24,7 +24,7 @@
       "c5-qb6": 0.84,
       "peon-envenenado": 6.77,
       "india-de-rey": 0.23,
-      "nf6-c5": 0.3
+      "nf6-c5": -0.03
     }
   }
 }
