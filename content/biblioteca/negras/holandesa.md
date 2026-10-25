@@ -74,9 +74,9 @@ En el Leningrado, con el peón de d4 ya cambiado, el caballo de c3 depende de su
 
 ```pgn
 1. d4 f5 2. c4 Nf6 3. g3 g6 4. Bg2 Bg7 5. Nf3 O-O 6. O-O d6 7. Nc3 c6 8. d5 e5 9. dxe6 Bxe6
-10. b3 Na6 { [%hint Desarrollá el caballo por el borde, rumbo a c5 o b4.] }
+10. b3 Na6 { [%hint Terminá de desarrollar el flanco de dama sin tapar a tus otras piezas.] }
 11. Bb2 Ne4 { [%hint Saltá al centro: le abrís la diagonal a tu alfil y apuntás dos piezas al caballo de c3.] }
-12. Re1?? { Prepara e4, pero no hace nada por el caballo de c3: un defensor no alcanza contra dos atacantes. }
+12. Re1?? { La torre se suma a la columna e, pero no hace nada por el caballo de c3: un defensor no alcanza contra dos atacantes. }
 Nxc3 13. Bxc3 Bxc3 { [%hint Cambiá y quedate con la pieza que sobra.] Además, tu alfil ataca a las dos torres. }
 ```
 

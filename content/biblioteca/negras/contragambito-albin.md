@@ -66,7 +66,7 @@ Con a3 y b4 las blancas evitan el jaque en b4 y ganan espacio en el flanco de da
 12. Be2 Bxe2 13. Qxe2 Bxd4 { Recuperaste el peón: el material está igualado. }
 ```
 
-El material está igualado y tus piezas están activas. Ojo: si las blancas siguen con `14.O-O Bxb2 15.Qxb2`, la dama ataca a tu caballo de e5 por la diagonal; defendelo con `15...Qd6` antes de enrocar. Y si `16.Re1` clava el caballo contra tu rey, enrocá largo (`16...O-O-O!`): el rey sale de la columna e y la clavada desaparece. No juegues `16...f6?`, porque `17.f4!` ataca al caballo clavado y lo gana.
+El material está igualado y tus piezas están activas. Ojo: si las blancas siguen con `14.O-O Bxb2 15.Qxb2`, la dama ataca a tu caballo de e5 por la diagonal; defendelo con `15...Qd6` antes de enrocar. Y si `16.Re1` clava el caballo contra tu rey, enrocá largo (`16...O-O-O!`): el rey sale de la columna e y la clavada desaparece. No juegues `16...f6??`, porque `17.f4!` ataca al caballo clavado y lo gana.
 
 Si en la jugada 12 las blancas echan al alfil con `12.f3`, el jaque `12...Qh4+` gana: el rey blanco queda al descubierto y tus piezas entran con todo.
 

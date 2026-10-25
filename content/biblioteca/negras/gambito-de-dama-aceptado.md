@@ -74,7 +74,7 @@ El material está igualado. A cambio del peón doblado tenés la columna f para 
 ## Variante: Con 3.e3 {#con-e3} [club]
 Con `3.e3` las blancas preparan recuperar el peón con el alfil. Usás el mismo esquema que contra `3.Nf3` y llegás a la misma posición de la Clásica.
 
-La tentación de todo principiante es quedarse con el peón de c4 empujando `3...b5?`. Después de `4.a4` ya quedás peor, y si insistís en sostenerlo con `4...c6??`, `5.axb5 cxb5 6.Qf3` ataca la torre de a8 por la diagonal que se abrió: perdés una pieza. Por eso, primero `3...Nf6`: el peón de c4 se pierde igual, pero vos ganás tiempo.
+La tentación de todo principiante es quedarse con el peón de c4 empujando `3...b5?`. Después de `4.a4` ya quedás peor, y más todavía si insistís con `4...c6?`. Y después de `5.axb5` no retomes: `5...cxb5?? 6.Qf3` ataca la torre de a8 por la diagonal que se abrió y perdés una pieza. Por eso, primero `3...Nf6`: el peón de c4 se pierde igual, pero vos ganás tiempo.
 
 ```pgn
 1. d4 d5 2. c4 dxc4 3. e3 Nf6 { [%hint Desarrollá una pieza antes de pensar en el peón de c4.] }

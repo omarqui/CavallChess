@@ -62,7 +62,7 @@ Con d4 en camino, el alfil de c5 pierde su diagonal y el peón de más se empiez
 Contra la Philidor sacás el alfil a c4 y abrís el centro con d4. En esta línea el negro usa un truco conocido para cambiar piezas: hay que saber responderlo.
 
 ```pgn
-1. e4 e5 2. Nf3 d6 { La Philidor: defiende el peón con otro peón. } 3. Bc4 { [%hint Desarrollá apuntando al punto débil del negro, f7.] El alfil mira a f7. Contra otras respuestas a esta jugada, mirá la guía de abajo. } Be7 4. d4 { [%hint Ahora que tu alfil mira a f7, discutí el centro con un peón.] } exd4 { Si 4...Nf6?, tomá en e5: ganás material (y si 5...Nxe4?, 6.Qd5). } 5. Nxd4 Nf6 6. Nc3 O-O 7. O-O Nxe4 { El truco de la horquilla: toma y recupera la pieza con ...d5. } 8. Nxe4 d5 { El peón ataca a la vez tu alfil y tu caballo. } 9. Bd3 { [%hint Salvá el alfil sin dejar solo al caballo.] } dxe4 10. Bxe4 Nd7 11. Re1
+1. e4 e5 2. Nf3 d6 { La Philidor: defiende el peón con otro peón. } 3. Bc4 { [%hint Desarrollá apuntando al punto débil del negro, f7.] } Be7 4. d4 { [%hint Ahora que tu alfil mira a f7, discutí el centro con un peón.] } exd4 { Si 4...Nf6?, tomá en e5: ganás material (y si 5...Nxe4?, 6.Qd5). } 5. Nxd4 Nf6 6. Nc3 O-O 7. O-O Nxe4 { El truco de la horquilla: toma y recupera la pieza con ...d5. } 8. Nxe4 d5 { El peón ataca a la vez tu alfil y tu caballo. } 9. Bd3 { [%hint Salvá el alfil sin dejar solo al caballo.] } dxe4 10. Bxe4 Nd7 11. Re1
 ```
 
 El material está igualado, pero tenés más espacio y las piezas más activas. Ubicá el alfil de c1 (Bf4 o Be3), poné la dama en f3 o e2 y presioná por la columna e.

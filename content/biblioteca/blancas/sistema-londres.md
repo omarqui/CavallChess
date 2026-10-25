@@ -86,7 +86,7 @@ Con `1...Nf6`, `...g6` y `...Bg7` las negras arman un fianchetto. Vos seguís co
 Con todo desarrollado, la posición es equilibrada y de maniobras. Retirá el alfil a h2 o g3 antes de que lo molesten con `...Nh5` o con la ruptura `...e5`, y pensá en llevar la dama a b3 para presionar el flanco de dama.
 
 ## Variante: Contra 1...Nf6 y 2...c5 {#nf6-c5} [club]
-Sin peón negro en d5, el caballo a c3 ya no ataca nada y comer en b2 deja de ser un error claro. Por eso, contra `2...c5` jugás `3.c3`: sostenés d4 y, si la dama sale a b6, la tuya va a b3, igual que en la variante contra `3...Nc6`. El cambio de damas lleva a una posición sin damas, tranquila y pareja.
+Sin peón negro en d5, el caballo a c3 ya no ataca nada y comer en b2 deja de ser un error claro. Por eso, contra `2...c5` jugás `3.c3`: sostenés d4 y, si la dama sale a b6, la tuya va a b3, igual que en la variante contra `3...Nc6`. El cambio de damas lleva a una posición tranquila y pareja.
 
 ```pgn
 1. d4 Nf6 2. Bf4 c5 3. c3 { [%hint Sostené el peón de d4 con un peón del flanco de dama, que además le abra camino a tu dama.] Con c3 sostenés d4 y le dejás a tu dama la casilla b3. } Qb6 { Ataca b2. } 4. Qb3 { [%hint Cuidá b2 con una pieza que además ofrezca un cambio.] La misma idea que en la variante contra 3...Nc6. } Qxb3 5. axb3 { Recapturás hacia el centro: la columna a queda abierta para tu torre. } cxd4 6. cxd4 Nc6 { Ataca d4. } 7. Nf3 { [%hint Defendé el peón atacado desarrollando una pieza.] Primero este caballo: si jugás 7.Nc3, el peón de d4 queda colgando. } e6 8. Nc3 Bb4 { Clava tu caballo. } 9. Bd2 { El alfil vuelve a defender el caballo de c3. } b6 10. e3 Bb7 11. Be2 { Desarrollo tranquilo: en la próxima jugada enrocás. }

@@ -48,7 +48,7 @@ Las blancas aceptan el peón y desarrollan el alfil en g2. Es la forma más prud
 
 Las blancas tienen un peón de más, pero tus piezas presionan a2 y b2. Una idea para seguir es `...Ne8`, `...Nc7` y `...Nb5` para cambiar el caballo de c3, que es el que más defiende; otra, `...Ng4` y `...Nge5`.
 
-Tené presente el rayos X de la columna a: tu torre de a8 está detrás del alfil de a6. Si en la jugada 11 la dama blanca va a a4 en vez de a c2, `11.Qa4?? Bxe2!` destapa la torre con ataque. Si `12.Nxe2`, `12...Rxa4` y te quedás con la dama; si la dama se escapa, por ejemplo con `12.Qc2`, `12...Bxf1` te deja con la calidad y un peón de más.
+Ojo con un ataque en rayos X por la columna a: tu torre de a8 está detrás del alfil de a6. Si en la jugada 11 la dama blanca va a a4 en vez de a c2, `11.Qa4?? Bxe2!` destapa la torre con ataque. Si `12.Nxe2`, `12...Rxa4` y te quedás con la dama; si la dama se escapa, por ejemplo con `12.Qc2`, después de `12...Bxf1 13.Bxf1` ganás la calidad y recuperás el peón del gambito.
 
 ## Variante: Benko aceptado: e4 y el rey a g2 {#rey-a-g2} [club] [gambito]
 Con `7.e4` las blancas ocupan el centro, pero después del cambio de alfiles pierden el enroque. El rey se va a g2 en un par de jugadas.

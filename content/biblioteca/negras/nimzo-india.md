@@ -75,7 +75,7 @@ Contra `4.e3` jugás `4...c5` y, una vez que el caballo de g1 salió a f3 y ya n
 
 Los peones doblados de c3 y c4 no pueden avanzar y el alfil de e3 no tiene nada que atacar. Un plan típico: `...a5` para fijar el flanco de dama, `...Bd7`, `...Qe7` y el caballo de f6 hacia h5 y f4. Fischer siguió con esas ideas y terminó ganando.
 
-Ojo con la jugada 11. Si cambiás con `11...exf4?`, después de `12.Bxf4` ya quedás peor, y la horquilla `12...g5`, que parece ganar una pieza, empeora todo: `13.e5!` ataca al caballo de f6 y abre la columna e. Si además seguís con `13...gxh4??`, `14.exf6` deja a tu caballo de e7 atacado y a tu rey sin refugio. Con `11...Ng6` el centro sigue cerrado, que es lo que te conviene con caballos contra alfiles. La regla: si el rival te ofrece abrir el juego mientras tu rey sigue en el centro, primero preguntate quién llega antes.
+Ojo con la jugada 11. Si cambiás con `11...exf4?`, después de `12.Bxf4` ya quedás peor, y la horquilla `12...g5`, que parece ganar una pieza, no gana nada: `13.e5!` ataca al caballo de f6 y abre la columna e. Si además tomás una de las dos piezas (`13...gxh4??` o `13...gxf4?`), `14.exf6` deja a tu caballo de e7 atacado y a tu rey sin refugio. Con `11...Ng6` el centro sigue cerrado, que es lo que te conviene con caballos contra alfiles. La regla: si el rival te ofrece abrir el juego mientras tu rey sigue en el centro, primero preguntate quién llega antes.
 
 ## Trampa a favor: Descubierta sobre el alfil de h4 {#descubierta-en-h4} [básica]
 En la Clásica, después de `11.cxd5 Nxd5` tu caballo ataca a la dama de c3 y, al mismo tiempo, tu dama queda mirando al alfil de h4. Lo único que sirve es `12.Bxd8`. Si las blancas salvan la dama, pierden el alfil con jaque.
