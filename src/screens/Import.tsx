@@ -2,7 +2,8 @@ import { useState } from 'react';
 import type { RepertoireGraph } from '../chess/graph';
 import { buildImportPlan, existingOf } from '../chess/pgnImport';
 import type { Side } from '../chess/position';
-import { getSettings, loadGraph } from '../db/repo';
+import { useActive, useRepertoireState } from '../db/hooks';
+import { getSettings, loadActiveGraph } from '../db/repo';
 import { fetchStudyPgn, parseStudyUrl } from '../integrations/lichess';
 import { ImportPreview } from '../ui/ImportPreview';
 import { Banner, Button, Screen, Segmented } from '../ui/kit';
@@ -13,6 +14,9 @@ type Source = 'lichess' | 'paste' | 'file';
 export function ImportScreen() {
   const [source, setSource] = useState<Source>('lichess');
   const [side, setSide] = useState<Side>('white');
+  const active = useActive();
+  const reps = useRepertoireState();
+  const several = !!reps && reps.repertoires.filter((r) => r.side === side).length > 1;
   const [text, setText] = useState('');
   const [url, setUrl] = useState('');
   const [busy, setBusy] = useState(false);
@@ -31,7 +35,7 @@ export function ImportScreen() {
         content = await fetchStudyPgn(ref, (await getSettings()).lichessToken);
       }
       if (!content.trim()) throw new Error('No hay PGN para leer.');
-      const g = await loadGraph(side);
+      const g = await loadActiveGraph(side);
       const p = buildImportPlan(content, side, existingOf(g));
       if (!p.edges.size && p.errors.length) throw new Error(p.errors.join(' '));
       setPgn(content);
@@ -80,6 +84,9 @@ export function ImportScreen() {
             { value: 'black', label: 'Negras' },
           ]}
         />
+        {several && active && (
+          <p className="mt-2 text-sm text-muted">Se agrega a tu repertorio activo: {active.repertoires[side].name}.</p>
+        )}
       </div>
 
       <div className="mt-5">

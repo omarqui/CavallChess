@@ -1,4 +1,4 @@
-import { nodeId, type Side } from '../../chess/position';
+import { nodeId, repFromId, type Side } from '../../chess/position';
 import type { GameOutcome } from '../../types';
 
 /** "1 partida", "1.234 partidas". */
@@ -7,9 +7,19 @@ export const plural = (n: number, one: string, many: string) => `${n.toLocaleStr
 /** Ruta del visor de una partida (el id es su URL de Chess.com, así que va codificado). */
 export const gamePath = (id: string) => `/games/${encodeURIComponent(id)}`;
 
-/** El repertorio abierto en la posición de un hueco, listo para prepararle una respuesta a `san`. */
-export const gapRepertoirePath = (side: Side, epd: string, san: string) =>
-  `/repertoire/${side}?node=${encodeURIComponent(nodeId(side, epd))}&gap=${encodeURIComponent(san)}`;
+/** Ruta del editor de un repertorio (el activo de `side`, o `rep` aunque no lo sea), opcionalmente en una posición. */
+export const repertoirePath = (side: Side, rep?: string, node?: string) => {
+  const q = [rep && rep !== side ? `rep=${encodeURIComponent(rep)}` : '', node ? `node=${encodeURIComponent(node)}` : '']
+    .filter(Boolean)
+    .join('&');
+  return `/repertoire/${side}${q ? `?${q}` : ''}`;
+};
+
+/** El repertorio del hueco (`gapId` lleva su id) abierto en su posición, listo para prepararle una respuesta a `san`. */
+export const gapRepertoirePath = (side: Side, gapId: string, epd: string, san: string) => {
+  const rep = repFromId(gapId);
+  return `${repertoirePath(side, rep, nodeId(rep, epd))}&gap=${encodeURIComponent(san)}`;
+};
 
 /** El repaso de una sola tarjeta desde una partida: ✕ y el botón final vuelven a esa partida. */
 export const reviewFromGamePath = (cardId: string, gameId: string) =>

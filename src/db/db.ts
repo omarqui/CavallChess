@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
-import type { CardRow, Gap, GameRow, MoveEdge, Note, PositionNode, ReviewEvent, StudyDay } from '../types';
+import type { CardRow, Gap, GameRow, MoveEdge, Note, PositionNode, Repertoire, ReviewEvent, StudyDay } from '../types';
 
 export interface KV {
   key: string;
@@ -16,6 +16,7 @@ export class CavallDB extends Dexie {
   days!: EntityTable<StudyDay, 'day'>;
   kv!: EntityTable<KV, 'key'>;
   notes!: EntityTable<Note, 'id'>;
+  repertoires!: EntityTable<Repertoire, 'id'>;
 
   constructor(name = 'cavallchess') {
     super(name);
@@ -39,6 +40,20 @@ export class CavallDB extends Dexie {
       days: 'day',
       kv: 'key',
       notes: 'id',
+    });
+    // Repertorios múltiples. Las filas no cambian: el repertorio es el prefijo de cada id, y los dos de antes
+    // (`white`, `black`) los crea `ensureRoots`.
+    this.version(3).stores({
+      nodes: 'id, side',
+      edges: 'id, side, fromId, toId',
+      cards: 'id, side',
+      events: '++seq, cardId, at',
+      gaps: 'id, side, count',
+      games: 'id, endTime',
+      days: 'day',
+      kv: 'key',
+      notes: 'id',
+      repertoires: 'id, side',
     });
   }
 }

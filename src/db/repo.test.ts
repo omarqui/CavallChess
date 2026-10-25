@@ -3,8 +3,14 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import Dexie from 'dexie';
 import { CavallDB } from './db';
 import {
+  activeRepId,
   addMove,
   commitImport,
+  createRepertoire,
+  deleteRepertoire,
+  duplicateRepertoire,
+  loadActiveGraph,
+  setActiveRepertoire,
   deleteEdge,
   ensureDue,
   ensureRoots,
@@ -21,7 +27,7 @@ import {
   setSettings,
   wipeAll,
 } from './repo';
-import { buildImportPlan } from '../chess/pgnImport';
+import { buildImportPlan, existingOf } from '../chess/pgnImport';
 import { INITIAL_EPD, nodeId } from '../chess/position';
 import { isDue, Rating, State } from '../srs/scheduler';
 import { edgeAt } from '../test/helpers';
@@ -213,7 +219,7 @@ describe('notas y respaldo v2', () => {
   it('el respaldo incluye las notas y las restaura', async () => {
     await saveNote('caro-kann', 'mi idea', d);
     const b = await exportBackup(d);
-    expect(b.version).toBe(2);
+    expect(b.version).toBe(3);
     await wipeAll(d);
     await importBackup(b, d);
     expect((await d.notes.get('caro-kann'))?.text).toBe('mi idea');
@@ -227,7 +233,7 @@ describe('notas y respaldo v2', () => {
   });
 
   it('rechaza versiones desconocidas', async () => {
-    const b = { ...(await exportBackup(d)), version: 3 as unknown as 2 };
+    const b = { ...(await exportBackup(d)), version: 4 as unknown as 3 };
     await expect(importBackup(b, d)).rejects.toThrow('no es un respaldo');
   });
 
@@ -250,5 +256,104 @@ describe('notas y respaldo v2', () => {
     expect((await up.nodes.get('white|x'))?.epd).toBe('x');
     await saveNote('a', 'hola', up);
     expect(await up.notes.count()).toBe(1);
+  });
+});
+
+describe('repertorios', () => {
+  async function importInto(rep: string, pgn: string, side: 'white' | 'black' = 'white') {
+    const g = await loadGraph(rep, d);
+    const plan = buildImportPlan(pgn, side, existingOf(g));
+    await commitImport(plan, new Map(), new Map(), d);
+    return loadGraph(rep, d);
+  }
+
+  it('ensureRoots crea un repertorio por color con el id del color, una sola vez', async () => {
+    await ensureRoots(d);
+    const reps = await d.repertoires.toArray();
+    expect(reps.map((r) => [r.id, r.side, r.name]).sort()).toEqual([
+      ['black', 'black', 'Principal'],
+      ['white', 'white', 'Principal'],
+    ]);
+  });
+
+  it('un repertorio nuevo es independiente: sus ids llevan su prefijo', async () => {
+    await importPgn('1. e4 e5 2. Nf3 *');
+    const rep = await createRepertoire('white', '  Londres  ', d);
+    expect(rep.name).toBe('Londres');
+    expect(rep.id).not.toContain('|');
+    const g = await importInto(rep.id, '1. d4 d5 2. Bf4 *');
+    expect(g.rootId).toBe(nodeId(rep.id, INITIAL_EPD));
+    expect(g.trainableCardIds()).toHaveLength(2);
+    expect(g.trainableCardIds().every((id) => id.startsWith(`${rep.id}|`))).toBe(true);
+    expect(await d.cards.get(g.trainableCardIds()[0])).toBeDefined();
+    // El de siempre no cambió.
+    expect((await loadGraph('white', d)).trainableCardIds()).toHaveLength(2);
+    expect((await loadGraph('white', d)).children(nodeId('white', INITIAL_EPD)).map((e) => e.san)).toEqual(['e4']);
+  });
+
+  it('addMove agrega en el repertorio de la posición', async () => {
+    const rep = await createRepertoire('white', 'Otro', d);
+    const e = await addMove('white', nodeId(rep.id, INITIAL_EPD), 'd2d4', d);
+    expect(e?.id.startsWith(`${rep.id}|`)).toBe(true);
+    expect(e?.toId.startsWith(`${rep.id}|`)).toBe(true);
+    expect(await d.cards.get(e!.id)).toBeDefined();
+    expect((await loadGraph('white', d)).edges.size).toBe(0);
+  });
+
+  it('el activo es el elegido; si no hay o se borró, el más viejo del color', async () => {
+    expect(await activeRepId('white', d)).toBe('white');
+    const rep = await createRepertoire('white', 'Londres', d);
+    expect(await activeRepId('white', d)).toBe('white');
+    await setActiveRepertoire(rep.id, d);
+    expect(await activeRepId('white', d)).toBe(rep.id);
+    expect(await activeRepId('black', d)).toBe('black');
+    expect((await loadActiveGraph('white', d)).rep).toBe(rep.id);
+    await deleteRepertoire(rep.id, d);
+    expect(await activeRepId('white', d)).toBe('white');
+    expect((await getSettings(d)).activeRep?.white).toBeUndefined();
+  });
+
+  it('duplicar copia jugadas, tarjetas y el log; después avanzan por separado', async () => {
+    await importPgn('1. e4 e5 2. Nf3 *');
+    const [e4] = (await loadGraph('white', d)).trainableCardIds();
+    await rate(e4, Rating.Good, 'session', d);
+    const copy = await duplicateRepertoire('white', 'Copia', d);
+    const g = await loadGraph(copy.id, d);
+    const copyE4 = `${copy.id}${e4.slice('white'.length)}`;
+    expect(g.trainableCardIds()).toEqual((await loadGraph('white', d)).trainableCardIds().map((id) => `${copy.id}${id.slice(5)}`));
+    expect((await d.cards.get(copyE4))!.card).toEqual((await d.cards.get(e4))!.card);
+    expect(await d.events.where('cardId').equals(copyE4).count()).toBe(1);
+
+    await rate(copyE4, Rating.Again, 'session', d);
+    expect((await d.cards.get(e4))!.card.state).toBe(State.Review);
+    expect(await d.events.where('cardId').equals(e4).count()).toBe(1);
+  });
+
+  it('borrar quita posiciones, jugadas, tarjetas y huecos, y no deja borrar el único del color', async () => {
+    const rep = await createRepertoire('white', 'Londres', d);
+    const g = await importInto(rep.id, '1. d4 d5 2. Bf4 *');
+    await d.gaps.put({ id: `${rep.id}|x|y`, side: 'white', epd: 'x', uci: 'y', san: 'y', count: 1, lastSeen: 0 });
+    await deleteRepertoire(rep.id, d);
+    expect(await d.repertoires.get(rep.id)).toBeUndefined();
+    expect(await d.nodes.where('id').startsWith(`${rep.id}|`).count()).toBe(0);
+    expect(await d.edges.where('id').startsWith(`${rep.id}|`).count()).toBe(0);
+    expect(await d.cards.get(g.trainableCardIds()[0])).toBeUndefined();
+    expect(await d.gaps.count()).toBe(0);
+    await expect(deleteRepertoire('white', d)).rejects.toThrow('único');
+    expect(await d.repertoires.get('white')).toBeDefined();
+  });
+
+  it('el respaldo v3 lleva los repertorios; uno v2 vuelve con los dos de siempre', async () => {
+    const rep = await createRepertoire('black', 'Caro-Kann', d);
+    await setActiveRepertoire(rep.id, d);
+    const b = await exportBackup(d);
+    expect(b.repertoires?.map((r) => r.id)).toContain(rep.id);
+    await wipeAll(d);
+    await importBackup(b, d);
+    expect((await d.repertoires.get(rep.id))?.name).toBe('Caro-Kann');
+    expect(await activeRepId('black', d)).toBe(rep.id);
+
+    await importBackup({ ...b, version: 2, repertoires: undefined }, d);
+    expect((await d.repertoires.toArray()).map((r) => r.id).sort()).toEqual(['black', 'white']);
   });
 });

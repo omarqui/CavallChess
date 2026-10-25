@@ -2,11 +2,13 @@ import { INITIAL_EPD, nodeId, type Side } from './position';
 import type { MoveEdge, PositionNode } from '../types';
 
 /**
- * Vista en memoria del grafo de un color. Todo lo derivado (archivado, corte, orden DFS,
+ * Vista en memoria del grafo de un repertorio (de un color). Todo lo derivado (archivado, corte, orden DFS,
  * caminos, etiquetas) se calcula acá a partir de nodos y jugadas; nada de eso se guarda.
  */
 export class RepertoireGraph {
   readonly side: Side;
+  /** Id del repertorio: prefijo de los ids de sus posiciones y jugadas. */
+  readonly rep: string;
   readonly rootId: string;
   readonly nodes = new Map<string, PositionNode>();
   readonly edges = new Map<string, MoveEdge>();
@@ -19,9 +21,10 @@ export class RepertoireGraph {
   readonly trainable: Set<string>;
   private dfsCache?: string[];
 
-  constructor(side: Side, nodes: PositionNode[], edges: MoveEdge[]) {
+  constructor(side: Side, nodes: PositionNode[], edges: MoveEdge[], rep: string = side) {
     this.side = side;
-    this.rootId = nodeId(side, INITIAL_EPD);
+    this.rep = rep;
+    this.rootId = nodeId(rep, INITIAL_EPD);
     for (const n of nodes) this.nodes.set(n.id, n);
     for (const e of edges) {
       this.edges.set(e.id, e);
@@ -207,7 +210,7 @@ export class RepertoireGraph {
   /** Nodos que quedarían inalcanzables si se quitara la jugada `edgeId`. */
   wouldArchive(edgeIdToRemove: string): string[] {
     const without = [...this.edges.values()].filter((e) => e.id !== edgeIdToRemove);
-    const g = new RepertoireGraph(this.side, [...this.nodes.values()], without);
+    const g = new RepertoireGraph(this.side, [...this.nodes.values()], without, this.rep);
     return [...this.reachable].filter((id) => !g.reachable.has(id));
   }
 }

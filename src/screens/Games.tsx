@@ -1,7 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useRef, useState } from 'react';
 import { db } from '../db/db';
-import { useGaps, useGraphs, useSettings } from '../db/hooks';
+import { repFromId } from '../chess/position';
+import { useGaps, useRepertoireState, useSettings } from '../db/hooks';
 import { isBusy } from '../games/lock';
 import { syncChesscom } from '../games/sync';
 import { Banner, Button, Screen, Section } from '../ui/kit';
@@ -26,7 +27,7 @@ const GAPS_SHOWN = 5;
 export function GamesScreen() {
   const settings = useSettings();
   const gaps = useGaps();
-  const graphs = useGraphs();
+  const reps = useRepertoireState();
   const total = useLiveQuery(() => db.games.count());
   // Los mensajes también quedan al volver de una partida: si desaparecieran, la lista subiría y el scroll no
   // caería en la misma fila.
@@ -36,7 +37,13 @@ export function GamesScreen() {
   // Como el filtro de la lista: al volver de una partida siguen abiertos.
   const [allGaps, setAllGaps] = useSessionState('partidas.todosLosHuecos', false);
   const running = useRef(false);
-  if (!settings || !gaps || total === undefined || !graphs) return null;
+  if (!settings || !gaps || total === undefined || !reps) return null;
+  // Los huecos de un repertorio que ya no existe esperan al recálculo: no se muestran.
+  const shownGaps = gaps.filter((g) => reps.graphs.has(repFromId(g.id)));
+  const repName = (gapId: string) => {
+    const rep = reps.repertoires.find((r) => r.id === repFromId(gapId));
+    return rep && reps.repertoires.filter((r) => r.side === rep.side).length > 1 ? rep.name : undefined;
+  };
 
   const run: RunJob = async (next, task) => {
     if (running.current) return;
@@ -102,21 +109,21 @@ export function GamesScreen() {
       {settings.chesscomUser && <HistorySection settings={settings} job={job} run={run} />}
       {total > 0 && <ToolsSection job={job} run={run} />}
 
-      <Section title="Huecos del repertorio" aside={gaps.length > 0 && <span className="text-sm text-muted">{gaps.length}</span>}>
-        {gaps.length === 0 ? (
+      <Section title="Huecos del repertorio" aside={shownGaps.length > 0 && <span className="text-sm text-muted">{shownGaps.length}</span>}>
+        {shownGaps.length === 0 ? (
           <p className="text-[15px] text-muted">
             Cuando un rival juegue algo que tu repertorio no cubre, aparece acá para que prepares tu respuesta.
           </p>
         ) : (
           <>
             <ul className="space-y-3">
-              {gaps.slice(0, allGaps ? 30 : GAPS_SHOWN).map((g) => (
-                <GapItem key={g.id} gap={g} graphs={graphs} />
+              {shownGaps.slice(0, allGaps ? 30 : GAPS_SHOWN).map((g) => (
+                <GapItem key={g.id} gap={g} g={reps.graphs.get(repFromId(g.id))!} repName={repName(g.id)} />
               ))}
             </ul>
-            {!allGaps && gaps.length > GAPS_SHOWN && (
+            {!allGaps && shownGaps.length > GAPS_SHOWN && (
               <Button className="mt-3 w-full" onClick={() => setAllGaps(true)}>
-                Ver {gaps.length > 30 ? 'los 30 más frecuentes' : `los ${gaps.length} huecos`}
+                Ver {shownGaps.length > 30 ? 'los 30 más frecuentes' : `los ${shownGaps.length} huecos`}
               </Button>
             )}
           </>

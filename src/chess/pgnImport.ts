@@ -42,6 +42,8 @@ export interface ImportedChapter {
 
 export interface ImportPlan {
   side: Side;
+  /** Repertorio destino: prefijo de los ids del plan. */
+  rep: string;
   chapters: ImportedChapter[];
   nodes: Map<string, { epd: string; myTurn: boolean }>;
   edges: Map<string, ImportedEdge>;
@@ -55,13 +57,15 @@ export interface ExistingRepertoire {
   mine: Map<string, { uci: string; san: string }>;
   /** nodos existentes (para aceptar capítulos que empiezan desde una posición ya conocida) */
   nodeIds: Set<string>;
+  /** Repertorio destino; sin él, el del color. */
+  rep?: string;
 }
 
 /** Lo que ya tiene el repertorio (también lo archivado), en la forma que espera `buildImportPlan`. */
 export function existingOf(g: RepertoireGraph): ExistingRepertoire {
   const mine = new Map<string, { uci: string; san: string }>();
   for (const e of g.edges.values()) if (e.mine) mine.set(e.fromId, { uci: e.uci, san: e.san });
-  return { mine, nodeIds: new Set(g.nodes.keys()) };
+  return { mine, nodeIds: new Set(g.nodes.keys()), rep: g.rep };
 }
 
 /** Resolución por conflicto: 'keep' conserva lo existente, 'replace' adopta lo del PGN. */
@@ -125,8 +129,10 @@ export function buildImportPlan(
   existing: ExistingRepertoire,
   resolutions: Resolutions = new Map(),
 ): ImportPlan {
+  const rep = existing.rep ?? side;
   const plan: ImportPlan = {
     side,
+    rep,
     chapters: [],
     nodes: new Map(),
     edges: new Map(),
@@ -139,7 +145,7 @@ export function buildImportPlan(
   const chosen = new Map<string, string>();
 
   const addNode = (epd: string) => {
-    const id = nodeId(side, epd);
+    const id = nodeId(rep, epd);
     if (!plan.nodes.has(id)) plan.nodes.set(id, { epd, myTurn: turnOf(epd) === side });
     return id;
   };
@@ -153,7 +159,7 @@ export function buildImportPlan(
     }
     const pos = start.value as Chess;
     const startEpd = epdOf(pos);
-    const startId = nodeId(side, startEpd);
+    const startId = nodeId(rep, startEpd);
     if (startEpd !== INITIAL_EPD && !existing.nodeIds.has(startId) && !plan.nodes.has(startId)) {
       plan.errors.push(
         `“${chapterName(game.headers, gi)}” empieza desde una posición que no está en tu repertorio; se omitió.`,
@@ -214,7 +220,7 @@ export function buildImportPlan(
         next.play(move);
         const toEpd = epdOf(next);
         addNode(toEpd);
-        const id = edgeId(side, epd, uci);
+        const id = edgeId(rep, epd, uci);
         const { text, shapes, hint, trap } = commentOf(child.data);
         const prev = plan.edges.get(id);
         if (!prev) {

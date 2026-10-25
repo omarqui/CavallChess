@@ -26,21 +26,21 @@ export function lineStatus(line: FichaLine, side: Side, graph: RepertoireGraph):
   for (let ply = 0; ply < line.moves.length; ply++) {
     const m = line.moves[ply];
     if (turnOf(m.fromEpd) !== side) continue;
-    const id = nodeId(side, m.fromEpd);
+    const id = nodeId(graph.rep, m.fromEpd);
     const have = graph.mineEdge(id);
     if (have && have.uci !== m.uci) return { kind: 'conflict', ply, existingSan: have.san };
     if (!have || graph.isArchived(id)) missing++;
     else if (ply >= from) present++;
   }
-  if (!missing) return line.kind === 'variante' || hasTrapMark(line, side, graph) ? { kind: 'added' } : { kind: 'partial' };
+  if (!missing) return line.kind === 'variante' || hasTrapMark(line, graph) ? { kind: 'added' } : { kind: 'partial' };
   return present ? { kind: 'partial' } : { kind: 'new' };
 }
 
 /** ¿La jugada de la trampa (`moves[trapPly]`: el error del rival o tu jugada correcta) ya lleva su marca? */
-function hasTrapMark(line: FichaLine, side: Side, graph: RepertoireGraph): boolean {
+function hasTrapMark(line: FichaLine, graph: RepertoireGraph): boolean {
   const m = line.trapPly === undefined ? undefined : line.moves[line.trapPly];
   if (!m) return true;
-  return !!graph.children(nodeId(side, m.fromEpd)).find((e) => e.uci === m.uci)?.trap;
+  return !!graph.children(nodeId(graph.rep, m.fromEpd)).find((e) => e.uci === m.uci)?.trap;
 }
 
 /** Cuántas líneas de la ficha ya están completas en el repertorio. */

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import type { RepertoireGraph } from '../chess/graph';
 import { figurine, type Side } from '../chess/position';
 import { purgeNodes } from '../db/repo';
-import { useGraphs } from '../db/hooks';
+import { useGraphs, useRepertoireState } from '../db/hooks';
+import { repertoirePath } from './games/format';
 import { Board } from '../ui/Board';
 import { Banner, Button, Screen, sideLabel } from '../ui/kit';
 import { navigate } from '../ui/router';
@@ -32,11 +33,14 @@ function branches(g: RepertoireGraph) {
   });
 }
 
-export function ArchivedScreen({ side }: { side: Side }) {
+/** Lo archivado del repertorio activo de `side`, o de `repParam` si es de ese color. */
+export function ArchivedScreen({ side, repParam }: { side: Side; repParam?: string }) {
   const graphs = useGraphs();
+  const state = useRepertoireState();
   const [confirm, setConfirm] = useState<string[] | null>(null);
-  if (!graphs) return null;
-  const g = graphs[side];
+  if (!graphs || !state) return null;
+  const asked = repParam ? state.graphs.get(repParam) : undefined;
+  const g = asked?.side === side ? asked : graphs[side];
   const list = branches(g);
 
   const purge = async (ids: string[]) => {
@@ -85,7 +89,7 @@ export function ArchivedScreen({ side }: { side: Side }) {
                   {b.members.length === 1 ? 'posición' : 'posiciones'}, {b.cards} {b.cards === 1 ? 'tarjeta' : 'tarjetas'}
                 </p>
                 <div className="mt-2 flex gap-2">
-                  <Button className="!min-h-9" onClick={() => navigate(`/repertoire/${side}?node=${encodeURIComponent(b.head)}`)}>
+                  <Button className="!min-h-9" onClick={() => navigate(repertoirePath(side, g.rep, b.head))}>
                     Ver
                   </Button>
                   <Button variant="danger" className="!min-h-9" onClick={() => setConfirm(b.members)}>

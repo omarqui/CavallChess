@@ -1,5 +1,5 @@
+import type { RepertoireGraph } from '../../chess/graph';
 import { figurine, nodeId, playUci } from '../../chess/position';
-import type { Graphs } from '../../db/hooks';
 import { useLibrary } from '../../library/catalog';
 import { findFichasForMove } from '../../library/status';
 import type { Gap } from '../../types';
@@ -8,10 +8,12 @@ import { Button, MoveLine, sideLabel } from '../../ui/kit';
 import { navigate } from '../../ui/router';
 import { gapRepertoirePath } from './format';
 
-/** Un hueco: la posición con la jugada del rival, cuántas veces salió y cómo prepararle una respuesta. */
-export function GapItem({ gap, graphs }: { gap: Gap; graphs: Graphs }) {
-  const g = graphs[gap.side];
-  const id = nodeId(gap.side, gap.epd);
+/**
+ * Un hueco: la posición con la jugada del rival, cuántas veces salió y cómo prepararle una respuesta. `g` es el
+ * repertorio del hueco; `repName` se muestra si tenés más de uno de ese color.
+ */
+export function GapItem({ gap, g, repName }: { gap: Gap; g: RepertoireGraph; repName?: string }) {
+  const id = nodeId(g.rep, gap.epd);
   const path = g.pathFromRoot(id) ?? g.anyPathFromRoot(id) ?? [];
   const covered = g.edges.has(`${id}|${gap.uci}`);
   const [from, to] = [gap.uci.slice(0, 2), gap.uci.slice(2, 4)];
@@ -25,7 +27,8 @@ export function GapItem({ gap, graphs }: { gap: Gap; graphs: Graphs }) {
       </div>
       <div className="min-w-0 flex-1">
         <p className="text-sm text-muted">
-          {sideLabel(gap.side)} · {gap.count} {gap.count === 1 ? 'vez' : 'veces'}
+          {sideLabel(gap.side)}
+          {repName && ` · ${repName}`} · {gap.count} {gap.count === 1 ? 'vez' : 'veces'}
         </p>
         <div className="mt-1 text-[15px]">
           <MoveLine moves={[...path, { san: played?.san ?? gap.san, id: 'gap' }]} active={path.length} />
@@ -35,7 +38,7 @@ export function GapItem({ gap, graphs }: { gap: Gap; graphs: Graphs }) {
         ) : (
           <Button
             className="mt-2"
-            onClick={() => navigate(gapRepertoirePath(gap.side, gap.epd, gap.san))}
+            onClick={() => navigate(gapRepertoirePath(gap.side, gap.id, gap.epd, gap.san))}
           >
             Preparar respuesta a {figurine(gap.san)}
           </Button>

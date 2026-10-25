@@ -1,7 +1,7 @@
 import { db, type CavallDB } from '../db/db';
-import { forceDue, getSettings, loadGraph, recordGame, setSettings } from '../db/repo';
+import { forceDue, getSettings, loadAllGraphs, recordGame, setSettings, type AllGraphs } from '../db/repo';
 import type { GameRow, Settings, Side } from '../types';
-import { analyzeGame } from './analyze';
+import { analyzeBest } from './best';
 import {
   archiveMonth,
   archivesToFetch,
@@ -31,11 +31,8 @@ export async function shouldAutoSync(): Promise<boolean> {
   return !!s.chesscomUser && (!s.lastChesscomSync || Date.now() - s.lastChesscomSync > SYNC_EVERY_MS);
 }
 
-type Graphs = Record<Side, Awaited<ReturnType<typeof loadGraph>>>;
-
-async function loadGraphs(d: CavallDB): Promise<Graphs> {
-  return { white: await loadGraph('white', d), black: await loadGraph('black', d) };
-}
+type Graphs = AllGraphs;
+const loadGraphs = loadAllGraphs;
 
 const normalizeUser = (u: string | undefined) => u?.trim().toLowerCase() || undefined;
 
@@ -91,7 +88,7 @@ async function processMonth(
     const myColor: Side | null =
       g.white.username.toLowerCase() === user ? 'white' : g.black.username.toLowerCase() === user ? 'black' : null;
     if (!myColor) continue;
-    const { outcome, gap } = analyzeGame(g.pgn, graphs[myColor]);
+    const { outcome, gap, rep } = analyzeBest(g.pgn, graphs[myColor].graphs, graphs[myColor].active);
     const me = myColor === 'white' ? g.white : g.black;
     const opp = myColor === 'white' ? g.black : g.white;
     const row: GameRow = {
@@ -103,6 +100,7 @@ async function processMonth(
       result: me.result,
       outcome,
       pgn: g.pgn,
+      rep,
     };
     if (outcome.kind === 'myDeviation' && shouldForceDue(row.endTime, now)) {
       await forceDue(outcome.cardId, 'game', d);

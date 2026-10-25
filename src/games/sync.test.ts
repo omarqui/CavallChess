@@ -1,8 +1,8 @@
 import 'fake-indexeddb/auto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CavallDB } from '../db/db';
-import { buildImportPlan } from '../chess/pgnImport';
-import { commitImport, ensureRoots, getSettings, loadGraph, setSettings } from '../db/repo';
+import { buildImportPlan, existingOf } from '../chess/pgnImport';
+import { commitImport, createRepertoire, deleteRepertoire, ensureRoots, getSettings, loadGraph, setSettings } from '../db/repo';
 import { archivesToFetch, fetchArchives, fetchMonth, olderArchives } from './chesscom';
 import type { ChesscomGame } from './chesscom';
 import { recalcGames } from './store';
@@ -464,5 +464,50 @@ describe('loadOlderGames', () => {
     // Octubre es el mes más nuevo: se relee y todas sus partidas ya están.
     expect((await syncChesscom(undefined, d2)).imported).toBe(0);
     expect(gets).toEqual({ uno: 0, varios: 1 });
+  });
+});
+
+describe('varios repertorios del mismo color', () => {
+  async function importarEn(rep: string, pgn: string) {
+    const g = await loadGraph(rep, d);
+    const plan = buildImportPlan(pgn, 'white', existingOf(g), new Map());
+    await commitImport(plan, new Map(), new Map(), d);
+  }
+
+  it('cada partida se cruza con el repertorio que la cubre: el desvío y el hueco son de ese', async () => {
+    await repertorio(); // Principal: 1. e4 e5
+    const londres = await createRepertoire('white', 'Londres', d);
+    await importarEn(londres.id, '1. d4 d5 2. Bf4 *');
+    const now = Date.now();
+    mockApi({
+      '2026-10': [
+        game('desvio', now - DAY, '1. d4 d5 2. Nf3 *'),
+        game('hueco', now - DAY, '1. d4 Nf6 *'),
+        game('italiana', now - DAY, '1. e4 e5 *'),
+      ],
+    });
+    const r = await syncChesscom(undefined, d);
+    expect(r).toMatchObject({ imported: 3, deviations: 1, gaps: 1 });
+    const byId = new Map((await d.games.toArray()).map((g) => [g.id.split('/').pop(), g]));
+    expect(byId.get('desvio')?.rep).toBe(londres.id);
+    expect(byId.get('hueco')?.rep).toBe(londres.id);
+    expect(byId.get('italiana')?.rep).toBe('white');
+    const [ev] = (await d.events.toArray()).filter((e) => e.kind === 'forceDue');
+    expect(ev.cardId.startsWith(`${londres.id}|`)).toBe(true);
+    expect((await d.gaps.toArray()).map((g) => g.id.startsWith(`${londres.id}|`))).toEqual([true]);
+  });
+
+  it('al borrar un repertorio, recalcular vuelve a cruzar sus partidas con los que quedan', async () => {
+    await repertorio();
+    const londres = await createRepertoire('white', 'Londres', d);
+    await importarEn(londres.id, '1. d4 d5 2. Bf4 *');
+    mockApi({ '2026-10': [game('hueco', Date.now() - DAY, '1. d4 Nf6 *')] });
+    await syncChesscom(undefined, d);
+    await deleteRepertoire(londres.id, d);
+    await recalcGames(undefined, d);
+    const [row] = await d.games.toArray();
+    expect(row.rep).toBe('white');
+    expect(row.outcome).toMatchObject({ kind: 'myDeviation', ply: 0 });
+    expect(await d.gaps.count()).toBe(0);
   });
 });

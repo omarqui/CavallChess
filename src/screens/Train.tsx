@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { DrawShape } from '@lichess-org/chessground/draw';
-import { displaySquares, epdFromNodeId, figurine, INITIAL_EPD, playUci, type Side } from '../chess/position';
+import { displaySquares, epdFromNodeId, figurine, INITIAL_EPD, playUci, repFromId, type Side } from '../chess/position';
 import { forceDue, rate } from '../db/repo';
-import { useCards, useEvents, useGraphs, useSettings, type Graphs } from '../db/hooks';
+import { useCards, useEvents, useGraphs, useRepertoireState, useSettings, type Graphs } from '../db/hooks';
 import { buildDailyQueue } from '../srs/queue';
 import { State } from '../srs/scheduler';
 import { weakSpots } from '../srs/stats';
@@ -56,7 +56,7 @@ function buildSession(
   let ids: string[] = [];
   for (const s of sides) {
     const g = graphs[s];
-    ids.push(...(props.root && props.root.startsWith(`${s}|`) ? g.subtreeCardIds(props.root) : g.trainableCardIds()));
+    ids.push(...(props.root && props.root.startsWith(`${g.rep}|`) ? g.subtreeCardIds(props.root) : g.trainableCardIds()));
   }
   // Débiles primero; el resto en orden de línea.
   const weak = weakSpots([graphs.white, graphs.black], events, new Date(), 30, 1000).map((w) => w.edge.id);
@@ -67,10 +67,17 @@ function buildSession(
 }
 
 export function TrainScreen(props: Props) {
-  const graphs = useGraphs();
+  const active = useGraphs();
+  const state = useRepertoireState();
   const cards = useCards();
   const events = useEvents();
   const settings = useSettings();
+  // Una tarjeta suelta (repasar desde una partida) puede ser de un repertorio que no es el activo: su color usa ese.
+  const graphs = useMemo(() => {
+    if (!active || !state) return undefined;
+    const own = props.card ? state.graphs.get(repFromId(props.card)) : undefined;
+    return own ? { ...active, [own.side]: own } : active;
+  }, [active, state, props.card]);
   const ready = graphs && cards && events && settings;
   const session = useRef<TrainingSession | null>(null);
   const [step, setStep] = useState<Step | null>(null);

@@ -19,6 +19,7 @@ import { LibraryScreen } from './screens/Library';
 import { LineViewerScreen } from './screens/LineViewer';
 import { ProgressScreen } from './screens/Progress';
 import { RepertoireScreen } from './screens/Repertoire';
+import { RepertoriosScreen } from './screens/Repertorios';
 import { SettingsScreen } from './screens/Settings';
 import { TrainScreen } from './screens/Train';
 import type { Side } from './types';
@@ -162,6 +163,7 @@ export default function App() {
       screen = (
         <RepertoireScreen
           side={side}
+          repParam={route.params.get('rep') ?? undefined}
           nodeParam={route.params.get('node') ?? undefined}
           gapSan={route.params.get('gap') ?? undefined}
         />
@@ -172,9 +174,13 @@ export default function App() {
       tab = null;
       screen = <IntroScreen />;
       break;
+    case 'repertorios':
+      tab = 'repertoire';
+      screen = <RepertoriosScreen />;
+      break;
     case 'archived':
       tab = 'repertoire';
-      screen = <ArchivedScreen side={side} />;
+      screen = <ArchivedScreen side={side} repParam={route.params.get('rep') ?? undefined} />;
       break;
     case 'import':
       tab = 'repertoire';

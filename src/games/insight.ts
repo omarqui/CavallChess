@@ -129,11 +129,11 @@ export function openingInsight(
     if (inTheory && hits.some((h) => !h.fall)) theory = ply + 1;
     else inTheory = false;
 
-    const fromId = nodeId(side, m.fromEpd);
-    const edge = graph.trainable.has(fromId) && !graph.node(fromId)?.cutHere ? graph.edges.get(edgeId(side, m.fromEpd, m.uci)) : undefined;
+    const fromId = nodeId(graph.rep, m.fromEpd);
+    const edge = graph.trainable.has(fromId) && !graph.node(fromId)?.cutHere ? graph.edges.get(edgeId(graph.rep, m.fromEpd, m.uci)) : undefined;
     const ecoHere = eco?.[m.epd];
     if (ecoHere) ecoName = ecoHere.replace(/^[A-E]\d\d /, '');
-    const toId = nodeId(side, m.epd);
+    const toId = nodeId(graph.rep, m.epd);
     const labels = edge && graph.trainable.has(toId) ? graph.labelsFor(toId) : [];
     if (labels.length) repName = labels.map((n) => n.name).join(' › ');
     const name = labels.length ? repName : lib ? libName(lib) : ecoName;
