@@ -72,7 +72,7 @@ Con `5.b6` las blancas devuelven el peón para que no se abra la columna a. No h
 10. e4 Be7 11. Bc4 O-O 12. O-O Rxb6
 ```
 
-Recuperaste el peón y el material está igualado. Tus piezas están bien desarrolladas y la torre de b6 quedó activa. Seguí con `...d6` y con `...Be6` o `...Bb7` para cambiar el alfil de c4; si la dama blanca se queda en d5, buscá echarla con tiempo.
+Recuperaste el peón y el material está igualado. Tus piezas están bien desarrolladas y la torre de b6 quedó activa. Seguí con `...d6` y con `...Be6` para cambiar el alfil de c4; si la dama blanca se queda en d5, buscá echarla con tiempo.
 
 ## Variante: Benko rehusado con 4.Nf3 {#rehusado} [club]
 Muchos jugadores no quieren aceptar el peón. Con `4.Nf3` las blancas siguen su desarrollo; vos presionás d5 con el alfil y ganás espacio con b4.

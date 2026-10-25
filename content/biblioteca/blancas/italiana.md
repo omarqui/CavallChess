@@ -52,7 +52,7 @@ Tenés el peón aislado en d4, pero también las piezas más activas. La idea es
 En vez de cambiar alfiles, las negras se comen el peón de e4. Es muy común en partidas rápidas. Lo que sigue es casi forzado y conviene saberlo: vas a sacar al rey negro de su casa con una serie de jaques.
 
 ```pgn
-1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+ 7. Bd2 Nxe4 8. Bxb4 Nxb4 9. Bxf7+ { [%hint Antes de ir por el caballo suelto de b4, sacá al rey negro de su casa con un sacrificio.] } Kxf7 10. Qb3+ { [%hint Buscá un jaque que además ataque una pieza suelta.] } d5 11. Ne5+ { [%hint Seguí con un jaque que acerque otra pieza al rey.] } Ke6 12. Qxb4 { Recuperaste el alfil que entregaste en f7: el material está parejo y el rey negro quedó en el centro. } c5 13. Qa3 { La dama sale del ataque y presiona c5: si ese peón se mueve, se abre la diagonal hacia e7 y f8. } cxd4 14. Nf3 { El caballo de e5 se quedó sin apoyo y el rey lo atacaba: vuelve a f3, desde donde además presiona d4. } Qf6 15. O-O
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+ 7. Bd2 Nxe4 8. Bxb4 Nxb4 9. Bxf7+ { [%hint Antes de ir por el caballo suelto de b4, sacá al rey negro de su casa con un sacrificio.] } Kxf7 10. Qb3+ { [%hint Buscá un jaque que además ataque una pieza suelta.] } d5 11. Ne5+ { [%hint Seguí con un jaque que acerque otra pieza al rey.] } Ke6 12. Qxb4 { Recuperaste la pieza que entregaste en f7: el material está parejo y el rey negro quedó en el centro. } c5 13. Qa3 { La dama sale del ataque y presiona c5: si ese peón se mueve, se abre la diagonal hacia e7 y f8. } cxd4 14. Nf3 { El caballo de e5 se quedó sin apoyo y el rey lo atacaba: vuelve a f3, desde donde además presiona d4. } Qf6 15. O-O
 ```
 
 Las negras tienen un peón de más, pero su rey está expuesto y vos tenés el desarrollo: la posición está equilibrada. Seguí con `Nbd2` y las torres al centro, y presioná el peón de d4. Si en la jugada 10 el rey va a e8 en vez de tapar con `...d5`, comé el caballo de b4 y el juego queda parejo.
@@ -67,7 +67,7 @@ En el Giuoco Piano, después de `6.cxd4`, lo correcto para las negras es el jaqu
 Tus peones desarmaron la defensa negra y quedás con una ventaja grande. Si en la jugada 8 el caballo va a e4 en vez de g4, enrocá: así la torre cuida f2 contra `...Bxf2+` y `...Nxf2`, y la ventaja sigue siendo clara.
 
 ## Variante: Giuoco Piano con 5...Bb6 {#piano-bb6} [club]
-Las negras no cambian en d4 y retiran el alfil antes de que lo ataquen. Ojo: no es la trampa anterior. Acá el peón de e5 sigue en el tablero, así que en vez de avanzar en el centro, cambiás.
+Las negras retiran a b6 el alfil atacado, sin cambiar en d4. Ojo: no es la trampa anterior. Acá el peón de e5 sigue en el tablero, así que en vez de avanzar en el centro, cambiás.
 
 ```pgn
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 Bb6 { El alfil se aparta sin cambiar en d4. } 6. dxe5 { [%hint Abrí el centro y ganá tiempo sobre el caballo de f6.] Si en vez de saltar comen en e4, 7.Qd5! ataca f7 y el caballo a la vez. } Ng4 { El caballo ataca e5 y, junto con el alfil de b6, presiona f2. } 7. Bxf7+ { [%hint Antes de defender, sacá al rey de su casa con un jaque que te deje dar otro.] } Kxf7 8. Ng5+ { Con jaque, y la dama ya mira al caballo de g4. } Ke8 9. Qxg4 Nxe5 10. Qg3 { La dama se aparta del caballo y lo presiona en e5. } d6 11. O-O { Ganaste un peón y el rey negro ya no puede enrocar. }

@@ -24,7 +24,7 @@ Con `3...d5` desafiás el centro de inmediato. Si las blancas cambian en d5 y ar
 - **Cambio con Nf3 y Rb1:** la torre ataca b7. Vos cambiás en d4, das jaque en a5 y comés el peón de a2. Las blancas tienen iniciativa, pero tus peones de a y b quedan pasados.
 - **`4.Nf3` con `5.Bf4`:** sin cambio en d5, el alfil de f4 vigila c7. Enrocás, jugás `...c5` y, si las blancas lo toman, `...Qa5` clava al caballo de c3 y recupera el peón. Contra `4.Bf4` sin Nf3 el plan es el mismo: `...Bg7`, `...c5` y `...Qa5`.
 - **Sistema Ruso (`4.Nf3` y `5.Qb3`):** la dama presiona d5. Cambiás en c4 y, cuando la dama recaptura, enrocás; si las blancas arman el centro con e4, `...a6` y `...b5` echan a la dama con tiempo y `...c5` ataca el centro desde el costado.
-- **`4.Nf3` con `5.e3`:** las blancas juegan tranquilo y encierran su alfil de c1. Enrocá y jugá `...c5`; si cambian en d4 y recapturan con el peón de e, el caballo sale a c6 y presionás d4 como en las otras líneas.
+- **`4.Nf3` con `5.e3`:** las blancas juegan tranquilo y encierran su alfil de c1. Enrocá y jugá `...c5`; si cambiás en d4 y recapturan con el peón de e, el caballo sale a c6 y presionás d4 como en las otras líneas.
 
 ## Consejos
 - Antes de cambiar en d4, fijate que la columna c y la diagonal de tu alfil de g7 queden a tu favor.
@@ -88,14 +88,14 @@ Sin cambio en d5, las blancas desarrollan el alfil a f4 para vigilar c7. Vos rom
 La posición está pareja y tus piezas, activas. Si las blancas juegan `14.Nd5`, el golpe es `14...e5`: mirá la trampa de esta ficha.
 
 ## Variante: Sistema Ruso {#sistema-ruso} [club]
-Con `5.Qb3` la dama ataca d5. Cambiás en c4 y, cuando las blancas arman el centro con e4, usás los peones del flanco de dama para echar a la dama y atacar d4 (la Variante Húngara).
+Con `5.Qb3` la dama presiona d5. Cambiás en c4 y, cuando las blancas arman el centro con e4, usás los peones del flanco de dama para echar a la dama y atacar d4 (la Variante Húngara).
 
 ```pgn
-1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. Nf3 Bg7 5. Qb3 dxc4 { [%hint Cambiá el peón atacado: para recuperarlo, la dama va a tener que exponerse.] }
+1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. Nf3 Bg7 5. Qb3 dxc4 { [%hint No te quedes defendiendo d5: buscá que la dama blanca tenga que volver a moverse.] }
 6. Qxc4 O-O 7. e4 a6 { [%hint Prepará el avance que echa a la dama con tiempo.] }
 8. Be2 b5 9. Qb3 c5 { [%hint Atacá el centro desde el costado ahora que la dama se alejó.] }
 10. dxc5 Bb7 { [%hint Antes de recuperar el peón, desarrollá con presión sobre e4.] }
-11. e5 Nfd7 { [%hint Retirá el caballo atacado a una casilla desde donde ataque c5 y e5.] }
+11. e5 Nfd7 { [%hint El caballo está atacado: elegí una retirada desde la que puedas ir por los peones blancos que se adelantaron.] }
 ```
 
 Vas a recuperar el peón: si `12.Be3`, `12...Nxe5` gana el de e5 y la posición queda pareja. Si en la jugada 8 las blancas empujan `8.e5`, seguí con `8...b5 9.Qb3 Nfd7`: el peón de e5 pasa a ser un blanco.

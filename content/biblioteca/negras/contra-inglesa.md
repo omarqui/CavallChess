@@ -86,7 +86,7 @@ Contra el salto a d4, el codicioso `5.Nxe5` ya es un error. Si además las blanc
 
 ```pgn
 1. c4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. g3 Nd4 { [%hint Ocupá con el caballo una casilla central y ofrecé el cambio del caballo de f3.] }
-5. Nxe5 { Se lleva un peón, pero el caballo deja libre f3 y queda en la columna de tu dama. } Qe7 { [%hint Atacá el caballo y ponete en la misma columna que el rey blanco.] }
+5. Nxe5 { Se lleva un peón, pero el caballo deja libre f3 y queda en la columna e, adonde puede ir tu dama. } Qe7 { [%hint Atacá el caballo y ponete en la misma columna que el rey blanco.] }
 6. Nd3?? { Retira el caballo, pero deja la columna e abierta hasta el rey. } Nf3# { El peón de e2 no puede comer porque está clavado por tu dama, y el de g ya no está en g2. }
 ```
 

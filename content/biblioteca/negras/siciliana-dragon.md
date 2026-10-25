@@ -43,7 +43,7 @@ Con `9.Bc4` el alfil apunta a f7 y frena tu `...d5`. Vos llevás la torre a c8, 
 10. O-O-O Rc8 { [%hint Ocupá la columna semiabierta que apunta al rey blanco.] }
 11. Bb3 Ne5 { [%hint Llevá el caballo hacia una casilla desde donde ataque a la dama y al alfil de e3.] }
 12. h4 h5 { [%hint Frená el peón que quiere abrir la columna h contra tu rey.] }
-13. Bg5 Rc5 { [%hint Activá la torre de modo que apoye el avance de tu peón de b.] }
+13. Bg5 Rc5 { [%hint Sin sacarla de la columna c, subí la torre para que respalde el avance de tu peón de b.] }
 14. Kb1 b5
 ```
 

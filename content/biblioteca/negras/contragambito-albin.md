@@ -34,7 +34,7 @@ Contra `2.c4` no te quedás defendiendo d5: contraatacás con `2...e5`. Después
 La línea más jugada. Las blancas desarrollan el alfil en g2 y sostienen e5 con piezas; vos traés el caballo de g8 hasta g6 para ganarlo de vuelta.
 
 ```pgn
-1. d4 d5 2. c4 e5 3. dxe5 d4 { [%hint No defiendas: buscá quitarle casillas al caballo de b1 y al peón de e2.] El peón de d4 le quita casillas al caballo de b1 y al peón de e2. }
+1. d4 d5 2. c4 e5 3. dxe5 d4 { [%hint Tu peón central está atacado: en vez de defenderlo, buscale una casilla desde donde moleste al desarrollo blanco.] El peón de d4 le quita casillas al caballo de b1 y al peón de e2. }
 4. Nf3 Nc6 { [%hint Defendé tu avanzada y sumá presión sobre el peón de e5.] }
 5. g3 Nge7 { [%hint Empezá un viaje de caballo que termine atacando e5.] }
 6. Bg2 Ng6 7. O-O Ngxe5 { Recuperaste el peón: el material está igualado. }
@@ -66,7 +66,9 @@ Con a3 y b4 las blancas evitan el jaque en b4 y ganan espacio en el flanco de da
 12. Be2 Bxe2 13. Qxe2 Bxd4 { Recuperaste el peón: el material está igualado. }
 ```
 
-El material está igualado y tus piezas están activas. Ojo: si las blancas siguen con `14.O-O Bxb2 15.Qxb2`, la dama ataca a tu caballo de e5 por la diagonal; defendelo con `15...Qd6` antes de enrocar.
+El material está igualado y tus piezas están activas. Ojo: si las blancas siguen con `14.O-O Bxb2 15.Qxb2`, la dama ataca a tu caballo de e5 por la diagonal; defendelo con `15...Qd6` antes de enrocar. Y si `16.Re1` clava el caballo contra tu rey, enrocá largo (`16...O-O-O!`): el rey sale de la columna e y la clavada desaparece. No juegues `16...f6?`, porque `17.f4!` ataca al caballo clavado y lo gana.
+
+Si en la jugada 12 las blancas echan al alfil con `12.f3`, el jaque `12...Qh4+` gana: el rey blanco queda al descubierto y tus piezas entran con todo.
 
 ## Variante: Contra 4.e3 {#e3} [básica] [gambito]
 Atacar tu peón con e3 parece lo más lógico, pero te deja dar un jaque molesto. Esta es la forma de jugar cuando las blancas no caen en la trampa.

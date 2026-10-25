@@ -88,7 +88,7 @@ Como jugás `...Qc7` antes de `...a6`, el caballo de d4 puede saltar a b5 y atac
 10. O-O Bb4 { [%hint Atacá el caballo que defiende el peón central.] Llegaste a la misma posición de la variante con 6.Be2. }
 ```
 
-Desde acá seguís como en la variante con `6.Be2`. Si en la jugada 8 las blancas prueban `8.Bb6`, con la amenaza `Nc7+`, no te asustes: `8...axb5 9.Nxb5 Bb4+` te da buen juego.
+Desde acá seguís como en la variante con `6.Be2`. Si en la jugada 8 las blancas prueban `8.Bb6`, con la amenaza `Nc7+`, no te asustes: `8...axb5 9.Nxb5 Bb4+ 10.c3 Ba5!` te da buen juego, y si `11.Nd6+`, el rey va a f8. Tiene que ser `10...Ba5`: el alfil cubre c7 y ataca al de b6, mientras que las otras jugadas dejan entrar `Nc7+` y perdés la torre de a8.
 
 ## Variante: 5.Nb5 y la estructura Maroczy {#nb5} [básica]
 Con `5.Nb5` el caballo amenaza saltar a d6. Lo frenás con `...d6`, y si las blancas arman el centro con c4, jugás el erizo.

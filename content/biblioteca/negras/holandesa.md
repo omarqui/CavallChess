@@ -70,7 +70,7 @@ Con `2.e4` las blancas entregan un peón para abrir líneas rápido. Lo tomás, 
 Devolviste el peón, pero tenés la pareja de alfiles y una posición sana. Si las blancas cambian damas en e7, recapturá con el alfil: el final es cómodo para vos.
 
 ## Trampa a favor: La diagonal larga {#diagonal-larga} [club]
-En el Leningrado, si las blancas juegan b3 con el caballo en c3 y el peón de d4 ya cambiado, ese caballo queda sin defensores y tu alfil de g7 lo ataca por la diagonal larga. `...Ne4` lo ataca por segunda vez.
+En el Leningrado, si las blancas juegan b3 con el caballo en c3 y el peón de d4 ya cambiado, ese caballo queda sin defensores. Tu alfil de g7 lo apunta por la diagonal larga, pero el caballo de f6 se la tapa: `...Ne4` le abre la diagonal al alfil de g7 y suma el segundo ataque.
 
 ```pgn
 1. d4 f5 2. c4 Nf6 3. g3 g6 4. Bg2 Bg7 5. Nf3 O-O 6. O-O d6 7. Nc3 c6 8. d5 e5 9. dxe6 Bxe6

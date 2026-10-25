@@ -81,7 +81,7 @@ Con `3.exd5 cxd5` la estructura queda simétrica y tranquila. Desarrollo sano, e
 7. Qb3 { Ataca b7. } Qd7 { Defiende b7 sin crear debilidades. }
 8. Nd2 e6 { El alfil ya está afuera: ahora sí cerrás con e6. }
 9. Ngf3 Bd6 { Ofrecés cambiar los alfiles de casillas oscuras. }
-10. Bxd6 Qxd6 { La dama ya no cuida b7. Si las blancas lo comen, Rb8 y la dama tiene que volver a a6; después enrocás y, con la torre en la columna b, recuperás el peón de b2: la posición queda pareja. }
+10. Bxd6 Qxd6 { La dama ya no cuida b7. Si las blancas lo comen, Rb8 y la dama tiene que irse a a6; después enrocás y, con la torre en la columna b, recuperás el peón de b2: la posición queda pareja. }
 11. O-O O-O 12. Rae1 Rab8 { [%hint Prepará el avance de tus dos peones del flanco de dama contra los tres blancos.] La torre apoya el avance del peón de b. [%cal Gb7b5] }
 ```
 

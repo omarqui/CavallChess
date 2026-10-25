@@ -72,7 +72,7 @@ El peón de a5 te quita la casilla b6. Seguí con `...Rfd8` y `...h6`, y prepar�
 11. Bxf6 Nxf6 12. g5 Nd7 { El caballo retrocede, pero desde d7 puede saltar a c5 o a b6. }
 ```
 
-Las blancas siguen con `13.f5` para abrir líneas contra tu rey. Ahí una opción sólida es enrocar corto y empujar `...b4` para echar al caballo de c3; la alternativa teórica, `13...Bxg5+ 14.Kb1 Ne5`, lleva a posiciones muy filosas. En cualquier caso, el ataque blanco es peligroso y no hay tiempo que perder. Si en vez de `10.g4` juegan `10.Bd3`, el plan es el mismo: `...b5` y `...Bb7`.
+Las blancas siguen con `13.f5` para abrir líneas contra tu rey. Ahí podés enrocar corto y empujar `...b4` para echar al caballo de c3, o elegir la alternativa teórica, `13...Bxg5+ 14.Kb1 Ne5`: las dos llevan a posiciones muy filosas. En cualquier caso, el ataque blanco es peligroso y no hay tiempo que perder. Si en vez de `10.g4` juegan `10.Bd3`, el plan es el mismo: `...b5` y `...Bb7`.
 
 ## Variante: Ataque Sozin {#sozin} [club]
 Con `6.Bc4` el alfil apunta a f7 y a e6. Le cerrás la diagonal con `...e6`, lo echás con `...b5` y defendés tu enroque con cuidado.
@@ -82,7 +82,7 @@ Con `6.Bc4` el alfil apunta a f7 y a e6. Le cerrás la diagonal con `...e6`, lo 
 7. Bb3 b5 { [%hint Ganá espacio en el flanco de dama con la amenaza de echar al caballo de c3.] }
 8. O-O Be7 9. Qf3 { Si el peón de e4 avanza, la diagonal de la dama se abre hasta tu torre de a8. } Qc7 { [%hint Controlá la casilla de avance del peón central blanco.] }
 10. Qg3 O-O 11. Bh6 Ne8 { Defendés g7 una vez más. }
-12. Rad1 Bd7 { [%hint Completá el desarrollo del flanco de dama.] }
+12. Rad1 Bd7 { [%hint Desarrollá una pieza del flanco de dama de modo que también cubra e6.] }
 ```
 
 Tu flanco de rey ya está cubierto. Ahora `...Nc6` para cambiar el caballo de d4 y `...a5-a4` para empujar al alfil de b3. Ojo con los sacrificios blancos en e6 y en f5: antes de mover, revisá que tu peón de e6 y tu rey estén bien defendidos.

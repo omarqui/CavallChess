@@ -49,7 +49,7 @@ La línea principal. Con `4.Nc3 dxc4 5.a4` las blancas impiden que sostengas el 
 La estructura quedó cerrada: las blancas tienen espacio en el flanco de rey y vos una base firme en d5. Seguí con `...Be7`, `...Rc8` y juego por la columna c; tu alfil de h5 puede volver a g6 para cambiarse por el de d3.
 
 ## Variante: Variante Alekhine {#alekhine} [básica]
-Esta vez las blancas empiezan con `3.Nc3` y sacan el caballo a f3 una jugada después: con `4...dxc4` llegás a la misma posición de la Variante Checa. Si ahora no juegan `5.a4` sino `5.e3`, quieren recuperar el peón con el alfil. Como todavía no jugaron a4, podés sostenerlo con b5.
+Las blancas empiezan con `3.Nc3` y sacan el caballo a f3 una jugada después. Con `4...dxc4` tomás el peón de c4. Si siguen con `5.e3`, quieren recuperarlo con el alfil; como todavía no jugaron `a4`, podés sostenerlo con `...b5`. La jugada más común es `5.a4`, justamente para impedir `...b5`: esa es la Variante Checa, de nivel club.
 
 ```pgn
 1. d4 d5 2. c4 c6 3. Nc3 Nf6 4. Nf3 dxc4 5. e3 b5 { [%hint Defendé el peón que ganaste, ahora que todavía se puede.] }
@@ -79,7 +79,7 @@ Contra `3.Nc3` y `4.e3` la regla del alfil tiene una excepción. Si lo sacás ya
 1. d4 d5 2. c4 c6 3. Nc3 Nf6 4. e3 a6 { [%hint Si sacás ya el alfil, b7 queda flojo: esperá con una jugada de peón que prepare ganar espacio en el flanco de dama.] }
 5. Nf3 b5 { [%hint Aprovechá lo que preparaste en la jugada anterior: ganá espacio y presioná c4.] }
 6. b3 Bg4 { [%hint Ahora sí: sacá la pieza que estaba esperando, con presión sobre un defensor del centro blanco.] El caballo de f3 queda clavado contra la dama. }
-7. h3 Bxf3 { Antes de que te lo echen, cambiás el alfil por el caballo que vigilaba d4 y e5. }
+7. h3 Bxf3 { En vez de retirarlo, cambiás el alfil por el caballo que vigilaba d4 y e5. }
 8. Qxf3 e6 { Ahora sí cerrás con e6: el alfil ya no puede quedar encerrado, porque lo cambiaste. }
 9. Bd3 Bb4 { El alfil clava al caballo de c3. }
 10. Bd2 Nbd7 11. O-O O-O

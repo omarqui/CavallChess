@@ -24,7 +24,7 @@ No hace falta memorizar mucho: alcanza con un plan para cada uno.
 ## Ideas y planes
 - **Alapin con `3.exd5`:** después de `...Qxd5`, `...Nf6`, `...e6` y el cambio `...cxd4`, las blancas suelen quedarse con un peón aislado en d4. Tu receta: bloquearlo con un caballo en d5, presionarlo con las torres en la columna d y cambiar piezas, porque en el final ese peón es una debilidad.
 - **Alapin con `3.e5`:** la estructura se parece al Avance de la Francesa, pero tu alfil de casillas claras sale antes de que juegues `...e6`. El blanco es el peón de d4: `...Nc6`, `...cxd4`, `...Nge7-f5` y `...Qb6`.
-- **Smith-Morra:** tenés un peón de más; las blancas, desarrollo rápido y columnas abiertas. Sus ideas son e5, Nd5 o Nb5 contra d6, y golpes en f7. Tu esquema: `...Nc6`, `...d6`, `...e6`, `...Nf6`, `...Be7` y enroque. Cuando la torre blanca llega a d1, `...e5` impide para siempre el avance e4-e5, que le abriría la columna d frente a tu dama, y deja e6 libre para tu alfil, que se ofrece a cambiar al de c4.
+- **Smith-Morra:** tenés un peón de más; las blancas, desarrollo rápido y columnas abiertas. Sus ideas son e5, Nd5 o Nb5 contra d6, y golpes en f7. Tu esquema: `...Nc6`, `...d6`, `...e6`, `...Nf6`, `...Be7` y enroque. Cuando la torre blanca llega a d1, `...e5` le cierra el paso al peón de e4, cuyo avance le abriría la columna d frente a tu dama, y deja e6 libre para tu alfil, que se ofrece a cambiar al de c4.
 - **Grand Prix:** las blancas juegan f4, Nf3, el alfil a c4 o b5, enroque corto y, muchas veces, `Qe1-h4` y f5 contra tu rey. Contra `Bb5`, el salto `...Nd4` te da la pareja de alfiles o, si cambian el caballo, un peón que gana espacio en d4; contra `Bc4`, `...e6` le cierra la diagonal y `...d5` lo echa con tempo.
 
 ## Consejos
@@ -67,7 +67,7 @@ Tomás el peón y te desarrollás con un esquema sólido. Las blancas tienen act
 1. e4 c5 2. d4 cxd4 3. c3 dxc3 { [%hint Aceptá el peón: con un desarrollo cuidadoso, te lo podés quedar.] }
 4. Nxc3 Nc6 5. Nf3 d6 { [%hint Controlá e5 y abrí la diagonal de tu alfil de casillas claras.] }
 6. Bc4 e6 { [%hint Cerrá la diagonal que apunta a f7 antes de sacar el caballo del flanco de rey.] }
-7. O-O Nf6 8. Qe2 Be7 9. Rd1 e5 { [%hint La torre blanca se puso frente a tu dama: impedí para siempre el avance del peón de e4, que le abriría la columna.] }
+7. O-O Nf6 8. Qe2 Be7 9. Rd1 e5 { [%hint La torre blanca se puso frente a tu dama: frená con un peón el avance del de e4, que le abriría la columna.] }
 10. h3 { Impide que tus piezas salten a g4. } O-O
 11. Be3 Be6 { [%hint Ofrecé cambiar al alfil más activo de las blancas.] }
 ```
