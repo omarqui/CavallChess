@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { shot, skipIntro } from './helpers';
+import { move, shot, skipIntro } from './helpers';
 
 test('biblioteca: catálogo por color y buscador', async ({ page }) => {
   await page.goto('/');
@@ -24,13 +24,26 @@ test('biblioteca: catálogo por color y buscador', async ({ page }) => {
 });
 
 test('biblioteca: si no carga, avisa y se puede reintentar', async ({ page }) => {
+  // Instalada, para que la bienvenida no muestre el paso de instalar.
+  await page.addInitScript(() => Object.defineProperty(navigator, 'standalone', { value: true, configurable: true }));
   // El trozo con las fichas (bundle-*.js) falla la primera vez (la bienvenida ya lo pide al abrir).
   let pedidos = 0;
   await page.route(/\/assets\/bundle-[^/]*\.js$/, (route) =>
     pedidos++ === 0 ? route.abort('internetdisconnected') : route.continue(),
   );
   await page.goto('/');
-  await skipIntro(page);
+
+  // En la bienvenida, el paso de elegir aperturas avisa y deja seguir sin ellas.
+  await page.getByRole('button', { name: 'Empezar' }).click();
+  await move(page, 'b8c6', 'black');
+  await page.getByRole('button', { name: 'Siguiente' }).click();
+  await expect(page.getByText('No se pudo cargar la biblioteca.')).toBeVisible();
+  await page.waitForTimeout(400); // fin del fundido del paso
+  await shot(page, '33-bienvenida-sin-biblioteca');
+  await page.getByRole('button', { name: 'Seguir', exact: true }).click();
+  await expect(page.getByRole('heading', { name: '¿Jugás en Chess.com?' })).toBeVisible();
+  await page.getByRole('button', { name: 'Saltar' }).click();
+
   await page.getByRole('link', { name: 'Biblioteca' }).click();
   await expect(page.getByText('No se pudo cargar la biblioteca.')).toBeVisible();
   await shot(page, '23-biblioteca-error');

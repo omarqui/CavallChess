@@ -194,6 +194,7 @@ test('entrenamiento: el aviso de una trampa a favor, con un fallo y a la primera
   await expect(page.getByText('Sesión terminada.')).toBeVisible({ timeout: 6000 });
   await expect(page.getByText('Trampa: Mate de Legal. El rival cayó.', { exact: true })).toBeVisible();
   await expect(page.getByText(/no encontraste el castigo/)).toBeHidden();
+  await page.waitForTimeout(600);
   await shot(page, '16-trampa-fin');
 });
 
