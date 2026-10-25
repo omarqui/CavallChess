@@ -11,6 +11,7 @@ npm install
 npm run dev                 # Vite en :5173 (copia antes el motor a public/engine)
 npm run typecheck           # tsc --noEmit (TypeScript 7 nativo, sin project references)
 MOTOR=1 npm run biblioteca:motor   # verifica las fichas de la biblioteca con Stockfish y escribe content/biblioteca/verificacion.json (PowerShell: $env:MOTOR=1)
+#   verifica también la posición previa al error del rival en las trampas a favor; las entradas llevan `version` (ver content/biblioteca/README.md)
 npm test                    # vitest: todos los unitarios (entorno node)
 npx vitest run src/trainer/session.test.ts            # un archivo
 npx vitest run -t "fallo: hay que jugar la correcta"  # un test por nombre
