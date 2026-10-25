@@ -6,6 +6,7 @@ import {
   addMove,
   commitImport,
   deleteEdge,
+  ensureDue,
   ensureRoots,
   exportBackup,
   forceDue,
@@ -22,7 +23,7 @@ import {
 } from './repo';
 import { buildImportPlan } from '../chess/pgnImport';
 import { INITIAL_EPD, nodeId } from '../chess/position';
-import { Rating, State } from '../srs/scheduler';
+import { isDue, Rating, State } from '../srs/scheduler';
 import { edgeAt } from '../test/helpers';
 
 let d: CavallDB;
@@ -66,6 +67,27 @@ describe('repositorio', () => {
     expect(events.map((e) => e.kind)).toEqual(['rating', 'rating', 'forceDue']);
     const row = (await d.cards.get(id))!;
     expect(row.card.reps).toBe(2);
+  });
+
+  it('ensureDue fuerza solo si no estaba vencida', async () => {
+    await importPgn('1. e4 *');
+    const g = await loadGraph('white', d);
+    const id = g.trainableCardIds()[0];
+    await rate(id, Rating.Good, 'session', d);
+    expect(isDue((await d.cards.get(id))!.card, new Date())).toBe(false);
+    expect(await ensureDue(id, d)).toBe(true);
+    expect(isDue((await d.cards.get(id))!.card, new Date())).toBe(true);
+    const antes = await d.events.count();
+    expect(await ensureDue(id, d)).toBe(false);
+    expect(await d.events.count()).toBe(antes);
+  });
+
+  it('ensureDue con una tarjeta nueva o inexistente devuelve false sin eventos', async () => {
+    await importPgn('1. e4 *');
+    const id = (await loadGraph('white', d)).trainableCardIds()[0];
+    expect(await ensureDue(id, d)).toBe(false);
+    expect(await ensureDue('white|nada|e2e4', d)).toBe(false);
+    expect(await d.events.count()).toBe(0);
   });
 
   it('reemplazar una jugada propia archiva su subárbol y conserva la tarjeta; volver la revive', async () => {

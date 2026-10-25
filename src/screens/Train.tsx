@@ -20,6 +20,8 @@ interface Props {
   mode: 'review' | 'practice';
   side?: Side;
   root?: string;
+  /** Una sola tarjeta (id de la jugada); manda sobre mode/side/root. */
+  card?: string;
 }
 
 const REPLAY_MS = 150;
@@ -36,6 +38,14 @@ function buildSession(
     rate: (id: string, r: Parameters<typeof rate>[1]) => void rate(id, r, 'session'),
     forceDue: (id: string) => void forceDue(id, 'practice'),
   };
+  if (props.card) {
+    // Una sola tarjeta: si no es entrenable, la cola queda vacía y se ve "No hay nada para repasar ahora.".
+    const id = props.card;
+    const ok = graphs.white.trainableCardIds().includes(id) || graphs.black.trainableCardIds().includes(id);
+    const ids = ok ? [id] : [];
+    const fresh = ok && cards.get(id)?.card.state === State.New ? ids : [];
+    return new TrainingSession(graphs, ids, fresh, 'review', cb);
+  }
   if (props.mode === 'review') {
     const q = buildDailyQueue([graphs.white, graphs.black], cards, events, new Date(), newPerDay);
     return new TrainingSession(graphs, [...q.due, ...q.fresh], q.fresh, 'review', cb);

@@ -131,6 +131,7 @@ export default function App() {
           mode={route.params.get('mode') === 'practice' ? 'practice' : 'review'}
           side={(route.params.get('side') as Side | null) ?? undefined}
           root={route.params.get('root') ?? undefined}
+          card={route.params.get('card') ?? undefined}
         />
       );
       break;
