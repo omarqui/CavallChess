@@ -1,14 +1,16 @@
 import { expect, test, type Page } from '@playwright/test';
-import { mockChesscom } from './chesscomMock';
+import { mockChesscom, type MockGame } from './chesscomMock';
 import { shot, skipIntro } from './helpers';
 
-/** Configura el usuario de Chess.com desde Ajustes (se guarda al salir del campo). */
+/** Configura el usuario de Chess.com desde Ajustes (se guarda al salir del campo) y espera a verlo en Partidas. */
 async function setChesscomUser(page: Page, user: string) {
   await page.goto('/#/settings');
   const input = page.getByLabel('Usuario de Chess.com');
   await input.fill(user);
   await input.blur();
-  await page.waitForTimeout(200);
+  // Sin recargar (la escritura sigue en curso): Partidas lee los ajustes en vivo y muestra el usuario al guardarse.
+  await page.evaluate(() => (location.hash = '#/games'));
+  await expect(page.getByText(`Chess.com · ${user}`)).toBeVisible();
 }
 
 test('partidas: la API simulada de Chess.com entra a la lista', async ({ page }) => {
@@ -205,14 +207,15 @@ test('partidas: historial, filtros y armar repertorio desde muchas', async ({ pa
   await expect(counter('3 partidas')).toBeVisible();
   await page.getByRole('radio', { name: 'Todas' }).click();
   await expect(counter('6 partidas')).toBeVisible();
+  // Arriba: actualizar, el historial y las herramientas; la lista va al final.
+  const showRows = () =>
+    page.getByRole('heading', { name: 'Tus partidas' }).evaluate((el) => el.scrollIntoView({ block: 'start' }));
   await scrollMain('top');
   await shot(page, 'games-list-light');
-  await page.getByRole('heading', { name: 'Tus partidas' }).evaluate((el) => el.scrollIntoView({ block: 'start' }));
+  await showRows();
   await shot(page, 'games-list-rows-light');
-  await scrollMain('bottom');
-  await shot(page, 'games-list-tools-light');
   await scheme('dark');
-  await shot(page, 'games-list-tools-dark');
+  await shot(page, 'games-list-rows-dark');
   await scrollMain('top');
   await shot(page, 'games-list-dark');
   await scheme('light');
@@ -263,4 +266,69 @@ test('partidas: historial, filtros y armar repertorio desde muchas', async ({ pa
   await expect(page.getByText('vs rival5')).toBeVisible();
 
   expect(errors).toEqual([]);
+});
+
+/** Partidas de un mes, de la más reciente a la más vieja, una cada `stepH` horas desde hace `fromH`. */
+function gamesOf(prefix: string, n: number, fromH: number, stepH = 1): MockGame[] {
+  return Array.from({ length: n }, (_, i) => ({
+    id: `${prefix}${i + 1}`,
+    white: 'tester',
+    black: `${prefix}rival${i + 1}`,
+    moves: '1. e4 e5 2. Nf3 Nc6',
+    winner: i % 3 === 0 ? 'black' : 'white',
+    end: new Date(Date.now() - (fromH + i * stepH) * 3_600_000),
+    timeClass: (['blitz', 'rapid', 'bullet', 'daily'] as const)[i % 4],
+  }));
+}
+
+test('partidas: "Ver más" pagina de a 50', async ({ page }) => {
+  await mockChesscom(page, { user: 'tester', months: { [monthKey(0)]: gamesOf('p', 60, 2) } });
+  await page.goto('/');
+  await skipIntro(page);
+  await setChesscomUser(page, 'tester');
+  await page.getByRole('button', { name: 'Actualizar partidas' }).click();
+  await expect(page.getByText('60 partidas nuevas')).toBeVisible();
+
+  const list = page
+    .locator('section')
+    .filter({ has: page.getByRole('heading', { name: 'Tus partidas' }) })
+    .getByRole('listitem');
+  await expect(page.getByText('60 partidas', { exact: true })).toBeVisible();
+  await expect(list).toHaveCount(50);
+  // Ritmos en castellano.
+  await expect(page.getByRole('link', { name: /vs prival2 · rápida · Ganaste/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /vs prival4 · diaria/ })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Ver más' }).click();
+  await expect(list).toHaveCount(60);
+  await expect(page.getByRole('button', { name: 'Ver más' })).toHaveCount(0);
+  await expect(page.getByText('vs prival60')).toBeVisible();
+});
+
+test('partidas: cancelar la carga del historial y retomarla', async ({ page }) => {
+  // La actualización trae los 3 meses más nuevos; el historial, los 4 anteriores (uno por mes, cada uno demorado).
+  const months: Record<string, MockGame[]> = {};
+  for (let ago = 0; ago < 7; ago++) months[monthKey(ago)] = gamesOf(`m${ago}-`, 1, 24 * 31 * ago + 30);
+  await mockChesscom(page, { user: 'tester', months, delayMs: 700 });
+  await page.goto('/');
+  await skipIntro(page);
+  await setChesscomUser(page, 'tester');
+  await page.getByRole('button', { name: 'Actualizar partidas' }).click();
+  await expect(page.getByText('3 partidas nuevas')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Cargar todo el historial' }).click();
+  await expect(page.getByText(/^Leyendo \d{4}-\d{2} · 1 de 4$/)).toBeVisible();
+  await expect(page.getByRole('progressbar', { name: 'Carga del historial' })).toBeVisible();
+  await shot(page, 'games-list-history-progress-light');
+  await page.getByRole('button', { name: 'Cancelar' }).click();
+  const cancelled = page.getByRole('status').filter({ hasText: /^Cancelaste la carga\./ });
+  await expect(cancelled).toHaveText(/^Cancelaste la carga\. Sumaste \d+ partidas?\. Quedan \d+ meses más viejos\.$/);
+  await expect(page.getByRole('button', { name: 'Actualizar partidas' })).toBeEnabled();
+
+  // Retomar sigue desde donde se cortó: al final están las 7, sin repetir ni saltear meses.
+  await page.getByRole('button', { name: 'Cargar todo el historial' }).click();
+  await expect(page.getByRole('status').filter({ hasText: /^Sumaste \d+ partidas?\.$/ })).toBeVisible();
+  await expect(page.getByText('7 partidas', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Cargar todo el historial' }).click();
+  await expect(page.getByText('Ya tenías todo el historial cargado.')).toBeVisible();
 });

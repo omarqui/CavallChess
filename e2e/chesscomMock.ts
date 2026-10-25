@@ -43,10 +43,13 @@ function toApi(g: MockGame) {
 
 /**
  * Simula la API de Chess.com para `user`. `months` va de 'YYYY/MM' a sus partidas; los archivos
- * se devuelven en orden ascendente, como la API real. Devuelve la lista de urls pedidas, para
- * verificar qué meses se leyeron.
+ * se devuelven en orden ascendente, como la API real. `delayMs` (opcional) demora cada mes, para
+ * poder cancelar una carga a mitad. Devuelve la lista de urls pedidas, para verificar qué meses se leyeron.
  */
-export async function mockChesscom(page: Page, opts: { user: string; months: Record<string, MockGame[]> }) {
+export async function mockChesscom(
+  page: Page,
+  opts: { user: string; months: Record<string, MockGame[]>; delayMs?: number },
+) {
   const requested: string[] = [];
   const base = `${API}/${opts.user.toLowerCase()}/games`;
   const keys = Object.keys(opts.months).sort();
@@ -60,7 +63,9 @@ export async function mockChesscom(page: Page, opts: { user: string; months: Rec
     const key = url.startsWith(`${base}/`) ? url.slice(base.length + 1) : '';
     const games = opts.months[key];
     if (!games) return route.fulfill({ status: 404, json: { message: 'not found' }, headers: cors });
-    return route.fulfill({ json: { games: games.map(toApi) }, headers: cors });
+    if (opts.delayMs) await new Promise((r) => setTimeout(r, opts.delayMs));
+    // La app pudo haber cortado el pedido mientras tanto (Cancelar): entonces ya no hay a quién responderle.
+    return route.fulfill({ json: { games: games.map(toApi) }, headers: cors }).catch(() => {});
   });
   return requested;
 }

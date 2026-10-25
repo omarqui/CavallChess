@@ -7,11 +7,11 @@ import { fichaProgress, lineStatus, orphanNotes, type LineStatus } from '../libr
 import type { Ficha, FichaLine } from '../library/types';
 import type { Note } from '../types';
 import { Board } from '../ui/Board';
-import { MoveLine, Screen, Segmented } from '../ui/kit';
+import { BackLink, Icon, ICONS, MoveLine, Screen, Segmented } from '../ui/kit';
 import { LibraryError } from '../ui/LibraryError';
 import { Tip } from '../ui/Tip';
 import { RichInline, RichText } from '../ui/RichText';
-import { href, navigate } from '../ui/router';
+import { navigate } from '../ui/router';
 
 export type FichaTab = 'resumen' | 'variantes' | 'trampas' | 'apuntes';
 
@@ -33,32 +33,6 @@ const TRAP_KIND: Record<string, string> = { favor: 'A favor', contra: 'En contra
 const PREVIEW_PLIES = 6;
 
 // ─── Piezas chicas ───────────────────────────────────────────────────────────
-
-export function Icon({ d, className = 'size-4' }: { d: ReactNode; className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className={`shrink-0 ${className}`}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {d}
-    </svg>
-  );
-}
-
-export const ICONS = {
-  back: <path d="M14.5 6l-6 6 6 6" />,
-  plus: <path d="M12 5.5v13M5.5 12h13" />,
-  check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
-  play: <path d="M8 5.8v12.4a.6.6 0 0 0 .9.5l9.8-6.2a.6.6 0 0 0 0-1L8.9 5.3a.6.6 0 0 0-.9.5z" />,
-  pencil: <path d="M4.5 19.5h3.8L18.6 9.2a2.2 2.2 0 0 0-3.1-3.1L5.2 16.4l-.7 3.1zM14 7.6l3.1 3.1" />,
-  chevron: <path d="M6.5 9.5l5.5 5.5 5.5-5.5" />,
-};
 
 type Tone = 'plain' | 'good' | 'brass' | 'bad';
 
@@ -153,17 +127,6 @@ export function ActionButton({
   );
 }
 
-export function BackLink({ to, children }: { to: string; children: ReactNode }) {
-  return (
-    <a
-      href={href(to)}
-      className="-ml-2 inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-[15px] font-medium text-muted transition hover:text-ink"
-    >
-      <Icon d={ICONS.back} className="size-5" />
-      {children}
-    </a>
-  );
-}
 
 // ─── Notas ───────────────────────────────────────────────────────────────────
 

@@ -9,22 +9,10 @@ import { gameMoves, type GameMove } from '../games/gamePgn';
 import type { GameOutcome, GameRow } from '../types';
 import { arrow, Board } from '../ui/Board';
 import { EnginePanel } from '../ui/EnginePanel';
-import { Banner, Button, MoveLine, Screen, Toggle } from '../ui/kit';
+import { BackLink, Banner, Button, Icon, ICONS, MoveLine, NavButton, Screen, Toggle } from '../ui/kit';
 import { navigate } from '../ui/router';
 import { showToast } from '../ui/toast';
-import { BackLink, Icon, ICONS } from './Ficha';
-import { NavButton } from './LineViewer';
-
-const LOSSES = ['checkmated', 'resigned', 'timeout', 'lose', 'abandoned'];
-
-/** El resultado de Chess.com (`win`, `resigned`, `agreed`…) desde tu lado, como en la lista de Partidas. */
-const resultLabel = (result: string) =>
-  result === 'win' ? 'Ganaste' : LOSSES.includes(result) ? 'Perdiste' : 'Tablas';
-
-/** Ruta del visor de una partida (el id es su URL de Chess.com, así que va codificado). */
-export const gamePath = (id: string) => `/games/${encodeURIComponent(id)}`;
-
-const EXTERNAL = <path d="M14 5h5v5M19 5l-8 8M17 13.5V18a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h4.5" />;
+import { gamePath, resultLabel, timeClassLabel } from './games/format';
 
 type Exit = Extract<GameOutcome, { kind: 'myDeviation' | 'gap' }>;
 
@@ -75,7 +63,7 @@ function Viewer({ game, graph }: { game: GameRow; graph: RepertoireGraph }) {
       </div>
     );
   }
-  return <Player game={game} moves={moves} analysis={analysis} />;
+  return <Player game={game} graph={graph} moves={moves} analysis={analysis} />;
 }
 
 function GameHeader({ game, aside }: { game: GameRow; aside?: ReactNode }) {
@@ -95,30 +83,44 @@ function GameHeader({ game, aside }: { game: GameRow; aside?: ReactNode }) {
           className="-mr-2 inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-2 text-[15px] font-medium text-brass transition hover:bg-surface"
         >
           Ver en Chess.com
-          <Icon d={EXTERNAL} className="size-4" />
+          <Icon d={ICONS.external} className="size-4" />
         </a>
       </div>
       <p className="text-sm text-muted">
-        Con {game.myColor === 'white' ? 'blancas' : 'negras'} · {game.timeClass} · {resultLabel(game.result)} · {date}
+        Con {game.myColor === 'white' ? 'blancas' : 'negras'} · {timeClassLabel(game.timeClass)} · {resultLabel(game.result)}{' '}
+        · {date}
       </p>
     </header>
   );
 }
 
 /** Flechas en la posición de salida: la jugada de la partida y, si te desviaste, la de tu repertorio. */
-function exitShapes(exit: Exit, move: GameMove): DrawShape[] {
+function exitShapes(exit: Exit, move: GameMove, graph: RepertoireGraph): DrawShape[] {
   const [from, to] = displaySquares(move.fromEpd, move.uci);
   if (exit.kind === 'gap') return [arrow(from, to, 'yellow')];
-  const expected = exit.cardId.slice(exit.cardId.lastIndexOf('|') + 1);
+  const expected = graph.edges.get(exit.cardId)?.uci;
+  if (!expected) return [arrow(from, to, 'red')];
   const [eFrom, eTo] = displaySquares(move.fromEpd, expected);
   return [arrow(from, to, 'red'), arrow(eFrom, eTo, 'green')];
 }
 
-function Player({ game, moves, analysis }: { game: GameRow; moves: GameMove[]; analysis: GameAnalysis }) {
+function Player({
+  game,
+  graph,
+  moves,
+  analysis,
+}: {
+  game: GameRow;
+  graph: RepertoireGraph;
+  moves: GameMove[];
+  analysis: GameAnalysis;
+}) {
   const o = analysis.outcome;
   const exit = exitOf(o);
   const [ply, setPly] = useState(() => Math.min(openingPly(o), moves.length));
   const [analyze, setAnalyze] = useState(false);
+  const [reviewing, setReviewing] = useState(false);
+  const reviewBusy = useRef(false);
   const strip = useRef<HTMLDivElement>(null);
 
   const go = (n: number) => setPly(Math.max(0, Math.min(moves.length, n)));
@@ -144,14 +146,20 @@ function Player({ game, moves, analysis }: { game: GameRow; moves: GameMove[]; a
   const current = ply > 0 ? moves[ply - 1] : undefined;
   const epd = current?.epd ?? INITIAL_EPD;
   const exitMove = exit ? moves[exit.ply] : undefined;
-  const shapes = exit && exitMove && ply === exit.ply ? exitShapes(exit, exitMove) : undefined;
+  const shapes = exit && exitMove && ply === exit.ply ? exitShapes(exit, exitMove, graph) : undefined;
   const agregar = (plies: number) => navigate(`${gamePath(game.id)}/agregar?hasta=${plies}`);
 
+  /** Deja vencida la tarjeta y la repasa sola. Un segundo toque mientras tanto no hace nada. */
   const review = async (cardId: string) => {
+    if (reviewBusy.current) return;
+    reviewBusy.current = true;
+    setReviewing(true);
     try {
       await ensureDue(cardId);
     } catch (e) {
       showToast(`No se pudo preparar el repaso: ${e instanceof Error ? e.message : 'error desconocido'}.`);
+      reviewBusy.current = false;
+      setReviewing(false);
       return;
     }
     navigate(`/train?card=${encodeURIComponent(cardId)}`);
@@ -159,21 +167,45 @@ function Player({ game, moves, analysis }: { game: GameRow; moves: GameMove[]; a
 
   return (
     <div className="mx-auto flex h-full w-full max-w-xl flex-col">
-      <div className="safe-top shrink-0 px-4">
+      {/* El aviso va arriba del tablero: así se ve con su acción principal aunque "Analizar" ocupe lugar abajo. */}
+      <div className="safe-top shrink-0 px-4 pb-2">
         <GameHeader game={game} aside={<Toggle label="Analizar" checked={analyze} onChange={setAnalyze} />} />
+        {o.kind === 'myDeviation' || o.kind === 'gap' ? (
+          <ExitNotice
+            exit={o}
+            gap={analysis.gap}
+            side={game.myColor}
+            at={ply}
+            canAddReply={o.kind === 'gap' && moves.length >= o.ply + 2}
+            reviewing={reviewing}
+            onGo={() => go(o.ply)}
+            onReview={(id) => void review(id)}
+            onAddReply={() => agregar(o.ply + 2)}
+          />
+        ) : (
+          <p className="text-[15px] text-muted">{outcomeNote(o)}</p>
+        )}
       </div>
 
-      <div className="mx-auto w-full shrink-0 px-4" style={{ maxWidth: 'calc(min(100vw, 36rem, 38dvh) + 2rem)' }}>
-        <Board
-          epd={epd}
-          orientation={game.myColor}
-          lastMove={current ? displaySquares(current.fromEpd, current.uci) : undefined}
-          shapes={shapes}
-          animationMs={150}
-        />
+      {/*
+        El tablero ocupa lo que queda: mide como mucho el ancho, y si falta alto (aviso con dos filas de botones,
+        "Analizar" prendido, pantalla baja) se achica antes que tapar el aviso o la navegación.
+      */}
+      <div className="min-h-0 shrink px-4" style={{ height: 'calc(min(100vw, 36rem) - 2rem)' }}>
+        <div className="h-full" style={{ containerType: 'size' }}>
+          <div className="mx-auto" style={{ width: 'min(100cqw, 100cqh)' }}>
+            <Board
+              epd={epd}
+              orientation={game.myColor}
+              lastMove={current ? displaySquares(current.fromEpd, current.uci) : undefined}
+              shapes={shapes}
+              animationMs={150}
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Una sola línea que se desliza: con la lista entera debajo, el aviso y las jugadas no entran a 390 px. */}
+      {/* Una sola línea que se desliza: la lista entera no entra junto al aviso a 390 px. */}
       <div ref={strip} className="relative shrink-0 overflow-x-auto whitespace-nowrap px-4 pt-1 text-[17px] [scrollbar-width:none]">
         <MoveLine
           moves={moves.map((m, i) => ({ san: m.san, id: `${i}-${m.uci}` }))}
@@ -183,22 +215,7 @@ function Player({ game, moves, analysis }: { game: GameRow; moves: GameMove[]; a
         />
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-3 pt-2">
-        {o.kind === 'myDeviation' || o.kind === 'gap' ? (
-          <ExitNotice
-            exit={o}
-            gap={analysis.gap}
-            side={game.myColor}
-            at={ply}
-            canAddReply={o.kind === 'gap' && moves.length >= o.ply + 2}
-            onGo={() => go(o.ply)}
-            onReview={(id) => void review(id)}
-            onAddReply={() => agregar(o.ply + 2)}
-          />
-        ) : (
-          <p className="text-[15px] text-muted">{outcomeNote(o)}</p>
-        )}
-      </div>
+      <div className="min-h-0 flex-1" />
 
       <div className="safe-bottom shrink-0 border-t border-line bg-paper px-4 pt-2">
         {analyze && <EnginePanel epd={epd} />}
@@ -211,12 +228,7 @@ function Player({ game, moves, analysis }: { game: GameRow; moves: GameMove[]; a
             Agregar al repertorio hasta acá
           </Button>
           <div className="flex w-16 shrink-0">
-            <NavButton
-              label="Siguiente"
-              disabled={ply >= moves.length}
-              onClick={() => go(ply + 1)}
-              icon={<path d="M9.5 6l6 6-6 6" />}
-            />
+            <NavButton label="Siguiente" disabled={ply >= moves.length} onClick={() => go(ply + 1)} icon={ICONS.forward} />
           </div>
         </div>
       </div>
@@ -224,12 +236,14 @@ function Player({ game, moves, analysis }: { game: GameRow; moves: GameMove[]; a
   );
 }
 
+/** Aviso compacto de la salida del repertorio: qué pasó y, primero, la acción principal. */
 function ExitNotice({
   exit,
   gap,
   side,
   at,
   canAddReply,
+  reviewing,
   onGo,
   onReview,
   onAddReply,
@@ -239,6 +253,7 @@ function ExitNotice({
   side: Side;
   at: number;
   canAddReply: boolean;
+  reviewing: boolean;
   onGo: () => void;
   onReview: (cardId: string) => void;
   onAddReply: () => void;
@@ -250,12 +265,18 @@ function ExitNotice({
   );
   if (exit.kind === 'myDeviation') {
     return (
-      <Banner tone="bad">
+      <Banner tone="bad" compact>
         <p>
           Acá jugaste {figurine(exit.playedSan)}; en tu repertorio va {figurine(exit.expectedSan)}.
         </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <Button className="flex-auto !px-3" onClick={() => onReview(exit.cardId)}>
+        <div className="mt-2 flex flex-wrap gap-2">
+          <Button
+            variant="primary"
+            className="flex-auto !px-3"
+            disabled={reviewing}
+            aria-busy={reviewing}
+            onClick={() => onReview(exit.cardId)}
+          >
             Repasar ahora
           </Button>
           {goButton}
@@ -263,28 +284,28 @@ function ExitNotice({
       </Banner>
     );
   }
+  const prepare = gap && (
+    <Button
+      variant={canAddReply ? 'secondary' : 'primary'}
+      className="flex-auto !px-3"
+      onClick={() =>
+        navigate(`/repertoire/${side}?node=${encodeURIComponent(nodeId(side, gap.epd))}&gap=${encodeURIComponent(gap.san)}`)
+      }
+    >
+      Preparar respuesta
+    </Button>
+  );
   return (
-    <Banner>
+    <Banner compact>
       <p>El rival jugó {figurine(exit.playedSan)} y tu repertorio no lo cubría.</p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {gap && (
-          <Button
-            className="flex-auto !px-3"
-            onClick={() =>
-              navigate(
-                `/repertoire/${side}?node=${encodeURIComponent(nodeId(side, gap.epd))}&gap=${encodeURIComponent(gap.san)}`,
-              )
-            }
-          >
-            Preparar respuesta
-          </Button>
-        )}
-        {goButton}
+      <div className="mt-2 flex flex-wrap gap-2">
         {canAddReply && (
-          <Button className="flex-auto !px-3" onClick={onAddReply}>
+          <Button variant="primary" className="w-full !px-3" onClick={onAddReply}>
             Agregar la novedad y tu respuesta
           </Button>
         )}
+        {prepare}
+        {goButton}
       </div>
     </Banner>
   );

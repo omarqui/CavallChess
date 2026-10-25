@@ -4,16 +4,15 @@ import { useGraphs } from '../db/hooks';
 import { buildFromGames } from '../games/aggregate';
 import type { Side } from '../types';
 import { ImportPreview } from '../ui/ImportPreview';
-import { Banner, Segmented } from '../ui/kit';
+import { BackLink, Banner, Segmented } from '../ui/kit';
 import { navigate } from '../ui/router';
 import { showToast } from '../ui/toast';
-import { ActionBar, ActionButton, BackLink } from './Ficha';
+import { ActionBar, ActionButton } from './Ficha';
+import { plural, savedMessage, sentence } from './games/format';
 
 const DAY = 86_400_000;
 type Period = '3' | '12' | 'all';
 const SINCE_DAYS: Record<Exclude<Period, 'all'>, number> = { '3': 90, '12': 365 };
-
-const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
 /** Un número chico con botones de 44 px: en el teléfono es más cómodo que tipearlo. */
 function Stepper({
@@ -98,12 +97,13 @@ export function BuildFromGamesScreen() {
 
   if (!graphs) return <div ref={top} />;
 
-  /** Cambiar una opción borra el aviso de "no hay suficientes partidas", que era de las opciones anteriores. */
+  /** Cambiar una opción borra los avisos ("no hay suficientes partidas" o un error): eran de las opciones anteriores. */
   const option =
     <T,>(set: (v: T) => void) =>
     (v: T) => {
       set(v);
       setEmpty(false);
+      setError(null);
     };
 
   const build = async () => {
@@ -119,7 +119,7 @@ export function BuildFromGamesScreen() {
       if (r.pgn) setPreview({ pgn: r.pgn, side, gamesUsed: r.gamesUsed });
       else setEmpty(true);
     } catch (e) {
-      setError(`No se pudo armar la vista previa: ${e instanceof Error ? e.message : 'error desconocido'}.`);
+      setError(`No se pudo armar la vista previa: ${sentence(e instanceof Error ? e.message : 'error desconocido')}`);
     } finally {
       setBusy(false);
     }
@@ -135,13 +135,8 @@ export function BuildFromGamesScreen() {
           graph={graphs[preview.side]}
           title="Repertorio desde tus partidas"
           proposeNames={() => []}
-          onSaved={({ mine, rival }) => {
-            const total = mine + rival;
-            showToast(
-              total
-                ? `Sumaste ${plural(total, 'jugada', 'jugadas')}, ${mine} para aprender.`
-                : 'Ya tenías todo eso en tu repertorio.',
-            );
+          onSaved={(saved) => {
+            showToast(savedMessage(saved));
             navigate(`/repertoire/${preview.side}`, true);
           }}
           onBack={() => setPreview(null)}
@@ -214,17 +209,22 @@ export function BuildFromGamesScreen() {
         </Field>
       </div>
 
+      {/* Las regiones vivas quedan montadas; solo aparece o se va el aviso de adentro. */}
       <div ref={notice} style={{ scrollMarginBottom: 'calc(var(--tabbar-h) + 6.5rem)' }}>
-        {empty && (
-          <div role="status" className="mt-4">
-            <Banner>No hay suficientes partidas con ese filtro. Probá con un período más largo o un mínimo más bajo.</Banner>
-          </div>
-        )}
-        {error && (
-          <div role="alert" className="mt-4">
-            <Banner tone="bad">{error}</Banner>
-          </div>
-        )}
+        <div role="status">
+          {empty && (
+            <div className="mt-4">
+              <Banner>No hay suficientes partidas con ese filtro. Probá con un período más largo o un mínimo más bajo.</Banner>
+            </div>
+          )}
+        </div>
+        <div role="alert">
+          {error && (
+            <div className="mt-4">
+              <Banner tone="bad">{error}</Banner>
+            </div>
+          )}
+        </div>
       </div>
 
       <ActionBar>
