@@ -151,6 +151,52 @@
       "horquilla-c7": 9.64
     }
   },
+  "grunfeld": {
+    "hash": "af1cde982a64be47e16ce8d8dfdc183b18bf81c124b5ba125c12a70c8d01b183",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "cambio-be3": -0.05,
+      "cambio-bc4": -0.09,
+      "cambio-rb1": -0.35,
+      "nf3-bf4": -0.2,
+      "sistema-ruso": -0.21,
+      "captura-en-e5": 4.33
+    }
+  },
+  "holandesa": {
+    "hash": "736f93b1d85ee2673713931dd3d1e0a88d8103d5b5b89fde123c41a16dcfe663",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "leningrado": -0.5,
+      "contra-bg5": -0.07,
+      "staunton": 0.13,
+      "diagonal-larga": 6.08
+    }
+  },
+  "india-de-dama": {
+    "hash": "57112c479ec7f593de376b507c65ff6a69bc01880f3bf70cdffbe45dc16c012c",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "fianchetto": -0.34,
+      "petrosian": -0.17,
+      "cuatro-e3": -0.08,
+      "peon-envenenado": -6.31
+    }
+  },
+  "india-de-rey": {
+    "hash": "52e60ff4bf874732c8e3eafda26ec116c47205c07c2c17607e910a16b849f3d1",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "clasica": -0.2,
+      "samisch": -0.11,
+      "cuatro-peones": 0.29,
+      "contragolpe-en-c4": 2.53
+    }
+  },
   "inglesa": {
     "hash": "16ecd0de9ca90809d6d0b2bae59377ce51c1742c8b762c51cb59c4c00249ecfa",
     "profundidad": 18,
@@ -177,6 +223,18 @@
       "dos-caballos-be7": 0.19,
       "mate-de-legal": 1000,
       "blackburne-shilling": -1000
+    }
+  },
+  "nimzo-india": {
+    "hash": "115a9f4a4b04e9ba62c207329bfd704c5162e8830437a3050ec31bf5e1b2cc31",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "samisch": -0.05,
+      "clasica": -0.14,
+      "hubner": 0.46,
+      "descubierta-en-h4": 7.58,
+      "horquilla-en-g5": -4.55
     }
   },
   "sistema-londres": {
