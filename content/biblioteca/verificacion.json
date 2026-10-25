@@ -1,1 +1,64 @@
-{}
+{
+  "alapin": {
+    "hash": "d97aa70ea063d65ddebc70d5278b4f96ec4a2e5246602f462e780ec4c8dcc26a",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "nf6-nc6": 0.1,
+      "d5": 0.01,
+      "nf6-e6": 0.23,
+      "e6": 0.25,
+      "caballo-sin-casillas": 7.26,
+      "caballo-colgado": 5.63
+    }
+  },
+  "avance-contra-francesa": {
+    "hash": "2c87aa055afa3882a927ae75429f55a2b9238418dd4e97e713d2cd4cc09d9cf3",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "c4": 0.25,
+      "bd7": 0.29,
+      "nh6": 0.06,
+      "jaque-en-b5": 8.32,
+      "horquilla-c3": -3.15
+    }
+  },
+  "contra-escandinava": {
+    "hash": "e561494cbec7bd8b86684914800190e03dfcb659b285cc824ef08785b9cc2500",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "qa5": 0.92,
+      "qd6": 1.39,
+      "nf6": 0.53,
+      "salto-nd5": 8.25,
+      "peon-envenenado": 8.27
+    }
+  },
+  "grand-prix": {
+    "hash": "1c89d02a89dbaadff95e4355db495a8a4eb72c0bfa84042842ab444aa9b19492",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "nc6-g6": 0.51,
+      "d6": 0.01,
+      "e6": -0.11,
+      "horquilla-c7": 9.64
+    }
+  },
+  "smith-morra": {
+    "hash": "5f93fa297969aded6796aa7e7b83682b34c7888f6faf0b77f8066e25394c852a",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "aceptado-clasico": -0.13,
+      "rehusado-nf6": 0.1,
+      "aceptado-e6-a6": 0,
+      "rehusado-d5": 0.29,
+      "avance-e5": 8,
+      "caballo-de-d5": 5.63,
+      "trampa-siberiana": -1000
+    }
+  }
+}
