@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { move, shot } from './helpers';
+import { move, shot, skipIntro } from './helpers';
 
 const PGN = `[Event "Repertorio: Española"]
 [StudyName "Repertorio"]
@@ -19,6 +19,7 @@ test('flujo completo: importar, aprender, repasar, fallar, progreso, editor y aj
   await page.addInitScript(() => Object.defineProperty(navigator, 'canShare', { value: undefined }));
 
   await page.goto('/');
+  await skipIntro(page);
   await expect(page.getByText('Tu repertorio está vacío.')).toBeVisible();
   await shot(page, '01-inicio-vacio');
 
@@ -120,6 +121,8 @@ test('flujo completo: importar, aprender, repasar, fallar, progreso, editor y aj
 });
 
 test('el motor analiza en el editor', async ({ page }) => {
+  await page.goto('/');
+  await skipIntro(page);
   await page.goto('/#/repertoire/white');
   await page.getByRole('switch', { name: '' }).last().click();
   await expect(page.getByText(/prof\. \d+/)).toBeVisible({ timeout: 20000 });
@@ -127,6 +130,8 @@ test('el motor analiza en el editor', async ({ page }) => {
 });
 
 test('repertorio con negras: el tablero se invierte y la línea se reproduce', async ({ page }) => {
+  await page.goto('/');
+  await skipIntro(page);
   await page.goto('/#/import');
   await page.getByRole('radio', { name: 'Pegar PGN' }).click();
   await page.getByRole('radio', { name: 'Negras' }).click();
@@ -149,6 +154,8 @@ test('repertorio con negras: el tablero se invierte y la línea se reproduce', a
 });
 
 test('los sets de piezas cambian las imágenes', async ({ page }) => {
+  await page.goto('/');
+  await skipIntro(page);
   await page.goto('/#/settings');
   const knight = page.locator('piece.knight.white').first();
   const image = () => knight.evaluate((el) => getComputedStyle(el).backgroundImage);

@@ -22,4 +22,17 @@ export async function move(page: Page, uci: string, orientation: 'white' | 'blac
   await clickSquare(page, uci.slice(2, 4), orientation);
 }
 
+/** Con el repertorio vacío la app abre la bienvenida: la salta si aparece en 3 s (y deja la marca guardada). */
+export async function skipIntro(page: Page): Promise<void> {
+  const skip = page.getByRole('button', { name: 'Saltar' });
+  try {
+    await skip.waitFor({ state: 'visible', timeout: 3000 });
+  } catch {
+    return;
+  }
+  await skip.click();
+  // "Saltar" guarda la marca antes de salir: cuando el botón desaparece, ya está escrita.
+  await skip.waitFor({ state: 'hidden' });
+}
+
 export const shot = (page: Page, name: string) => page.screenshot({ path: `e2e/screenshots/${name}.png` });

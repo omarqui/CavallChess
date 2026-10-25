@@ -24,6 +24,7 @@ npm run icons               # regenera iconos PWA desde public/favicon.svg
 
 - **El e2e sirve `dist/` con `vite preview` y reutiliza un servidor ya levantado en :4173.** Corré `npm run build` antes; si quedó un preview viejo corriendo, el e2e prueba el build anterior.
 - El e2e usa `channel: 'chrome'` (no descarga navegadores) y bloquea service workers. Los toques al tablero se hacen por coordenadas (`e2e/helpers.ts`); el helper espera `.board-frame[data-interactive="true"]`, así que ese atributo no se puede quitar de `Board`.
+- Con el repertorio vacío la app abre la bienvenida (`#/intro`). Cada e2e arranca con `page.goto('/')` y `await skipIntro(page)`, y recién después navega a su ruta. El viewport de iPhone trae su user agent, así que la bienvenida muestra el paso de instalar salvo que el test simule `navigator.standalone`.
 - En Git Bash, `BASE_PATH=/CavallChess/` se convierte en ruta de Windows: usá `MSYS_NO_PATHCONV=1`.
 
 ## Arquitectura
