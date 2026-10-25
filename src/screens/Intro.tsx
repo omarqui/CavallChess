@@ -399,7 +399,7 @@ function Demo({ onNext }: { onNext: () => void }) {
             {result?.kind === 'retry' ? (
               <p className="mt-1 text-[15px] text-bad">
                 {result.defends
-                  ? 'Eso también lo defiende, pero acá buscamos desarrollar: probá con una pieza menor o un peón central.'
+                  ? 'Eso también lo defiende, pero hay una defensa más natural: probá con el caballo de b8 o con el peón de d7.'
                   : 'Probá de nuevo: buscá cómo proteger el peón.'}
               </p>
             ) : (
