@@ -139,6 +139,15 @@ describe('consultas de partidas', () => {
     expect(pagina.map((r) => r.id)).toEqual(Array.from({ length: 10 }, (_, i) => row(19 - i).id));
     expect(lecturas.valores).toBeLessThanOrEqual(10);
   });
+
+  it('sin filtro, el total usa el mismo índice que las páginas', async () => {
+    await seed(5);
+    // Una fila sin endTime no está en el índice: no aparece en las páginas, así que tampoco se cuenta.
+    await d.games.put({ ...row(99), endTime: undefined } as unknown as GameRow);
+    const todas: GameFilter = { color: 'todas', outcome: 'todas' };
+    expect((await gamesPage(todas, 0, 50, d)).length).toBe(5);
+    expect(await countGames(todas, d)).toBe(5);
+  });
 });
 
 describe('recalcGames', () => {

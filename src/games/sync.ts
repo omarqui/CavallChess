@@ -177,13 +177,19 @@ export interface LoadOlderOptions {
 export type LoadOlderResult = SyncResult & { remaining: number; cancelled: boolean };
 
 async function loadOlder(opts: LoadOlderOptions, d: CavallDB): Promise<LoadOlderResult> {
+  const { signal } = opts;
+  const result: SyncResult = { imported: 0, deviations: 0, gaps: 0 };
+  // Cancelada mientras esperaba el candado: no se pide nada (ni falla sin conexión). Sin archivos no se sabe
+  // cuántos meses quedan; la UI no lo muestra al cancelar.
+  if (signal?.aborted) {
+    opts.onProgress?.('Cancelado.', 0, 0);
+    return { ...result, remaining: 0, cancelled: true };
+  }
   const { settings, user } = await userOf(d);
   opts.onProgress?.('Buscando archivos…', 0, 0);
   const archives = await fetchArchives(user);
   const toFetch = olderArchives(archives, settings.chesscomMonths, user, opts.months);
   const graphs = await loadGraphs(d);
-  const result: SyncResult = { imported: 0, deviations: 0, gaps: 0 };
-  const { signal } = opts;
   let cancelled = false;
 
   for (const [i, url] of toFetch.entries()) {
@@ -203,8 +209,10 @@ async function loadOlder(opts: LoadOlderOptions, d: CavallDB): Promise<LoadOlder
       break;
     }
   }
-  const loaded = (await getSettings(d)).chesscomMonths;
+  const after = await getSettings(d);
   opts.onProgress?.(cancelled ? 'Cancelado.' : 'Listo.', toFetch.length, toFetch.length);
-  const remaining = olderArchives(archives, loaded, user, 'all').length;
+  // Si cambiaste de usuario, los meses que le quedaban a la cuenta vieja no le dicen nada a la nueva.
+  const remaining =
+    normalizeUser(after.chesscomUser) === user ? olderArchives(archives, after.chesscomMonths, user, 'all').length : 0;
   return { ...result, remaining, cancelled };
 }

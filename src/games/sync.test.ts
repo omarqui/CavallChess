@@ -308,11 +308,33 @@ describe('loadOlderGames', () => {
     const r = await loadOlderGames({ months: 3 }, d);
     expect(r.cancelled).toBe(true);
     expect(r.imported).toBe(1);
+    // Los meses que le quedaban a la cuenta vieja no le dicen nada a la nueva.
+    expect(r.remaining).toBe(0);
     expect(calls.map((c) => c.url)).not.toContain(url('2026-08'));
     const s = await getSettings(d);
     expect(s.chesscomUser).toBe('otro');
     expect(s.chesscomMonths ?? {}).toEqual({});
     expect(await d.games.get(game('s', now).url)).toBeUndefined();
+  });
+
+  it('una carga cancelada mientras espera el candado no pide nada a la red ni falla sin conexión', async () => {
+    const now = Date.now();
+    const { calls } = mockApi({
+      '2026-08': [game('a', now)],
+      '2026-09': [game('s', now)],
+      '2026-10': [game('o', now)],
+    });
+    const ctl = new AbortController();
+    const progreso: [string, number, number][] = [];
+    const sync = syncChesscom(undefined, d);
+    const carga = loadOlderGames({ months: 2, signal: ctl.signal, onProgress: (m, a, b) => progreso.push([m, a, b]) }, d);
+    ctl.abort(); // la carga todavía espera a que termine la sincronización
+    await sync;
+    // Ya sin conexión: no tiene que llegar a pedir nada.
+    vi.stubGlobal('fetch', vi.fn(async () => Promise.reject(new TypeError('Failed to fetch'))));
+    expect(await carga).toMatchObject({ cancelled: true, imported: 0, remaining: 0 });
+    expect(calls.filter((c) => c.url.endsWith('archives'))).toHaveLength(1);
+    expect(progreso).toEqual([['Cancelado.', 0, 0]]);
   });
 
   it('informa el final con done === total, también al cancelar', async () => {
