@@ -415,7 +415,7 @@ test('partidas: el visor cruza la partida con la biblioteca (teoría, trampa y e
   await page.getByRole('link', { name: /vs rival7/ }).click();
 
   await expect(page.getByRole('heading', { name: 'vs rival7' })).toBeVisible();
-  await expect(page.getByText('Teoría de la biblioteca hasta 5.♝︎xg5;')).toBeVisible();
+  await expect(page.getByText('Teoría hasta 5.♝︎xg5;')).toBeVisible();
   const trap = page.getByRole('button', { name: /Trampa a favor: El caballo sin casillas/ });
   await expect(trap).toBeVisible();
 
@@ -430,9 +430,9 @@ test('partidas: el visor cruza la partida con la biblioteca (teoría, trampa y e
   await page.waitForTimeout(300);
   await shot(page, 'games-viewer-biblioteca');
 
-  // La salida: 5…d6 ya no es teoría.
-  await page.getByRole('button', { name: /salió en 5…d6/ }).click();
-  await expect(page.getByText('Fuera de la biblioteca')).toBeVisible();
+  // La salida: 5…d6 ya no es teoría, y salió el rival.
+  await page.getByRole('button', { name: 'el rival salió en 5…d6' }).click();
+  await expect(page.getByText('El rival salió de la teoría')).toBeVisible();
   await page.waitForTimeout(300);
   await shot(page, 'games-viewer-fuera-biblioteca');
 
@@ -464,4 +464,33 @@ test('partidas: el visor cruza la partida con la biblioteca (teoría, trampa y e
   await page.getByText('d3, la jugada de la partida').scrollIntoViewIfNeeded();
   await page.waitForTimeout(300);
   await shot(page, 'games-viewer-explorador');
+});
+
+test('partidas: tu salida de la teoría, con el veredicto del motor y las ideas de la ficha', async ({ page }) => {
+  await mockChesscom(page, {
+    user: 'tester',
+    months: {
+      // En la Alapin la ficha sigue con 3.e5; acá jugás 3.♗c4 y dejás el peón de e4 colgado.
+      '2026/10': [{ id: '8', white: 'tester', black: 'rival8', moves: '1. e4 c5 2. c3 Nf6 3. Bc4 Nxe4', winner: 'black' }],
+    },
+  });
+  await page.goto('/');
+  await skipIntro(page);
+  await setChesscomUser(page, 'tester');
+  await page.goto('/#/games');
+  await page.getByRole('button', { name: 'Actualizar partidas' }).click();
+  await page.getByRole('link', { name: /vs rival8/ }).click();
+
+  await expect(page.getByText(/^Teoría hasta 2…♞︎f6;/)).toBeVisible();
+  await page.getByRole('button', { name: 'te saliste en 3.♝︎c4' }).click();
+  await expect(page.getByText('Te saliste de la teoría', { exact: true })).toBeVisible();
+  await expect(page.getByText('La ficha juega e5.')).toBeVisible();
+  // El motor (Stockfish real) califica la jugada: el veredicto aparece en el panel y en el resumen.
+  await expect(page.getByText(/según el motor/)).toBeVisible({ timeout: 60_000 });
+  await page.waitForTimeout(300);
+  await shot(page, 'games-viewer-tu-salida');
+
+  await page.getByText(/^Ideas de la apertura: Variante Alapin/).click();
+  await expect(page.locator('details[open]')).toBeVisible();
+  await shot(page, 'games-viewer-ideas');
 });

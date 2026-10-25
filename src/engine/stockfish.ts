@@ -19,6 +19,9 @@ class Engine {
   private listener?: (line: string) => void;
   private current = 0;
   private searching = false;
+  /** La búsqueda en curso y a quién avisarle cuando termina (solo si nadie la cortó). */
+  private running = 0;
+  private onDone?: () => void;
   /** Búsqueda que espera a que termine la anterior (hasta su "bestmove") para no mezclar líneas. */
   private queued?: () => void;
 
@@ -31,6 +34,9 @@ class Engine {
         if (line === 'readyok') resolve();
         if (line.startsWith('bestmove')) {
           this.searching = false;
+          const done = this.running === this.current ? this.onDone : undefined;
+          this.onDone = undefined;
+          done?.();
           const next = this.queued;
           this.queued = undefined;
           next?.();
@@ -45,8 +51,11 @@ class Engine {
     return this.ready;
   }
 
-  /** Analiza `epd` hasta `depth`, llamando a `onLine` con cada mejora. Devuelve una función para cortar. */
-  analyze(epd: string, onLine: (l: EngineLine) => void, depth = 20): () => void {
+  /**
+   * Analiza `epd` hasta `depth`, llamando a `onLine` con cada mejora y a `onDone` al terminar (no si se cortó).
+   * Devuelve una función para cortar. Una búsqueda nueva corta la anterior.
+   */
+  analyze(epd: string, onLine: (l: EngineLine) => void, depth = 20, onDone?: () => void): () => void {
     const id = ++this.current;
     const whiteToMove = epd.split(' ')[1] === 'w';
     const start = () => {
@@ -70,6 +79,8 @@ class Engine {
       this.worker!.postMessage(`position fen ${epd} 0 1`);
       this.worker!.postMessage(`go depth ${depth}`);
       this.searching = true;
+      this.running = id;
+      this.onDone = onDone;
     };
     void this.boot().then(() => {
       if (id !== this.current) return;
