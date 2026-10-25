@@ -1,8 +1,10 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { ensureRoots } from './db/repo';
 import { useSettings } from './db/hooks';
 import { shouldAutoSync, syncChesscom } from './games/sync';
 import { ArchivedScreen } from './screens/Archived';
+import { FichaScreen, parseFichaTab } from './screens/Ficha';
+import { FichaAddScreen } from './screens/FichaAdd';
 import { GamesScreen } from './screens/Games';
 import { HomeScreen } from './screens/Home';
 import { ImportScreen } from './screens/Import';
@@ -14,6 +16,7 @@ import { TrainScreen } from './screens/Train';
 import type { Side } from './types';
 import { configureFeedback } from './ui/feedback';
 import { href, useRoute } from './ui/router';
+import { showToast, useToast } from './ui/toast';
 
 function useAppearance() {
   const s = useSettings();
@@ -36,8 +39,15 @@ function useAppearance() {
 export default function App() {
   const route = useRoute();
   const [ready, setReady] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
+  const toast = useToast();
+  const main = useRef<HTMLElement>(null);
+  const pathKey = route.path.join('/');
   useAppearance();
+
+  // Cada pantalla nueva arranca desde arriba (los cambios de parámetros, como una pestaña, no).
+  useLayoutEffect(() => {
+    if (main.current) main.current.scrollTop = 0;
+  }, [pathKey]);
 
   useEffect(() => {
     void ensureRoots().then(() => setReady(true));
@@ -47,7 +57,7 @@ export default function App() {
       try {
         const r = await syncChesscom();
         if (r.deviations || r.gaps) {
-          setToast(
+          showToast(
             `Chess.com: ${r.deviations} ${r.deviations === 1 ? 'desvío' : 'desvíos'} y ${r.gaps} ${r.gaps === 1 ? 'hueco nuevo' : 'huecos nuevos'}.`,
           );
         }
@@ -56,12 +66,6 @@ export default function App() {
       }
     });
   }, []);
-
-  useEffect(() => {
-    if (!toast) return;
-    const t = setTimeout(() => setToast(null), 5000);
-    return () => clearTimeout(t);
-  }, [toast]);
 
   if (!ready) return null;
   const [first, second] = route.path;
@@ -98,11 +102,16 @@ export default function App() {
       tab = 'repertoire';
       screen = <ImportScreen />;
       break;
-    case 'biblioteca':
+    case 'biblioteca': {
       tab = 'biblioteca';
-      // Ficha, línea y agregar: provisorio hasta las Tareas 13 y 14.
-      screen = route.path.length > 1 ? <LibraryComingSoon /> : <LibraryScreen />;
+      const [, id, sub] = route.path;
+      if (!id) screen = <LibraryScreen />;
+      else if (!sub) screen = <FichaScreen key={id} id={id} tab={parseFichaTab(route.params.get('tab'))} />;
+      else if (sub === 'agregar' && route.path.length === 3) screen = <FichaAddScreen key={id} id={id} />;
+      // Visor de línea: provisorio hasta la Tarea 14.
+      else screen = <LibraryComingSoon />;
       break;
+    }
     case 'games':
       screen = <GamesScreen />;
       break;
@@ -119,17 +128,31 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-full flex-col">
-      <main className="flex-1 overflow-y-auto">{screen}</main>
+    <div className="flex h-full flex-col" style={{ '--tabbar-h': TABBAR_H } as CSSProperties}>
+      <main ref={main} className="flex-1 overflow-y-auto">
+        {screen}
+      </main>
       {toast && (
-        <div role="status" className="pointer-events-none fixed inset-x-0 bottom-24 z-30 flex justify-center px-4">
-          <div className="rounded-xl bg-ink px-4 py-2.5 text-[15px] text-paper shadow-lg">{toast}</div>
+        <div
+          role="status"
+          className="pointer-events-none fixed inset-x-0 z-30 flex justify-center px-4"
+          style={{ bottom: 'calc(var(--tabbar-h) + 4.75rem)' }}
+        >
+          <div className="max-w-md rounded-xl bg-ink px-4 py-2.5 text-center text-[15px] leading-snug text-paper shadow-lg transition duration-200 ease-out starting:translate-y-2 starting:opacity-0 motion-reduce:transition-none">
+            {toast}
+          </div>
         </div>
       )}
       {tab && <TabBar active={tab} />}
     </div>
   );
 }
+
+/**
+ * Alto de la barra de pestañas (con el área segura de abajo). Las acciones fijas de una pantalla se apoyan
+ * encima con `bottom: var(--tabbar-h)`.
+ */
+const TABBAR_H = 'calc(57.5px + max(env(safe-area-inset-bottom), 0.5rem))';
 
 const TABS: { id: string; to: string; label: string; icon: ReactNode }[] = [
   {

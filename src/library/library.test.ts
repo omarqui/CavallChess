@@ -6,6 +6,7 @@ import { buildImportPlan } from '../chess/pgnImport';
 import { epdOf, nodeId } from '../chess/position';
 import { edgeAt, emptyRepo, graphOf, importInto, repoFrom } from '../test/helpers';
 import type { Note } from '../types';
+import { parseRich } from '../ui/RichText';
 import { addFicha } from './add';
 import { groupFichas, parseLibrary, searchFichas } from './catalog';
 import { FICHA_PRUEBA } from './fixture';
@@ -168,5 +169,32 @@ describe('biblioteca: carga, estado y agregado', () => {
     expect(searchFichas([f], 'test defense')).toEqual([f]);
     expect(searchFichas([f], 'B12')).toEqual([f]);
     expect(searchFichas([f], 'B20')).toEqual([]);
+  });
+});
+
+describe('texto de las fichas', () => {
+  it('texto enriquecido: negrita, listas y jugadas', () => {
+    expect(parseRich('Jugá **rápido** `Nf3`.\n\n- uno')).toEqual([
+      { kind: 'p', parts: [{ kind: 'text', value: 'Jugá ' }, { kind: 'bold', value: 'rápido' }, { kind: 'text', value: ' ' }, { kind: 'move', value: 'Nf3' }, { kind: 'text', value: '.' }] },
+      { kind: 'li', parts: [{ kind: 'text', value: 'uno' }] },
+    ]);
+  });
+
+  it('las líneas de un párrafo se unen y una lista lo corta', () => {
+    expect(parseRich('Primera\nsegunda\n- item\nsigue\n\nOtro')).toEqual([
+      { kind: 'p', parts: [{ kind: 'text', value: 'Primera segunda' }] },
+      { kind: 'li', parts: [{ kind: 'text', value: 'item sigue' }] },
+      { kind: 'p', parts: [{ kind: 'text', value: 'Otro' }] },
+    ]);
+  });
+
+  it('las marcas sin cerrar quedan como texto', () => {
+    expect(parseRich('a **b `c')).toEqual([{ kind: 'p', parts: [{ kind: 'text', value: 'a **b `c' }] }]);
+  });
+
+  it('una negrita puede llevar jugadas adentro', () => {
+    expect(parseRich('**Avance (`3.e5`):** espacio')).toEqual([
+      { kind: 'p', parts: [{ kind: 'bold', value: 'Avance (`3.e5`):' }, { kind: 'text', value: ' espacio' }] },
+    ]);
   });
 });
