@@ -23,6 +23,7 @@ Con `2...dxc4` aceptás el peón, pero **no tratás de quedártelo**: las blanca
 - **Contra el peón aislado**: bloquealo con un caballo en d5, cambiá piezas menores y presionalo con las torres. Cuantas menos piezas quedan, más se nota su debilidad; con muchas piezas, en cambio, le da a las blancas casillas y juego de ataque.
 - **`...a6` y `...b5`** ganan espacio en el flanco de dama, echan al alfil de c4 y le abren a tu alfil de c8 la diagonal larga desde b7.
 - **Contra `3.e4`**: tu peón de e5 cambia el de d4 y el alfil va a e6 a ofrecer el cambio del alfil de c4. Aceptás un peón doblado en e6 a cambio de la columna f abierta y de un peón tuyo en d4 que molesta.
+- **Otras jugadas blancas**: contra `3.Nf3 Nf6 4.Nc3`, `4...a6` prepara b5, y si `5.e4`, seguí con `5...b5`. Contra `4.Qa4+`, tapá con `4...c6` y, después de `5.Qxc4`, sacá el alfil a f5. En la Variante Central, si `4.d5`, `4...Nf6` ataca e4; si `4.dxe5`, después de `4...Qxd1+ 5.Kxd1 Nc6` el rey blanco perdió el enroque y tu caballo ataca e5.
 
 ## Consejos
 - Jugá `...a6` antes de `...b5`: así el peón de b5 queda defendido.

@@ -34,7 +34,7 @@ Contra `2.c4` no te quedás defendiendo d5: contraatacás con `2...e5`. Después
 La línea más jugada. Las blancas desarrollan el alfil en g2 y sostienen e5 con piezas; vos traés el caballo de g8 hasta g6 para ganarlo de vuelta.
 
 ```pgn
-1. d4 d5 2. c4 e5 3. dxe5 d4 { [%hint Avanzá el peón que está atacado y clavá una cuña en el centro.] El peón de d4 le quita casillas al caballo de b1 y al peón de e2. }
+1. d4 d5 2. c4 e5 3. dxe5 d4 { [%hint No defiendas: buscá quitarle casillas al caballo de b1 y al peón de e2.] El peón de d4 le quita casillas al caballo de b1 y al peón de e2. }
 4. Nf3 Nc6 { [%hint Defendé tu avanzada y sumá presión sobre el peón de e5.] }
 5. g3 Nge7 { [%hint Empezá un viaje de caballo que termine atacando e5.] }
 6. Bg2 Ng6 7. O-O Ngxe5 { Recuperaste el peón: el material está igualado. }
@@ -61,19 +61,19 @@ Con a3 y b4 las blancas evitan el jaque en b4 y ganan espacio en el flanco de da
 ```pgn
 1. d4 d5 2. c4 e5 3. dxe5 d4 4. Nf3 Nc6 5. a3 Nge7 { [%hint Empezá un viaje de caballo que termine atacando e5.] }
 6. b4 Ng6 7. Bb2 a5 { [%hint Atacá el peón de avanzada antes de que te eche al caballo.] }
-8. b5 Ncxe5 { [%hint Usá el caballo que te acaban de atacar para recuperar el peón.] }
-9. Nxe5 Nxe5 10. e3 Bc5 { [%hint Sumá una pieza a la defensa de tu avanzada.] }
+8. b5 Ncxe5 9. Nxe5 Nxe5 10. e3 Bc5 { [%hint Sostené tu avanzada con una pieza que se desarrolla.] }
+11. exd4 { Ataca a la vez al alfil de c5 y al caballo de e5. } Bg4 { [%hint Antes de salvar tus piezas, atacá la dama.] La única buena. Si ahora 12.dxe5 o 12.dxc5, Qxd1 es mate. En cambio, 11...Ba7? pierde por 12.b6, y 11...O-O? por 12.dxc5. }
+12. Be2 Bxe2 13. Qxe2 Bxd4 { Recuperaste el peón: el material está igualado. }
 ```
 
-El material está igualado y tu peón de d4 está defendido. Si las blancas lo ganan, no te apures a recuperarlo: tus piezas son más activas, y `...Bg4`, el enroque y las torres al centro te dan juego.
+El material está igualado y tus piezas están activas. Ojo: si las blancas siguen con `14.O-O Bxb2 15.Qxb2`, la dama ataca a tu caballo de e5 por la diagonal; defendelo con `15...Qd6` antes de enrocar.
 
 ## Variante: Contra 4.e3 {#e3} [básica] [gambito]
 Atacar tu peón con e3 parece lo más lógico, pero te deja dar un jaque molesto. Esta es la forma de jugar cuando las blancas no caen en la trampa.
 
 ```pgn
 1. d4 d5 2. c4 e5 3. dxe5 d4 4. e3 Bb4+ { [%hint Antes de cambiar peones, obligá a las blancas a tapar un jaque.] }
-5. Bd2 dxe3 { [%hint Cambiá tu peón atacado por el que lo atacaba.] }
-6. fxe3 { La buena: las blancas recapturan con el peón y no con el alfil. } Qh4+ { [%hint Aprovechá que el peón de f se fue y el rey blanco quedó expuesto.] }
+5. Bd2 dxe3 6. fxe3 { La buena: las blancas recapturan con el peón y no con el alfil. } Qh4+ { [%hint Aprovechá que el peón de f se fue y el rey blanco quedó expuesto.] }
 7. g3 Qe4 { [%hint Atacá a la vez la torre y el peón que quedó suelto.] }
 8. Nf3 Bxd2+ 9. Nbxd2 Qxe3+ 10. Qe2 Qxe2+ 11. Bxe2 Nc6 { Ahora el peón débil es el de e5. }
 ```
@@ -85,9 +85,9 @@ Si contra el jaque en b4 las blancas toman tu alfil en lugar de recapturar en e3
 
 ```pgn
 1. d4 d5 2. c4 e5 3. dxe5 d4 4. e3 Bb4+ 5. Bd2 dxe3
-6. Bxb4?? { Se queda con el alfil, pero deja avanzar tu peón con jaque. } exf2+ { [%hint Seguí avanzando el peón con jaque.] }
-7. Ke2 fxg1=N+ { [%hint Coroná, pero elegí la pieza que da jaque.] Si coronás dama no hay jaque y las blancas ganan un tiempo para defenderse. }
-8. Ke1 { Si `8.Rxg1`, `8...Bg4+` ataca al rey y, detrás, a la dama de d1. } Qh4+ { [%hint Seguí con jaques: el rey blanco no tiene refugio.] }
+6. Bxb4?? { Se queda con el alfil, pero deja avanzar tu peón con jaque. } exf2+
+7. Ke2 fxg1=N+ { Coronás caballo: si coronás dama no hay jaque y las blancas ganan un tiempo para defenderse. }
+8. Ke1 { Si 8.Rxg1, 8...Bg4+ ataca al rey y, detrás, a la dama de d1. } Qh4+ { [%hint Seguí con jaques: el rey blanco no tiene refugio.] }
 9. Kd2 Nc6 { [%hint Traé otra pieza al ataque.] } 10. Bc3 Bg4
 ```
 

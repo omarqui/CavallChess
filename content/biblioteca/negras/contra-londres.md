@@ -23,7 +23,8 @@ El que juega el Londres saca el alfil a f4 y arma casi siempre lo mismo: e3, c3,
 - **El avance `...c4`**: cuando la dama blanca va a b3, empujar c4 la echa con tiempo y te gana espacio en el flanco de dama.
 - **El alfil de c8 antes de e6**: como en la Eslava, sacalo a f5 antes de cerrar la cadena con e6.
 - **El alfil de f4** es la pieza preferida del Londres: si podés, cambialo. El caballo que va a h5 lo persigue y `...Bd6` le ofrece el cambio.
-- **Si las blancas cambian en d4**: con `5.Nbd2 cxd4 6.exd4` la estructura queda simétrica y tranquila; desarrollá y cambiá alfiles con `...Bd6`.
+- **Contra `5.Nbd2`**: cambiás en d4 y, después de `6.exd4`, la estructura queda simétrica y tranquila; desarrollá y cambiá alfiles con `...Bd6`.
+- **Otros órdenes**: si las blancas juegan `4.c3` antes de Nf3, seguí con `4...Nf6`; después de `5.Nf3`, `5...Qb6` vuelve a la variante principal. Y si contra `5...Qb6` defienden b2 con `6.Qc2`, desarrollá con `6...Bg4` o `6...g6`.
 
 ## Consejos
 - Nunca saques la dama a b6 si el caballo blanco puede ir a c3 y después a b5: el peón de b2 es una carnada.
@@ -85,7 +86,7 @@ Tomar en c5 es una forma de evitar tu presión. Recuperás el peón con el alfil
 Recuperaste el peón y tus piezas están bien ubicadas. El plan es preparar `...e5` con `...Rd8`: ese avance le saca espacio al alfil de f4 y libera tu juego.
 
 ## Trampa en contra: La dama a b6 antes de tiempo {#dama-antes-de-tiempo} [básica]
-Si sacás la dama a b6 cuando las blancas todavía no jugaron c3, el caballo blanco salta a c3 y amenaza entrar en b5, donde ataca c7 junto con el alfil de f4.
+Si sacás la dama a b6 cuando las blancas todavía no jugaron c3, el caballo blanco salta a c3 y amenaza entrar en b5, donde ataca c7 junto con el alfil de f4. Y sobre todo, no comas en b2 después de `5.Nc3`.
 
 ```pgn
 1. d4 d5 2. Bf4 c5 3. e3 Nc6 4. Nf3 Nf6 { [%hint Desarrollá antes de sacar la dama.] }

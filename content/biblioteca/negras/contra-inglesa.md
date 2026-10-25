@@ -28,6 +28,7 @@ Con `1...e5` tomás tu parte del centro. Las blancas juegan una especie de Sicil
 - Si las blancas comen tu peón de e5 con el caballo, no te apures a defender nada: con la dama en e7 lo atacás y quedás mejor (y quizás ganás algo más, mirá la trampa).
 - En el Dragón invertido, cuando el peón blanco llegue a b5 contra tu caballo de c6, llevalo a d4.
 - Antes de jugar `...f5`, fijate que tu rey no quede expuesto en la diagonal que va a g8.
+- Contra los Cuatro Caballos con `4.e3` o `4.d3`, lo más simple es `4...Bb4`: desarrollás y presionás el caballo de c3.
 - Contra 1.Nf3, jugá 1...d5 y desarrollate como contra 1.d4.
 
 ## Variante: Cuatro Caballos con 4.g3 {#cuatro-caballos-g3} [básica]
@@ -35,10 +36,10 @@ El esquema más popular de las blancas: los dos caballos y el alfil a g2. El sal
 
 ```pgn
 1. c4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. g3 Nd4 { [%hint Ocupá con el caballo una casilla central y ofrecé el cambio del caballo de f3.] }
-5. Bg2 Nxf3+ 6. Bxf3 Bb4 { [%hint Desarrollá el alfil clavando un caballo.] }
+5. Bg2 Nxf3+ 6. Bxf3 Bb4 { [%hint Desarrollá el alfil presionando el caballo de c3.] }
 7. O-O O-O 8. d3 h6 { [%hint Evitá que el alfil de c1 te clave el caballo.] }
 9. Bg2 c6 { [%hint Prepará el avance central del peón de d.] }
-10. a3 Bxc3 { [%hint Entregá el alfil atacado por el caballo y doblale los peones a las blancas.] }
+10. a3 Bxc3 { Cambiás el alfil atacado y les doblás los peones a las blancas. }
 11. bxc3 d5 12. cxd5 cxd5
 ```
 
@@ -49,7 +50,7 @@ Si las blancas cambian enseguida los caballos, tu peón llega a d4 y ataca al ca
 
 ```pgn
 1. c4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. g3 Nd4 { [%hint Ocupá con el caballo una casilla central y ofrecé el cambio del caballo de f3.] }
-5. Nxd4 exd4 6. Nd5 Nxd5 { [%hint Cambiá el caballo que se instaló en el centro.] }
+5. Nxd4 exd4 6. Nd5 Nxd5 { Cambiás el caballo que se instaló en el centro. }
 7. cxd5 Be7 8. Bg2 O-O 9. O-O c6 { [%hint Atacá el peón de d5 antes de que las blancas lo sostengan.] }
 ```
 
@@ -85,8 +86,8 @@ Contra el salto a d4, el codicioso `5.Nxe5` ya es un error. Si además las blanc
 
 ```pgn
 1. c4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. g3 Nd4 { [%hint Ocupá con el caballo una casilla central y ofrecé el cambio del caballo de f3.] }
-5. Nxe5 { Se lleva un peón, pero saca al caballo que defendía f3 y deja la columna e a merced de tu dama. } Qe7 { [%hint Atacá el caballo y ponete en la misma columna que el rey blanco.] }
+5. Nxe5 { Se lleva un peón, pero el caballo deja libre f3 y queda en la columna de tu dama. } Qe7 { [%hint Atacá el caballo y ponete en la misma columna que el rey blanco.] }
 6. Nd3?? { Retira el caballo, pero deja la columna e abierta hasta el rey. } Nf3# { El peón de e2 no puede comer porque está clavado por tu dama, y el de g ya no está en g2. }
 ```
 
-Mate en seis jugadas. Aunque las blancas no caigan en `6.Nd3??`, después de `5...Qe7` el caballo de e5 tiene que irse y vos quedás con mejor posición.
+Mate en seis jugadas. Aunque las blancas no caigan en `6.Nd3??`, después de `5...Qe7` quedás mejor: si sostienen el caballo con `6.f4`, `6...d6` lo echa igual y el rey blanco queda expuesto en la columna e.

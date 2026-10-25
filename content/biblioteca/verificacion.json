@@ -26,13 +26,13 @@
     }
   },
   "contragambito-albin": {
-    "hash": "8b5913424e5a06a4fcd49fdf81569ce4feec03b038931e9d103de3ab5b85442f",
+    "hash": "1a5d7c3f68ffeded13574aa6d25463093b99c8b5c416f7945c8c9e537167fcb1",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "fianchetto": -0.4,
       "nbd2": -0.77,
-      "a3": -0.26,
+      "a3": 0.28,
       "e3": 0.08,
       "lasker": 9.03
     }
@@ -50,12 +50,13 @@
     }
   },
   "benoni-y-benko": {
-    "hash": "3bce4932d7fc7dc7ab4421c324c6d5b7f75e48b4bda8de21d925136416bdbebb",
+    "hash": "60189afba749d0829f4da28aff9177c8b068b48e8323c86492926160b0cd55d6",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "fianchetto": -0.65,
       "rey-a-g2": -0.66,
+      "b6": -0.31,
       "rehusado": 0.26,
       "benoni-moderna": -0.52,
       "avance-e5": -2.19,

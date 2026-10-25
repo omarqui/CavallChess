@@ -23,7 +23,8 @@ Si las blancas juegan `2.Nf3` en lugar de 2.c4, no hay peón en c4 que desviar y
 ## Ideas y planes
 - **Benko: las columnas abiertas.** Con la dama en a5 o b6 y las torres en a8 y b8, presionás a2 y b2. Los caballos buscan casillas activas: el de f6 puede ir a e8 y c7 o a g4 y e5, siempre despejando la diagonal del alfil de g7.
 - **Benko con e4**: si el peón blanco llega a e4, cambiás alfiles en f1 y el rey blanco pierde el enroque. Las blancas lo llevan a g2 a mano, y vos seguís con el mismo plan.
-- **Benko rehusado**: contra `4.Nf3` tu alfil va a b7 a presionar d5, y el peón de b5 avanza a b4 para echar al caballo de c3.
+- **Benko rehusado**: contra `4.Nf3` tu alfil va a b7 a presionar d5, y el peón de b5 avanza a b4 para echar al caballo de c3. Contra `4.a4`, `4...b4` cierra el flanco de dama y seguís con el fianchetto. Contra `4.Nd2` o `4.Qc2`, tomá en c4 y seguí con `...e6` para atacar el centro.
+- **Si después de `4...a6` las blancas no toman en a6**: contra `5.b6` mirá la variante. Contra `5.e3`, con `5...axb5 6.Bxb5 Qa5+` y `...Bb7` tenés la presión de siempre por el peón. Contra `5.f3`, `5...axb5 6.e4 Qa5+ 7.Bd2 b4` y ya recuperaste el peón.
 - **Benoni Moderna**: después de `...exd5` y `cxd5`, las blancas tienen mayoría en el centro y quieren avanzar e4-e5; vos tenés mayoría en el flanco de dama. El alfil de g7 y la torre en e8 frenan el avance central, y tus planes son `...Na6`-c7, `...b6` y `...Ba6` para cambiar el alfil de casillas claras.
 
 ## Consejos
@@ -53,12 +54,24 @@ Con `7.e4` las blancas ocupan el centro, pero después del cambio de alfiles pie
 1. d4 Nf6 2. c4 c5 3. d5 b5 { [%hint Ofrecé un peón de flanco para abrir columnas.] }
 4. cxb5 a6 { [%hint Insistí con otro peón: tus piezas entran por las columnas que se abren.] }
 5. bxa6 Bxa6 { [%hint Recapturá con la pieza que gana la diagonal más útil.] }
-6. Nc3 d6 7. e4 Bxf1 { [%hint Cambiá alfiles para que el rey blanco no pueda enrocar.] }
-8. Kxf1 g6 9. g3 Bg7 10. Kg2 O-O 11. Nf3 Nbd7 12. h3 Qa5 { [%hint Sumá la dama a la presión sobre la columna a y el caballo de c3.] }
+6. Nc3 d6 7. e4 Bxf1 8. Kxf1 g6 9. g3 Bg7 10. Kg2 O-O 11. Nf3 Nbd7 12. h3 Qa5 { [%hint Sumá la dama a la presión sobre la columna a y el caballo de c3.] }
 13. Re1 Rfb8
 ```
 
 Tus torres ocupan las columnas abiertas y la dama está activa. Seguí con `...Ne8` para despejar el alfil de g7, o con `...Nb6` rumbo a c4. Si en la novena jugada las blancas empujan e5 en lugar de g3, mirá la trampa en contra de esta ficha.
+
+## Variante: Benko con 5.b6 {#b6} [club]
+Con `5.b6` las blancas devuelven el peón para que no se abra la columna a. No hace falta comerlo enseguida: primero atacás el centro.
+
+```pgn
+1. d4 Nf6 2. c4 c5 3. d5 b5 { [%hint Ofrecé un peón de flanco para abrir columnas.] }
+4. cxb5 a6 { [%hint Insistí con otro peón: tus piezas entran por las columnas que se abren.] }
+5. b6 e6 { [%hint Antes de cobrar el peón adelantado, atacá el que sostiene el centro blanco.] }
+6. Nc3 Nxd5 7. Nxd5 exd5 8. Qxd5 Nc6 9. Nf3 Rb8 { [%hint Prepará la recuperación del peón que quedó adelantado.] }
+10. e4 Be7 11. Bc4 O-O 12. O-O Rxb6
+```
+
+Recuperaste el peón y el material está igualado. Tus piezas están bien desarrolladas y la torre de b6 quedó activa. Seguí con `...d6` y con `...Be6` o `...Bb7` para cambiar el alfil de c4; si la dama blanca se queda en d5, buscá echarla con tiempo.
 
 ## Variante: Benko rehusado con 4.Nf3 {#rehusado} [club]
 Muchos jugadores no quieren aceptar el peón. Con `4.Nf3` las blancas siguen su desarrollo; vos presionás d5 con el alfil y ganás espacio con b4.
@@ -93,20 +106,19 @@ En el Benko con e4, apenas el rey blanco se fue a f1, las blancas pueden empujar
 1. d4 Nf6 2. c4 c5 3. d5 b5 { [%hint Ofrecé un peón de flanco para abrir columnas.] }
 4. cxb5 a6 { [%hint Insistí con otro peón: tus piezas entran por las columnas que se abren.] }
 5. bxa6 Bxa6 { [%hint Recapturá con la pieza que gana la diagonal más útil.] }
-6. Nc3 d6 7. e4 Bxf1 { [%hint Cambiá alfiles para que el rey blanco no pueda enrocar.] }
-8. Kxf1 g6 9. e5 dxe5 { [%hint Antes de retirar el caballo atacado, fijate si podés recuperar el peón del gambito.] }
-(9... Nfd7? { Natural, pero deja que las blancas abran la columna e contra tu rey. } 10. exd6 exd6 11. Qe2+ Qe7 12. Ne4 { Tu dama está clavada, las blancas amenazan Bg5 y Nxd6+: tu posición se derrumba. })
+6. Nc3 d6 7. e4 Bxf1 8. Kxf1 g6 9. e5 dxe5 { [%hint Antes de retirar el caballo atacado, fijate si podés recuperar el peón del gambito.] }
+(9... Nfd7? { Natural, pero deja que las blancas abran la columna e contra tu rey. } 10. exd6 exd6 11. Qe2+ Qe7 12. Ne4 { Tu dama no puede dejar la columna e: si se va, el caballo salta con jaque descubierto. Además amenazan Nxd6+ y Bg5, y tu posición se derrumba. })
 10. Nf3 Nbd7 11. g3 Bg7 12. Kg2 O-O
 ```
 
 Recuperaste el peón del gambito, el material está igualado y tus piezas siguen activas: la posición es buena para vos. Seguí con el plan de siempre, la dama al flanco de dama y las torres a las columnas a y b.
 
 ## Trampa a favor: Rayos X en la columna a {#rayos-x} [club]
-En el Benko tu torre de a8 está detrás del alfil de a6. Si la dama blanca se para en esa columna, el alfil se mueve con ganancia y destapa a la torre.
+Más que una trampa frecuente, es un motivo que tenés que tener presente: puede aparecer cuando una pieza blanca se para en la columna a, sobre todo la dama, que suele buscar a4 o a3 para presionar tu flanco de dama. En el Benko tu torre de a8 está detrás del alfil de a6: si el alfil se mueve con ganancia, destapa a la torre.
 
 ```pgn
 1. d4 Nf6 2. c4 c5 3. d5 b5 4. cxb5 a6 5. bxa6 Bxa6 6. Nc3 d6 7. Nf3 g6 8. g3 Bg7 9. Bg2 Nbd7 10. O-O O-O
-11. Qa4?? { Ataca el alfil, pero se pone en la línea de tu torre. } Bxe2 { [%hint Mové el alfil con un ataque propio y destapá la torre.] Si `12.Nxe2`, `12...Rxa4` y te quedás con la dama. }
+11. Qa4?? { Ataca el alfil, pero se pone en la línea de tu torre. } Bxe2 { [%hint Mové el alfil con un ataque propio y destapá la torre.] Si 12.Nxe2, 12...Rxa4 y te quedás con la dama. }
 12. Qc2 Bxf1 13. Bxf1
 ```
 
