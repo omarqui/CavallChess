@@ -18,6 +18,21 @@ export interface PositionNode {
   cutHere?: boolean; // fin de repertorio: desde acá no se entrena
 }
 
+/** Marca de trampa en una jugada: la ficha y la trampa de la biblioteca a la que pertenece. */
+export interface TrapMark {
+  kind: 'favor' | 'contra';
+  name: string;
+  fichaId: string;
+  trapId: string;
+}
+
+/** Nota propia sobre una ficha (id = fichaId) o una línea (id = `fichaId|lineId`). */
+export interface Note {
+  id: string;
+  text: string;
+  updatedAt: number;
+}
+
 export interface MoveEdge {
   id: string; // `${side}|${epd}|${uci}`
   side: Side;
@@ -30,6 +45,7 @@ export interface MoveEdge {
   explanation?: string;
   shapes?: Shape[];
   nags?: number[];
+  trap?: TrapMark;
   createdAt: number;
 }
 
@@ -94,6 +110,8 @@ export interface Settings {
   lichessToken?: string;
   chesscomUser?: string;
   lastBackupAt?: number;
+  introSeenAt?: number; // cuándo se vio la intro de primer uso
+  tipsSeen?: string[]; // ids de consejos ya mostrados
   lastChesscomSync?: number;
   chesscomMonths?: Record<string, string>; // url de archivo mensual -> etag
 }
