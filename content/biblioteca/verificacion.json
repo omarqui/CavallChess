@@ -1,1 +1,67 @@
-{}
+{
+  "anti-sicilianas": {
+    "hash": "68cf9a84fd5355fd5be531a7635a2ecf221a9101eb87f5865e85b238c52f9ed1",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "alapin": -0.1,
+      "alapin-e5": 0.25,
+      "morra": 0.2,
+      "grand-prix-bb5": -0.26,
+      "grand-prix-bc4": 0.55,
+      "jaque-en-f7": -8
+    }
+  },
+  "francesa": {
+    "hash": "ba46f14421e9c9c0085bca2b09790699173dac3eb82046327045f8752e4c41f4",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "avance": -0.16,
+      "cambio": -0.11,
+      "steinitz": -0.34,
+      "burn": -0.45,
+      "tarrasch": -0.36,
+      "jaque-en-b5": -9.47
+    }
+  },
+  "siciliana-dragon": {
+    "hash": "a88e192d9aae085967ab4c0fada308bcc503b01e1e4c7c48484251583902d24d",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "yugoslavo-soltis": -0.42,
+      "yugoslavo-d5": -0.52,
+      "clasica": -0.01,
+      "bc4": 0.09,
+      "levenfish": 0.22,
+      "levenfish-e5": -5.9,
+      "sacrificio-en-f7": 5.3
+    }
+  },
+  "siciliana-najdorf": {
+    "hash": "28546354fb1aab70a63da16a124b5c0e446160e48b66a0f72e69e8f0ab809a0f",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "ataque-ingles": -0.23,
+      "opocensky": -0.38,
+      "bg5": -0.51,
+      "sozin": -0.05,
+      "salto-a-b5": 5.59,
+      "diagonal-larga": -3.64
+    }
+  },
+  "siciliana-taimanov": {
+    "hash": "fe55cf53d56816e987583fb1a8b3cb0036a4523c8606589929b32b0bb48cbe46",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "ataque-ingles": -0.16,
+      "bd3": -0.1,
+      "be2": -0.43,
+      "nb5": -0.08,
+      "peon-e4": 4.6
+    }
+  }
+}
