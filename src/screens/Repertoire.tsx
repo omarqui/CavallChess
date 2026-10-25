@@ -18,6 +18,7 @@ import type { MoveEdge } from '../types';
 import { arrow, Board } from '../ui/Board';
 import { EnginePanel } from '../ui/EnginePanel';
 import { Banner, Button, MoveLine, Screen, Section, Segmented, sideLabel, Toggle } from '../ui/kit';
+import { Tip } from '../ui/Tip';
 import { openingName, useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
 
@@ -92,6 +93,11 @@ export function RepertoireScreen({ side, nodeParam, gapSan }: { side: Side; node
         </div>
       }
     >
+      {cards.size > 0 && (
+        <Tip id="repertorio">
+          Tu repertorio es un árbol de posiciones: «Cortar aquí» marca el final de una línea, y borrar archiva sin perder el historial.
+        </Tip>
+      )}
       {gapSan && (
         <div className="mb-3">
           <Banner>

@@ -11,6 +11,7 @@ import type { CardRow, MoveEdge, ReviewEvent } from '../types';
 import { arrow, Board, toShapes, type Flash } from '../ui/Board';
 import { playCorrect, playMoveSound, playWrong } from '../ui/feedback';
 import { Banner, Button, MoveLine } from '../ui/kit';
+import { Tip } from '../ui/Tip';
 import { openingName, useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
 
@@ -273,6 +274,10 @@ function TrainView({
             <div className="mt-4 text-[15px]">
               <MoveLine moves={step.line} />
             </div>
+            {/* Debajo del tablero y los controles: mostrarlo o cerrarlo no mueve el tablero. */}
+            <Tip id="entrenar" className="mt-4">
+              Tocá el tablero para saltar la línea. «Pista» te da la idea sin decir la jugada, y «Fue un error de dedo» anula un fallo.
+            </Tip>
           </>
         )}
       </div>

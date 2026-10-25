@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { move, shot } from './helpers';
+import { move, shot, skipIntro } from './helpers';
 
 test.describe('instalada', () => {
   // El viewport de iPhone 13 trae su user agent: se simula la app ya instalada para que no aparezca el paso de instalar.
@@ -63,4 +63,16 @@ test('bienvenida: en Safari de iPhone explica cómo instalarla y la demo corrige
   // "Ver la introducción" la vuelve a abrir desde el principio.
   await page.getByRole('button', { name: 'Ver la introducción' }).click();
   await expect(page.getByRole('heading', { name: 'Hola, esto es CavallChess' })).toBeVisible();
+});
+
+test('los tips se cierran y no vuelven', async ({ page }) => {
+  await page.goto('/');
+  await skipIntro(page);
+  await page.getByRole('link', { name: 'Biblioteca' }).click();
+  await expect(page.getByText(/Cada ficha explica una apertura/)).toBeVisible();
+  await shot(page, 'tip-biblioteca');
+  await page.getByRole('button', { name: 'Entendido' }).click();
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Biblioteca' })).toBeVisible();
+  await expect(page.getByText(/Cada ficha explica una apertura/)).toBeHidden();
 });
