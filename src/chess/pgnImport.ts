@@ -66,7 +66,7 @@ const HINT_TAG = /\[%hint\s+([^\]]*)\]/g;
 /** `[%trap <favor|contra> <fichaId>/<trapId> <nombre>]`: marca de trampa. */
 const TRAP_TAG = /\[%trap\s+(favor|contra)\s+([^/\s\]]+)\/([^\s\]]+)\s+([^\]]*)\]/g;
 
-function commentOf(data: PgnNodeData): { text?: string; shapes: Shape[]; hint?: string; trap?: TrapMark } {
+export function commentOf(data: PgnNodeData): { text?: string; shapes: Shape[]; hint?: string; trap?: TrapMark } {
   const parts: string[] = [];
   const shapes: Shape[] = [];
   let hint: string | undefined;

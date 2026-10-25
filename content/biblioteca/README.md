@@ -1,0 +1,153 @@
+# Biblioteca de aperturas: guía para escribir fichas
+
+Cada apertura es una **ficha**: un archivo Markdown en `content/biblioteca/`, un archivo por ficha, con el nombre `<id>.md`. Esta guía es el contrato del formato: el parser (`src/library/parse.ts`) y el validador (`src/library/validate.ts`) rechazan lo que no la cumpla. El ejemplo completo está al final y pasa el validador (hay un test que lo comprueba).
+
+Estilo: español rioplatense con voseo ("jugá", "tenés", "sacá"). **Todo el texto es original**: no copies de libros ni de sitios. Los nombres de aperturas y las jugadas sí se pueden usar.
+
+## Estructura del archivo
+
+1. Frontmatter entre dos líneas `---`.
+2. Secciones `## …`, en este orden: `Para empezar`, `Ideas y planes`, `Consejos` y después las líneas (variantes y trampas), en el orden en que se estudian.
+
+### Frontmatter
+
+Formato `clave: valor`, una por línea, sin comentarios ni comillas. Las listas van separadas por comas.
+
+| Clave | Obligatoria | Significado |
+|------|------|------|
+| `id` | sí | kebab-case (`a-z`, `0-9`, guiones), estable: las notas del usuario cuelgan de él. Único en toda la biblioteca. |
+| `nombre` | sí | Nombre de la apertura, por ejemplo `Defensa Caro-Kann`. |
+| `alias` | no | Otros nombres, separados por coma. |
+| `lado` | sí | `blancas` o `negras`: quién elige la apertura. |
+| `grupo` | sí | Uno de los grupos de abajo, según `lado`. |
+| `orden` | sí | Entero. Orden dentro del grupo; no puede repetirse en el mismo (lado, grupo). |
+| `eco` | sí | Código o rango ECO, por ejemplo `B10-B19`. |
+| `nivel` | sí | `principiante`, `club` o ambos separados por coma. |
+| `jugadas` | sí | Posición característica en PGN desde la inicial (`1. e4 c6`). **Toda línea de la ficha empieza con estas jugadas.** |
+| `resumen` | sí | Una frase. |
+
+Grupos válidos:
+
+- `blancas`: `Abrís con 1.e4`, `Contra las respuestas a 1.e4`, `Abrís con 1.d4 y otras`.
+- `negras`: `Contra 1.e4`, `Contra 1.d4`, `Contra la Inglesa y otras`.
+
+### Secciones de texto
+
+- `## Para empezar`: qué buscás y cómo se juega, en pocas líneas.
+- `## Ideas y planes`: los planes típicos.
+- `## Consejos`: **solo ítems** que empiezan con `- `. Al menos uno.
+
+Formato de texto permitido: párrafos separados por una línea en blanco, `**negrita**`, listas con `- ` y jugadas entre comillas invertidas (`` `3...Bf5` ``), que la app muestra con figurines.
+
+### Líneas
+
+```
+## Variante: <nombre> {#<id>} [básica|club] [gambito]
+## Trampa a favor: <nombre> {#<id>} [básica|club]
+## Trampa en contra: <nombre> {#<id>} [básica|club]
+```
+
+- `{#id}`: kebab-case, único dentro de la ficha.
+- Nivel obligatorio: `[básica]` o `[club]` (también se acepta `[basica]`).
+- `[gambito]` es opcional y solo va en las variantes.
+
+El cuerpo de cada línea es: párrafos opcionales (la `intro`), **un único** bloque de código ` ```pgn ` y párrafos opcionales (el `outro`).
+
+### El PGN
+
+- Empieza en `1.` desde la posición inicial, sin encabezados `[Tag "…"]`, y es **lineal**: sin variantes `( … )`, salvo en la trampa en contra.
+- Cada comentario `{ … }` va **después** de la jugada y la explica.
+- Un comentario puede llevar texto, `[%hint …]`, flechas `[%cal Gd2d4]` y casillas `[%csl Rd4]`, y la jugada puede llevar NAGs (`?`, `??`, `!`, `!?`…).
+- `[%hint …]` es la pista que ve quien estudia antes de jugar: **solo en jugadas propias** (las del lado de la ficha).
+- Jugá siempre la misma jugada propia en cada posición, en todas las líneas (ver coherencia).
+
+### Trampa a favor
+
+El rival se equivoca y vos lo aprovechás. **Exactamente una** jugada del rival en la línea principal lleva `?` o `??`. No lleva variantes.
+
+### Trampa en contra
+
+Hay una jugada natural pero mala (la tentación) y la correcta. En el PGN, la principal sigue con **tu jugada correcta** y **exactamente una** variante `( … )` muestra lo que pasa si caés:
+
+- La variante reemplaza una jugada propia y su primera jugada lleva `?` o `??`.
+- La variante es lineal (sin variantes anidadas).
+- Las jugadas de la variante no cuentan para la coherencia.
+- Después de la variante la principal puede seguir.
+
+### Raíz de las variantes
+
+No se escribe: el parser la calcula. Para cada variante es 1 más el prefijo común más largo con cualquier otra variante de la ficha, con mínimo `jugadas + 1` y máximo el largo de la línea. Sirve para nombrar el capítulo en la importación. Por eso conviene que las variantes de una misma ficha se separen en una posición donde el nombre ya tenga sentido.
+
+## Reglas de validación
+
+Cada mensaje nombra la ficha y la línea.
+
+1. El frontmatter tiene todas las claves obligatorias; `lado`, `nivel` y `orden` tienen valores válidos.
+2. `id` de ficha y de líneas en kebab-case; los `id` de líneas no se repiten dentro de la ficha; los `id` de ficha no se repiten en la biblioteca; cada (lado, grupo, orden) es único.
+3. `grupo` está en la lista de ese `lado`.
+4. Las secciones `Para empezar`, `Ideas y planes` y `Consejos` existen, no están vacías y hay al menos un consejo.
+5. Hay al menos una `Variante` y al menos una variante `[básica]`.
+6. Cada línea tiene exactamente un bloque `pgn`, empieza desde la posición inicial y todas sus jugadas son legales.
+7. Toda línea empieza con las `jugadas` de la ficha.
+8. **Coherencia:** en cada posición donde le toca jugar al lado de la ficha, todas las líneas (y `jugadas`) usan la misma jugada. Las variantes de caída de las trampas en contra quedan excluidas.
+9. Estructura de trampas: a favor, exactamente un `?`/`??` del rival; en contra, exactamente una variante que reemplaza una jugada propia con `?`/`??` en su primera jugada. Las variantes `( … )` no se permiten en otras líneas.
+10. `[%hint]` solo en jugadas propias.
+
+## Ejemplo completo
+
+````markdown
+---
+id: caro-kann
+nombre: Defensa Caro-Kann
+alias: Caro-Kann Defense, Caro Kann
+lado: negras
+grupo: Contra 1.e4
+orden: 10
+eco: B10-B19
+nivel: principiante, club
+jugadas: 1. e4 c6
+resumen: Una defensa sólida que prepara d5 sin dejar el alfil de casillas claras encerrado.
+---
+## Para empezar
+Con **1...c6** preparás **2...d5** apoyando el peón. A diferencia de la Francesa, el alfil de casillas claras puede salir antes de cerrar la estructura.
+
+## Ideas y planes
+- Plantar un peón en d5 y cambiarlo o sostenerlo según lo que haga el rival.
+- Sacar el alfil de c8 a f5 o g4 antes de jugar e6.
+- Buscar un final sólido con una estructura de peones sana.
+
+## Consejos
+- Antes de jugar e6, preguntate dónde queda tu alfil de casillas claras.
+- Ante el avance 3.e5, atacá la cadena de peones con c5.
+- No te apures a capturar peones si dejás atrás una pieza sin desarrollar.
+
+## Variante: Avance {#avance} [básica]
+Las blancas ganan espacio con e5. Vos respondés con el alfil afuera.
+
+```pgn
+1. e4 c6 2. d4 d5 3. e5 Bf5 { [%hint Sacá el alfil antes de cerrar con e6.] El alfil sale antes de cerrar la cadena. } 4. Nf3 e6 5. Be2 c5 { Ataca la base de la cadena. [%cal Gc5d4] } 6. Be3 cxd4 7. Nxd4 Ne7
+```
+
+Con la cadena firme y el alfil activo, tu juego está cómodo.
+
+## Variante: Clásica {#clasica} [club]
+```pgn
+1. e4 c6 2. d4 d5 3. Nc3 dxe4 { Cambiás el peón central para abrir líneas. } 4. Nxe4 Nd7 { [%hint Prepara Ngf6 sin permitir la doble del peón.] } 5. Nf3 Ngf6 6. Nxf6+ Nxf6
+```
+
+Después del cambio de caballos, la estructura queda sana.
+
+## Trampa a favor: Alfil regalado {#alfil-regalado} [club]
+Si el rival cambia sus fuerzas con descuido, ganás material.
+
+```pgn
+1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Bd3?? { Regala el alfil: queda sin respaldo. } Bxd3 6. Qxd3
+```
+
+## Trampa en contra: Mate en d6 {#mate-en-d6} [básica]
+Cuidado con elegir el caballo equivocado.
+
+```pgn
+1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nd7 5. Qe2 Ndf6 (5... Ngf6?? { Deja la casilla d6 sin cubrir. } 6. Nd6#) 6. Nxf6+ Nxf6
+```
+````
