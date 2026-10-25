@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-import { ensureRoots } from './db/repo';
+import { db } from './db/db';
+import { ensureRoots, getSettings, setSettings } from './db/repo';
 import { useSettings } from './db/hooks';
 import { shouldAutoSync, syncChesscom } from './games/sync';
 import { ArchivedScreen } from './screens/Archived';
@@ -8,6 +9,8 @@ import { FichaAddScreen } from './screens/FichaAdd';
 import { GamesScreen } from './screens/Games';
 import { HomeScreen } from './screens/Home';
 import { ImportScreen } from './screens/Import';
+import { IntroScreen } from './screens/Intro';
+import { shouldMarkIntroSeen, shouldShowIntro } from './screens/intro/gate';
 import { LibraryScreen } from './screens/Library';
 import { LineViewerScreen } from './screens/LineViewer';
 import { ProgressScreen } from './screens/Progress';
@@ -16,7 +19,7 @@ import { SettingsScreen } from './screens/Settings';
 import { TrainScreen } from './screens/Train';
 import type { Side } from './types';
 import { configureFeedback } from './ui/feedback';
-import { href, useRoute } from './ui/router';
+import { href, navigate, useRoute } from './ui/router';
 import { showToast, useToast } from './ui/toast';
 
 function useAppearance() {
@@ -37,6 +40,18 @@ function useAppearance() {
   }, [s]);
 }
 
+/**
+ * Puerta de la bienvenida, al abrir la app (antes del primer render): con el repertorio vacío y sin la marca, lleva a
+ * `#/intro`; con tarjetas, la marca como vista. Se decide una sola vez, así no persigue a quien la saltó o borró los
+ * datos en esta misma sesión. `#/intro` se puede abrir siempre de forma explícita.
+ */
+async function introGate() {
+  const [s, totalCards] = await Promise.all([getSettings(), db.cards.count()]);
+  if (shouldMarkIntroSeen(s, totalCards)) await setSettings({ introSeenAt: Date.now() });
+  const first = window.location.hash.slice(1).split('?')[0].split('/').filter(Boolean)[0];
+  if (shouldShowIntro(s, totalCards) && first !== 'intro') navigate('/intro', true);
+}
+
 export default function App() {
   const route = useRoute();
   const [ready, setReady] = useState(false);
@@ -51,7 +66,9 @@ export default function App() {
   }, [pathKey]);
 
   useEffect(() => {
-    void ensureRoots().then(() => setReady(true));
+    void ensureRoots()
+      .then(() => introGate().catch(() => undefined))
+      .then(() => setReady(true));
     void navigator.storage?.persist?.().catch(() => undefined);
     void shouldAutoSync().then(async (yes) => {
       if (!yes) return;
@@ -94,6 +111,11 @@ export default function App() {
           gapSan={route.params.get('gap') ?? undefined}
         />
       );
+      break;
+    case 'intro':
+      // Bienvenida a pantalla completa: sin barra de pestañas.
+      tab = null;
+      screen = <IntroScreen />;
       break;
     case 'archived':
       tab = 'repertoire';

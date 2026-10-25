@@ -5,6 +5,7 @@ import type { Settings } from '../types';
 import { Banner, Button, Screen, Section, Segmented, Toggle } from '../ui/kit';
 import { Board } from '../ui/Board';
 import { INITIAL_EPD } from '../chess/position';
+import { navigate } from '../ui/router';
 
 export function SettingsScreen() {
   const s = useSettings();
@@ -206,6 +207,23 @@ export function SettingsScreen() {
             </Banner>
           </div>
         )}
+      </Section>
+
+      <Section title="Ayuda">
+        <p className="text-[15px] text-muted">
+          Volvé a ver la bienvenida: cómo se estudia y aperturas para empezar. Lo que elijas se suma a tu repertorio sin
+          pisar lo que ya jugás.
+        </p>
+        <div className="mt-3 flex flex-col">
+          <Button
+            onClick={async () => {
+              await setSettings({ introSeenAt: undefined, tipsSeen: [] });
+              navigate('/intro');
+            }}
+          >
+            Ver la introducción
+          </Button>
+        </div>
       </Section>
 
       <Section title="Borrar datos">

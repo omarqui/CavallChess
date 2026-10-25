@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { shot } from './helpers';
+import { shot, skipIntro } from './helpers';
 
 test('biblioteca: catálogo por color y buscador', async ({ page }) => {
+  await page.goto('/');
+  await skipIntro(page);
   await page.goto('/#/biblioteca');
   await expect(page.getByRole('heading', { name: 'Biblioteca' })).toBeVisible();
   await page.getByRole('radio', { name: 'Con negras' }).click();
@@ -15,6 +17,8 @@ test('biblioteca: catálogo por color y buscador', async ({ page }) => {
 });
 
 test('ficha: leer y agregar al repertorio', async ({ page }) => {
+  await page.goto('/');
+  await skipIntro(page);
   await page.goto('/#/biblioteca/caro-kann');
   await expect(page.getByRole('heading', { name: 'Defensa Caro-Kann' })).toBeVisible();
   await page.getByRole('radio', { name: 'Variantes' }).click();
@@ -28,6 +32,8 @@ test('ficha: leer y agregar al repertorio', async ({ page }) => {
 });
 
 test('ficha: las notas se guardan', async ({ page }) => {
+  await page.goto('/');
+  await skipIntro(page);
   await page.goto('/#/biblioteca/caro-kann');
   await page.getByRole('radio', { name: 'Mis apuntes' }).click();
   const nota = page.getByLabel('Sobre la apertura');
@@ -47,6 +53,8 @@ test('ficha: las notas se guardan', async ({ page }) => {
 
 test('ficha: una nota se guarda al pasar la app a segundo plano', async ({ page }) => {
   await page.clock.install();
+  await page.goto('/');
+  await skipIntro(page);
   await page.goto('/#/biblioteca/caro-kann?tab=apuntes');
   const nota = page.getByLabel('Sobre la apertura');
   await nota.waitFor();
@@ -63,6 +71,8 @@ test('ficha: una nota se guarda al pasar la app a segundo plano', async ({ page 
 });
 
 test('ficha: vaciar una nota de una línea que ya no está la borra recién al soltar el campo', async ({ page }) => {
+  await page.goto('/');
+  await skipIntro(page);
   await page.goto('/#/biblioteca/caro-kann?tab=apuntes');
   await page.getByLabel('Sobre la apertura').waitFor();
   // Una nota de una línea que la ficha ya no trae, escrita directo en la base.
@@ -100,6 +110,8 @@ test('ficha: vaciar una nota de una línea que ya no está la borra recién al s
 });
 
 test('visor: recorrer una línea y analizar', async ({ page }) => {
+  await page.goto('/');
+  await skipIntro(page);
   await page.goto('/#/biblioteca/caro-kann?tab=variantes');
   await page.getByRole('button', { name: 'Ver en el tablero' }).first().click();
   await page.getByRole('button', { name: 'Siguiente' }).click();
