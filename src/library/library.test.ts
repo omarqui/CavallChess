@@ -1,8 +1,9 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { CavallDB } from '../db/db';
-import { ensureRoots, loadGraph } from '../db/repo';
-import { epdOf, INITIAL_EPD, nodeId } from '../chess/position';
+import { commitImport, ensureRoots, loadGraph } from '../db/repo';
+import { buildImportPlan } from '../chess/pgnImport';
+import { epdOf, nodeId } from '../chess/position';
 import { edgeAt, emptyRepo, graphOf, importInto, repoFrom } from '../test/helpers';
 import type { Note } from '../types';
 import { addFicha } from './add';
@@ -109,19 +110,17 @@ describe('biblioteca: carga, estado y agregado', () => {
 
   it('agregar una ficha que choca conserva tu jugada', async () => {
     const g0 = await loadGraph('black', d);
-    const root = g0.node(nodeId('black', INITIAL_EPD))!;
-    await d.nodes.put({ ...root, name: 'Mi Caro' });
-    // 1.e4 c6 2.d4 d5 3.e5 c5, con nombre propio en la raíz: el nombre de la ficha cae en otro nodo
-    const { buildImportPlan } = await import('../chess/pgnImport');
-    const { commitImport } = await import('../db/repo');
+    const caro = nodeId('black', epdAfter(['e4', 'c6']));
+    const avance = nodeId('black', epdAfter(['e4', 'c6', 'd4', 'd5', 'e5']));
     const plan = buildImportPlan('1. e4 c6 2. d4 d5 3. e5 c5', 'black', { mine: new Map(), nodeIds: new Set(g0.nodes.keys()) });
-    await commitImport(plan, new Map(), new Map([[nodeId('black', epdAfter(['e4', 'c6'])), 'Mi Caro']]), d);
+    // Nombres tuyos justo en las posiciones donde addFicha propone "Defensa de Prueba" y "Avance".
+    await commitImport(plan, new Map(), new Map([[caro, 'Mi Caro'], [avance, 'Mi Avance']]), d);
 
     await addFicha(f, undefined, d);
     const g = await loadGraph('black', d);
-    const tras = nodeId('black', epdAfter(['e4', 'c6', 'd4', 'd5', 'e5']));
-    expect(g.mineEdge(tras)?.san).toBe('c5');
-    expect(g.node(nodeId('black', epdAfter(['e4', 'c6'])))?.name).toBe('Mi Caro');
+    expect(g.mineEdge(avance)?.san).toBe('c5');
+    expect(g.node(caro)?.name).toBe('Mi Caro');
+    expect(g.node(avance)?.name).toBe('Mi Avance');
   });
 
   it('agregar dos veces la misma ficha no crea nada', async () => {
