@@ -39,7 +39,7 @@ La respuesta más popular: las blancas desarrollan con `4.Nf3` y mantienen el pe
 4. Nf3 Bg4 { [%hint Clavá a la pieza que defiende e5 y d4.] }
 5. Be2 e6 6. O-O Be7 7. h3 Bh5 8. c4 Nb6 { [%hint Retirá el caballo a una casilla desde donde siga mirando el centro.] }
 9. Nc3 O-O 10. Be3 d5 { [%hint Cerrá el centro y fijá los peones blancos.] }
-11. c5 Bxf3 { [%hint Antes de mover el caballo atacado, sacale una pieza al centro blanco: si recapturan con el alfil, la casilla c4 queda libre.] Si recapturan con el peón (12.gxf3), el alfil de e2 sigue cuidando c4: el caballo vuelve con 12...Nc8 y sale por e7 hacia f5; las blancas quedan algo mejor, pero tu posición no tiene debilidades. }
+11. c5 Bxf3 { [%hint Antes de mover el caballo atacado, sacale una pieza al centro blanco: si recapturan con el alfil, la casilla c4 queda libre.] Si recapturan con el peón (12.gxf3), el alfil de e2 sigue cuidando c4: el caballo vuelve con 12...Nc8 y, después de mover el alfil de e7, sale por e7 hacia f5; las blancas quedan algo mejor, pero tu posición no tiene debilidades. }
 12. Bxf3 Nc4 { [%hint Ocupá la casilla que dejó libre el avance del peón.] }
 13. b3 Nxe3 14. fxe3 b6 { [%hint Atacá el peón de avanzada del flanco de dama.] }
 ```

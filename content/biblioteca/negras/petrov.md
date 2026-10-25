@@ -37,7 +37,7 @@ La línea principal. Echás al caballo, recuperás el peón y armás un centro f
 
 ```pgn
 1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 { [%hint No recuperes todavía el peón: primero echá al caballo.] }
-4. Nf3 Nxe4 { [%hint El caballo blanco se fue: ¿qué peón quedó sin defensa?] }
+4. Nf3 Nxe4 { [%hint Con el caballo blanco fuera de e5, la columna e ya no esconde un jaque descubierto: es el momento de igualar el material.] }
 5. d4 d5 { [%hint Sostené a tu caballo con un peón.] }
 6. Bd3 Nc6 7. O-O Be7 8. c4 Nb4 { [%hint Echá o cambiá el alfil que apunta a tu enroque.] El caballo ataca al alfil de d3. }
 9. Be2 O-O 10. Nc3 Bf5 { [%hint Desarrollá tu último alfil y sumá presión sobre c2.] }
@@ -46,14 +46,14 @@ La línea principal. Echás al caballo, recuperás el peón y armás un centro f
 14. cxd5 Qxd5 15. Bf4 Rac8
 ```
 
-Posición pareja y sin debilidades. El peón blanco de `c3` es el más flojo del tablero y tu torre de `c8` lo presiona cuando se mueva el caballo de `c6`; tu dama está activa en `d5`, pero vigilá que no la echen con `c4`.
+Posición pareja y sin debilidades. Con `15...Rac8` cuidás el peón de `c7`, que atacaba el alfil de `f4`; tu dama está activa en `d5`, pero vigilá que no la echen con `c4`.
 
 ## Variante: Ataque Nimzowitsch {#nimzowitsch} [club]
 Con `5.Nc3` las blancas ofrecen cambiar caballos. Después de `6.dxc3` quedan con los peones doblados, pero con líneas abiertas para sus piezas y la idea de enrocar largo.
 
 ```pgn
 1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 { [%hint No recuperes todavía el peón: primero echá al caballo.] }
-4. Nf3 Nxe4 { [%hint El caballo blanco se fue: ¿qué peón quedó sin defensa?] }
+4. Nf3 Nxe4 { [%hint Con el caballo blanco fuera de e5, la columna e ya no esconde un jaque descubierto: es el momento de igualar el material.] }
 5. Nc3 Nxc3 { [%hint Tu caballo está atacado: resolvelo con un cambio, no defendiéndolo.] }
 6. dxc3 Be7 7. Be3 O-O 8. Qd2 Nd7 { Desde d7 el caballo puede ir a f6, a b6 o a e5, según lo que hagan las blancas. }
 9. O-O-O c6 { [%hint Prepará el avance central que te da espacio.] }
@@ -82,7 +82,7 @@ Con `5.Qe2` las blancas clavan tu caballo de `e4` contra el rey. Defenderlo con 
 
 ```pgn
 1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 { [%hint No recuperes todavía el peón: primero echá al caballo.] }
-4. Nf3 Nxe4 { [%hint El caballo blanco se fue: ¿qué peón quedó sin defensa?] }
+4. Nf3 Nxe4 { [%hint Con el caballo blanco fuera de e5, la columna e ya no esconde un jaque descubierto: es el momento de igualar el material.] }
 5. Qe2 Qe7 { [%hint Tu caballo está clavado: poné entre él y tu rey una pieza que además lo defienda.] }
 (5... d5?? { Defiende al caballo, pero no lo desclava. } 6. d3 { El peón ataca al caballo clavado. }
 Qe7 7. dxe4 dxe4 8. Nfd2 { Las blancas ganaron una pieza por un peón. })
@@ -96,7 +96,7 @@ Contra `5.Qe2` la dama va a `e7`, pero contra `5.Nc3` el mismo reflejo pierde: l
 
 ```pgn
 1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 { [%hint No recuperes todavía el peón: primero echá al caballo.] }
-4. Nf3 Nxe4 { [%hint El caballo blanco se fue: ¿qué peón quedó sin defensa?] }
+4. Nf3 Nxe4 { [%hint Con el caballo blanco fuera de e5, la columna e ya no esconde un jaque descubierto: es el momento de igualar el material.] }
 5. Nc3 Nxc3 { [%hint Tu caballo está atacado: resolvelo con un cambio, no defendiéndolo.] }
 (5... Qe7? { Defiende al caballo, como contra 5.Qe2. } 6. Nd5 { El caballo blanco echa a tu dama de la columna e. }
 Qd7 7. Qe2 { Ahora sí tu caballo de e4 está clavado contra el rey. }
