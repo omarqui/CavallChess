@@ -209,6 +209,45 @@ cg-board square.flash-bad {
   padding-top: max(env(safe-area-inset-top), 0.5rem);
 }
 
+/*
+  Visor de partida. En el teléfono, una columna: datos, tablero, tira, panel y navegación; el tablero mide como mucho
+  el ancho y se achica si falta alto. En una pantalla ancha y apaisada, dos columnas: a la izquierda el tablero (todo el
+  alto que deja la tira y la navegación) y a la derecha los datos y el panel con todo el alto.
+*/
+.game-viewer {
+  display: flex;
+  flex-direction: column;
+  max-width: 36rem;
+}
+.game-viewer .gv-board {
+  height: calc(min(100vw, 36rem) - 2rem);
+}
+@media (min-width: 700px) and (orientation: landscape) {
+  .game-viewer {
+    display: grid;
+    max-width: 76rem;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 28rem);
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      'board info'
+      'board panel'
+      'strip panel'
+      'bottom panel';
+  }
+  .game-viewer .gv-info { grid-area: info; }
+  .game-viewer .gv-board {
+    grid-area: board;
+    height: auto;
+    padding-top: max(env(safe-area-inset-top), 0.75rem);
+  }
+  .game-viewer .gv-strip { grid-area: strip; }
+  .game-viewer .gv-panel {
+    grid-area: panel;
+    border-left: 1px solid var(--color-line);
+  }
+  .game-viewer .gv-bottom { grid-area: bottom; }
+}
+
 /* Coordenadas dentro del tablero, con el color de la casilla opuesta (como en Lichess). */
 .board-brown { --sq-light: #f0d9b5; --sq-dark: #b58863; }
 .board-blue { --sq-light: #dee3e6; --sq-dark: #8ca2ad; }

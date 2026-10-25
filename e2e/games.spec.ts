@@ -481,6 +481,8 @@ test('partidas: tu salida de la teoría, con el veredicto del motor y las ideas 
   await page.getByRole('button', { name: 'Actualizar partidas' }).click();
   await page.getByRole('link', { name: /vs rival8/ }).click();
 
+  // Sin repertorio, el visor abre después de tu salida de la teoría.
+  await expect(page.locator('[aria-current="true"]')).toHaveText(/c4$/);
   await expect(page.getByText(/^Teoría hasta 2…♞︎f6;/)).toBeVisible();
   await page.getByRole('button', { name: 'te saliste en 3.♝︎c4' }).click();
   await expect(page.getByText('Te saliste de la teoría', { exact: true })).toBeVisible();
@@ -493,4 +495,14 @@ test('partidas: tu salida de la teoría, con el veredicto del motor y las ideas 
   await page.getByText(/^Ideas de la apertura: Variante Alapin/).click();
   await expect(page.locator('details[open]')).toBeVisible();
   await shot(page, 'games-viewer-ideas');
+
+  // En una pantalla ancha y apaisada, dos columnas: el tablero grande a la izquierda y el panel con todo el alto.
+  await page.setViewportSize({ width: 1280, height: 720 });
+  const board = await page.locator('.board-frame').boundingBox();
+  const panel = await page.locator('.gv-panel').boundingBox();
+  expect(board!.width).toBeGreaterThan(500);
+  expect(panel!.x).toBeGreaterThan(board!.x + board!.width);
+  expect(panel!.height).toBeGreaterThan(400);
+  await page.waitForTimeout(300);
+  await shot(page, 'games-viewer-ancho');
 });
