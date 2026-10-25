@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { CavallDB } from '../db/db';
-import { addMove, ensureRoots } from '../db/repo';
+import { addMove, ensureRoots, recordGame } from '../db/repo';
 import { INITIAL_EPD, nodeId } from '../chess/position';
 import type { GameOutcome, GameRow, Side } from '../types';
 import { countGames, gamesPage, matchesFilter, recalcGames, type GameFilter } from './store';
@@ -123,6 +123,39 @@ describe('recalcGames', () => {
     expect(gaps).toHaveLength(1);
     expect(gaps[0]).toMatchObject({ side: 'white', san: 'e5', count: 2, lastSeen: 3000, lastGameUrl: 'g2' });
     expect(await d.events.toArray()).toEqual(eventosAntes);
+  });
+
+  it('conserva los huecos de una partida que llega durante el recálculo', async () => {
+    const e4 = await addMove('white', nodeId('white', INITIAL_EPD), 'e2e4', d);
+    await addMove('white', e4!.toId, 'c7c5', d);
+    const mk = (id: string, endTime: number): GameRow => ({
+      id,
+      endTime,
+      myColor: 'white',
+      opponent: 'x',
+      timeClass: 'blitz',
+      result: 'win',
+      outcome: { kind: 'noBook' },
+      pgn: '1. e4 e5 *',
+    });
+    await d.games.bulkPut([mk('g1', 1000), mk('g2', 2000)]);
+    let insertada = false;
+    const res = await recalcGames(async () => {
+      if (insertada) return;
+      insertada = true;
+      // Como hace la sincronización: la partida entra con su hueco.
+      await recordGame(
+        { ...mk('g3', 5000), outcome: { kind: 'gap', ply: 1, playedSan: 'e5', gapId: 'x' } },
+        { id: 'white|viejo|e7e5', side: 'white', epd: 'viejo', uci: 'e7e5', san: 'e5' },
+        d,
+      );
+    }, d);
+    expect(res.games).toBe(3);
+    expect(res.gaps).toBe(1);
+    const gaps = await d.gaps.toArray();
+    expect(gaps).toHaveLength(1);
+    expect(gaps[0]).toMatchObject({ count: 3, lastSeen: 5000, lastGameUrl: 'g3' });
+    expect((await d.games.get('g3'))!.outcome.kind).toBe('gap');
   });
 
   it('procesa más de una tanda', async () => {
