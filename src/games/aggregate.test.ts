@@ -1,6 +1,8 @@
+import { parsePgn, type Node, type PgnNodeData } from 'chessops/pgn';
 import { describe, expect, it } from 'vitest';
-import { buildImportPlan, type ImportPlan } from '../chess/pgnImport';
-import { INITIAL_EPD, playSan, type Side } from '../chess/position';
+import { buildImportPlan } from '../chess/pgnImport';
+import { INITIAL_EPD, playSan, turnOf, type Side } from '../chess/position';
+import { chapterProposals } from '../ui/ImportPreview';
 import { buildFromGames, resultScore, type GameForBuild } from './aggregate';
 import { gameMoves, gameMovesUntil, gamePgnUntil } from './gamePgn';
 
@@ -48,15 +50,34 @@ function game(moves: string, result = 'win', extra: Partial<GameForBuild> = {}):
 }
 const times = (n: number, g: () => GameForBuild) => Array.from({ length: n }, g);
 
-/** Cada posición propia del plan tiene a lo sumo una jugada. */
-function ownMovesPerPosition(plan: ImportPlan) {
-  const byFrom = new Map<string, string[]>();
-  for (const e of plan.edges.values()) {
-    if (!e.mine) continue;
-    byFrom.set(e.fromEpd, [...(byFrom.get(e.fromEpd) ?? []), e.san]);
-  }
-  return [...byFrom.values()];
+/**
+ * Recorre el árbol del PGN generado: cuántas jugadas escribe, qué posiciones tienen jugadas en más de un
+ * lugar (se expandieron dos veces) y qué posiciones propias tienen más de una jugada entre todos sus lugares.
+ */
+function treeOf(pgn: string, side: Side) {
+  let moves = 0;
+  const expansions = new Map<string, number>();
+  const ownMoves = new Map<string, Set<string>>();
+  const walk = (node: Node<PgnNodeData>, epd: string) => {
+    if (node.children.length) expansions.set(epd, (expansions.get(epd) ?? 0) + 1);
+    for (const child of node.children) {
+      moves++;
+      const played = playSan(epd, child.data.san)!;
+      if (turnOf(epd) === side) ownMoves.set(epd, (ownMoves.get(epd) ?? new Set()).add(played.uci));
+      walk(child, played.epd);
+    }
+  };
+  walk(parsePgn(pgn)[0].moves, INITIAL_EPD);
+  return {
+    moves,
+    expandedTwice: [...expansions].filter(([, n]) => n > 1).map(([epd]) => epd),
+    ownWithMany: [...ownMoves].filter(([, ucis]) => ucis.size > 1).map(([epd]) => epd),
+  };
 }
+
+/** Todas las órdenes posibles de `items`. */
+const permutations = (items: string[]): string[][] =>
+  items.length <= 1 ? [items] : items.flatMap((x, i) => permutations(items.filter((_, j) => j !== i)).map((p) => [x, ...p]));
 
 describe('jugadas de una partida', () => {
   it('gameMoves da EPD y UCI de cada jugada; null con FEN inicial distinto', () => {
@@ -81,7 +102,7 @@ describe('jugadas de una partida', () => {
 
   it('gamePgnUntil corta en la jugada pedida y buildImportPlan lo lee', () => {
     const pgn = gamePgnUntil(CHESSCOM, 3)!;
-    expect(pgn).toBe('[Event "tester vs rival"]\n\n1. e4 e5 2. Nf3 *\n');
+    expect(pgn).toBe('[Event "?"]\n\n1. e4 e5 2. Nf3 *\n');
     expect(pgn).not.toContain('[FEN');
     expect(pgn).not.toContain('%clk');
 
@@ -107,7 +128,32 @@ describe('jugadas de una partida', () => {
     expect(gamePgnUntil('[White "a"]\n[Black "b"]\n\n1. e4 e5 2. Ke3 *', 1)).toBeNull();
     expect(gameMovesUntil('1. e4 e5 2. Ke3 *', 1)).toBeNull();
     expect(gameMovesUntil(CHESSCOM, 2)).toEqual(gameMoves(CHESSCOM)!.slice(0, 2));
-    expect(movetext(gamePgnUntil(CHESSCOM, Number('no es un número'))!)).toBe('*');
+    // Cero, negativo o algo que no es un número: una partida sin jugadas, que no agrega nada.
+    for (const plies of [0, -3, Number('no es un número')]) {
+      const empty = gamePgnUntil(CHESSCOM, plies)!;
+      expect(movetext(empty)).toBe('*');
+      const emptyPlan = buildImportPlan(empty, 'white', EMPTY);
+      expect(emptyPlan.errors).toEqual([]);
+      expect(emptyPlan.edges.size).toBe(0);
+    }
+    expect(gameMovesUntil(CHESSCOM, -1)).toEqual([]);
+  });
+
+  it('los PGN generados no proponen nombre de raíz', () => {
+    // Un `[Event]` con nombre se vuelve una raíz nombrada, activada por defecto, en la vista previa.
+    const games = [
+      ...times(2, () => game('1. e4 e5 2. Nf3 Nc6')),
+      ...times(2, () => game('1. d4 d5 2. c4 e6', 'win', { myColor: 'black' })),
+    ];
+    for (const side of ['white', 'black'] as const) {
+      for (const pgn of [gamePgnUntil(CHESSCOM, 4)!, buildFromGames(games, side, { maxOwnMoves: 8, minRival: 1 }).pgn]) {
+        const plan = buildImportPlan(pgn, side, EMPTY);
+        expect(plan.errors).toEqual([]);
+        expect(plan.edges.size).toBeGreaterThan(0);
+        expect(plan.chapters.map((c) => c.name)).toEqual(['Capítulo 1']);
+        expect(chapterProposals(plan).filter((p) => p.enabled)).toEqual([]);
+      }
+    }
   });
 });
 
@@ -124,7 +170,7 @@ describe('repertorio desde muchas partidas', () => {
       opts,
     );
     expect(movetext(byCount.pgn)).toBe('1. e4 *');
-    expect(byCount.pgn.startsWith('[Event "Desde tus partidas"]\n\n')).toBe(true);
+    expect(byCount.pgn.startsWith('[Event "?"]\n\n')).toBe(true);
     expect(byCount.gamesUsed).toBe(3);
 
     // Empate en partidas: mejor puntaje medio. Tablas valen 0,5 y una derrota 0.
@@ -215,31 +261,47 @@ describe('repertorio desde muchas partidas', () => {
     expect(blackPlan.errors).toEqual([]);
     expect(blackPlan.ignoredOwnVariations).toBe(0);
     expect([...blackPlan.edges.values()].filter((e) => e.mine).map((e) => e.san)).toEqual(['c5', 'd6', 'Nf6', 'e6']);
+
+    // Respuestas del rival empatadas en partidas: orden alfabético del SAN, no el de llegada.
+    const tied = buildFromGames([game('1. e4 Nf6'), game('1. e4 e5'), game('1. e4 c5')], 'white', opts);
+    expect(movetext(tied.pgn)).toBe('1. e4 c5 ( 1... e5 ) ( 1... Nf6 ) *');
+
+    // La profundidad cuenta las jugadas del árbol, no las de cada partida. Por 1. e3 e6 2. e4 e5 el árbol
+    // llega con dos jugadas tuyas a la posición de 1. e4 e5, y 3. Nf3 es la tercera. La partida que fue por
+    // 1. e4 e5 2. Nf3 llegó ahí con dos y su 2... Nc6 se contó, pero en el árbol viene después de tu tercera
+    // jugada, donde la rama ya terminó.
+    const depth = buildFromGames(
+      [...times(2, () => game('1. e3 e6 2. e4 e5 3. Nf3')), game('1. e4 e5 2. Nf3 Nc6')],
+      'white',
+      { maxOwnMoves: 3, minRival: 1 },
+    );
+    expect(movetext(depth.pgn)).toBe('1. e3 e6 2. e4 e5 3. Nf3 *');
   });
 
   it('buildFromGames con transposiciones y repeticiones termina y deja una jugada propia por posición', () => {
     // Las dos órdenes llegan a la misma posición después de 2... e6 / 2... Nf6. Por la orden de 1... e6
-    // solo se jugó 3. Nf3; contando por posición (EPD) gana 3. Nc3 en las dos ramas.
+    // solo se jugó 3. Nf3; contando por posición (EPD) gana 3. Nc3, que vale para las dos órdenes.
     const transpositions = [
       ...times(3, () => game('1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. Qc2', 'win')),
       ...times(2, () => game('1. d4 e6 2. c4 Nf6 3. Nf3 d5 4. Nc3', 'win')),
     ];
+    // La posición se expande una sola vez (por la primera rama); la otra orden escribe la jugada que llega
+    // y termina ahí, porque `buildImportPlan` la junta por posición con el subárbol que ya está.
     const t = buildFromGames(transpositions, 'white', { maxOwnMoves: 4, minRival: 1 });
-    expect(movetext(t.pgn)).toBe('1. d4 Nf6 ( 1... e6 2. c4 Nf6 3. Nc3 Bb4 4. Qc2 ) 2. c4 e6 3. Nc3 Bb4 4. Qc2 *');
+    expect(movetext(t.pgn)).toBe('1. d4 Nf6 ( 1... e6 2. c4 Nf6 ) 2. c4 e6 3. Nc3 Bb4 4. Qc2 *');
     expect(t.gamesUsed).toBe(5);
     const plan = buildImportPlan(t.pgn, 'white', EMPTY);
     expect(plan.errors).toEqual([]);
     expect(plan.ignoredOwnVariations).toBe(0);
-    for (const sans of ownMovesPerPosition(plan)) expect(sans).toHaveLength(1);
+    expect(treeOf(t.pgn, 'white')).toMatchObject({ expandedTwice: [], ownWithMany: [] });
 
-    // Repeticiones: los caballos van y vuelven. La rama se corta antes de volver a una posición de la rama,
-    // aunque la profundidad deje seguir.
+    // Repeticiones: los caballos van y vuelven. La jugada que vuelve a la inicial se escribe, pero la inicial
+    // no se expande otra vez, aunque la profundidad deje seguir.
     const repetitions = times(3, () => game('1. Nf3 Nf6 2. Ng1 Ng8 3. Nf3 Nf6 4. Ng1 Ng8 5. Nf3 Nf6', 'repetition'));
     const r = buildFromGames(repetitions, 'white', { maxOwnMoves: 15, minRival: 1 });
-    expect(movetext(r.pgn)).toBe('1. Nf3 Nf6 2. Ng1 *');
-    const rPlan = buildImportPlan(r.pgn, 'white', EMPTY);
-    expect(rPlan.ignoredOwnVariations).toBe(0);
-    for (const sans of ownMovesPerPosition(rPlan)) expect(sans).toHaveLength(1);
+    expect(movetext(r.pgn)).toBe('1. Nf3 Nf6 2. Ng1 Ng8 *');
+    expect(buildImportPlan(r.pgn, 'white', EMPTY).ignoredOwnVariations).toBe(0);
+    expect(treeOf(r.pgn, 'white')).toMatchObject({ expandedTwice: [], ownWithMany: [] });
 
     // Las dos cosas juntas, con muchas partidas: termina y sigue habiendo una jugada propia por posición.
     const mixed = buildFromGames(
@@ -250,7 +312,22 @@ describe('repertorio desde muchas partidas', () => {
     const mixedPlan = buildImportPlan(mixed.pgn, 'white', EMPTY);
     expect(mixedPlan.errors).toEqual([]);
     expect(mixedPlan.ignoredOwnVariations).toBe(0);
-    for (const sans of ownMovesPerPosition(mixedPlan)) expect(sans).toHaveLength(1);
+    expect(treeOf(mixed.pgn, 'white')).toMatchObject({ expandedTwice: [], ownWithMany: [] });
+
+    // Muchas órdenes hacia el mismo sistema: con negras siempre 1... Nf6, 2... e6, 3... d5 y 4... Be7, y el
+    // rival juega d4, c4, Nf3 y g3 en las 24 órdenes posibles. Cada jugada distinta se escribe una sola vez:
+    // 32 del rival y 15 tuyas. Expandiendo cada orden por separado serían 128.
+    const system = permutations(['d4', 'c4', 'Nf3', 'g3']).map(([a, b, c, d]) =>
+      game(`1. ${a} Nf6 2. ${b} e6 3. ${c} d5 4. ${d} Be7`, 'win', { myColor: 'black' }),
+    );
+    const s = buildFromGames(system, 'black', { maxOwnMoves: 4, minRival: 1 });
+    expect(s.gamesUsed).toBe(24);
+    const sPlan = buildImportPlan(s.pgn, 'black', EMPTY);
+    expect(sPlan.errors).toEqual([]);
+    expect(sPlan.ignoredOwnVariations).toBe(0);
+    const sTree = treeOf(s.pgn, 'black');
+    expect(sTree).toMatchObject({ moves: 47, expandedTwice: [], ownWithMany: [] });
+    expect(sTree.moves).toBe(sPlan.edges.size);
   });
 
   it('buildFromGames ignora otro color y partidas viejas', () => {

@@ -53,6 +53,7 @@ function byRivalPreference(a: MoveStat, b: MoveStat) {
  * Arma un PGN de repertorio (una partida con variantes) desde tus partidas de `side`.
  * Cuenta las jugadas por posición (clave EPD, así que las transposiciones suman juntas); en tus posiciones
  * entra una sola jugada, la más jugada, y del rival entran las que se jugaron al menos `minRival` veces.
+ * De cada partida solo se cuenta hasta tu jugada número `maxOwnMoves`; lo que sigue no suma.
  * `gamesUsed` cuenta las partidas que aportaron al menos una jugada al árbol. Sin nada que armar, `pgn` es `''`.
  */
 export function buildFromGames(
@@ -87,35 +88,36 @@ export function buildFromGames(
     }
   });
 
+  // El árbol se arma a lo ancho y cada posición se expande una sola vez: la primera vez que aparece, que
+  // es por su camino más corto (así el corte por profundidad no depende del orden de las ramas). Si otra
+  // rama llega a una posición ya expandida (una transposición, o una repetición que vuelve atrás), se
+  // escribe la jugada pero no se expande de nuevo: `buildImportPlan` junta por posición, así que el
+  // subárbol ya está. Sin esto, cada orden de jugadas de un sistema reescribiría el mismo subárbol.
+  // Como cada posición tiene un solo lugar con jugadas, tu jugada no puede quedar repetida.
   const used = new Set<number>();
-  // Posiciones de la rama actual (no de todo el árbol): una transposición desde otra rama se vuelve a
-  // escribir, y `buildImportPlan` la junta por posición. Como tu jugada se elige solo por la posición,
-  // es la misma en las dos ramas y no queda más de una por posición.
-  const path = new Set<string>([INITIAL_EPD]);
-  const grow = (parent: Node<PgnNodeData>, epd: string, own: number) => {
-    if (own >= maxOwnMoves) return;
+  const root = new Node<PgnNodeData>();
+  const expanded = new Set<string>([INITIAL_EPD]);
+  const queue: { node: Node<PgnNodeData>; epd: string; own: number }[] = [{ node: root, epd: INITIAL_EPD, own: 0 }];
+  for (let i = 0; i < queue.length; i++) {
+    const { node, epd, own } = queue[i];
+    if (own >= maxOwnMoves) continue;
     const byUci = stats.get(epd);
-    if (!byUci) return;
+    if (!byUci) continue;
     const mine = turnOf(epd) === side;
     const candidates = [...byUci.values()];
     const picks = mine
       ? [candidates.sort(byOwnPreference)[0]]
       : candidates.filter((s) => s.games.length >= minRival).sort(byRivalPreference);
     for (const s of picks) {
-      // Volver a una posición de la rama es una repetición: la rama se corta antes. En tu posición no se
-      // busca otra jugada, para que la elección siga dependiendo solo de la posición.
-      if (path.has(s.epd)) continue;
       const child = new ChildNode<PgnNodeData>({ san: s.san });
-      parent.children.push(child);
+      node.children.push(child);
       for (const gi of s.games) used.add(gi);
-      path.add(s.epd);
-      grow(child, s.epd, mine ? own + 1 : own);
-      path.delete(s.epd);
+      if (expanded.has(s.epd)) continue;
+      expanded.add(s.epd);
+      queue.push({ node: child, epd: s.epd, own: mine ? own + 1 : own });
     }
-  };
-  const root = new Node<PgnNodeData>();
-  grow(root, INITIAL_EPD, 0);
+  }
 
   if (!root.children.length) return { pgn: '', gamesUsed: 0 };
-  return { pgn: writePgn('Desde tus partidas', root), gamesUsed: used.size };
+  return { pgn: writePgn(root), gamesUsed: used.size };
 }

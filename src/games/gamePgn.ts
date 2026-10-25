@@ -17,17 +17,12 @@ export interface GameMove {
 /** Un número de jugadas pedido desde afuera (p. ej. de la URL): nunca negativo, y `NaN` vale 0. */
 const atLeastZero = (plies: number) => Math.max(0, plies) || 0;
 
-interface ReadGame {
-  headers: Map<string, string>;
-  moves: GameMove[];
-}
-
 /**
- * La primera partida del PGN, si arranca en la posición inicial y toda su línea principal es legal.
+ * La línea principal de la primera partida del PGN, si arranca en la posición inicial y es toda legal.
  * Devuelve el detalle de las primeras `plies` jugadas; las demás solo se juegan para validarlas, porque
  * calcular el EPD es lo que más cuesta y con miles de partidas se nota.
  */
-function readGame(pgn: string, plies: number): ReadGame | null {
+function readMoves(pgn: string, plies: number): GameMove[] | null {
   const game = parsePgn(pgn)[0];
   if (!game) return null;
   const start = startingPosition(game.headers);
@@ -49,7 +44,7 @@ function readGame(pgn: string, plies: number): ReadGame | null {
     moves.push({ san, uci: makeUci(move), fromEpd, epd });
     fromEpd = epd;
   }
-  return { headers: game.headers, moves };
+  return moves;
 }
 
 /**
@@ -57,30 +52,31 @@ function readGame(pgn: string, plies: number): ReadGame | null {
  * Devuelve `null` si la partida arranca en otra posición (`[FEN]`), no se puede leer o tiene una jugada ilegal.
  */
 export function gameMoves(pgn: string): GameMove[] | null {
-  return readGame(pgn, Infinity)?.moves ?? null;
+  return readMoves(pgn, Infinity);
 }
 
 /** Como `gameMoves`, pero solo las primeras `plies` jugadas. La partida se valida entera igual. */
 export function gameMovesUntil(pgn: string, plies: number): GameMove[] | null {
-  return readGame(pgn, atLeastZero(plies))?.moves ?? null;
-}
-
-/** Una partida con un solo encabezado (`Event`) y las jugadas del árbol, lista para `buildImportPlan`. */
-export function writePgn(event: string, moves: Node<PgnNodeData>): string {
-  return makePgn({ headers: new Map([['Event', event]]), moves });
+  return readMoves(pgn, atLeastZero(plies));
 }
 
 /**
- * Las primeras `plies` jugadas de la partida, como PGN de una sola partida sin `[FEN]` ni relojes.
- * El único encabezado es `[Event "<White> vs <Black>"]`, que la importación solo muestra en sus mensajes de error.
+ * Una partida sin nombre (`[Event "?"]`) con las jugadas del árbol, lista para `buildImportPlan`.
+ * Sin nombre, la importación llama al capítulo "Capítulo 1" y la vista previa (`chapterProposals`) no
+ * propone nombrar la raíz, ni con los jugadores ni con un texto fijo.
+ */
+export function writePgn(moves: Node<PgnNodeData>): string {
+  return makePgn({ headers: new Map([['Event', '?']]), moves });
+}
+
+/**
+ * Las primeras `plies` jugadas de la partida, como PGN de una sola partida sin nombre, sin `[FEN]` ni relojes.
  * Devuelve `null` en los mismos casos que `gameMoves`.
  */
 export function gamePgnUntil(pgn: string, plies: number): string | null {
-  const game = readGame(pgn, atLeastZero(plies));
-  if (!game) return null;
+  const moves = readMoves(pgn, atLeastZero(plies));
+  if (!moves) return null;
   const root = new Node<PgnNodeData>();
-  extend(root, game.moves.map((m) => ({ san: m.san })));
-  const white = game.headers.get('White') ?? '?';
-  const black = game.headers.get('Black') ?? '?';
-  return writePgn(`${white} vs ${black}`, root);
+  extend(root, moves.map((m) => ({ san: m.san })));
+  return writePgn(root);
 }
