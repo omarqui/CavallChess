@@ -1,18 +1,22 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { DrawShape } from '@lichess-org/chessground/draw';
 import type { RepertoireGraph } from '../chess/graph';
-import { displaySquares, figurine, INITIAL_EPD, type Side } from '../chess/position';
-import { useGame, useGraphs } from '../db/hooks';
+import { displaySquares, figurine, INITIAL_EPD, nodeId, type Side } from '../chess/position';
+import { useGame, useGraphs, useSettings } from '../db/hooks';
 import { ensureDue } from '../db/repo';
 import { analyzeGame, type GameAnalysis } from '../games/analyze';
 import { gameMoves, type GameMove } from '../games/gamePgn';
+import { openingInsight } from '../games/insight';
+import { useLibrary } from '../library/catalog';
 import type { GameOutcome, GameRow } from '../types';
 import { arrow, Board } from '../ui/Board';
 import { EnginePanel } from '../ui/EnginePanel';
 import { BackLink, Banner, Button, Icon, ICONS, MoveLine, NavButton, Screen, Toggle } from '../ui/kit';
+import { useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
 import { showToast } from '../ui/toast';
 import { gamePath, gapRepertoirePath, resultLabel, reviewFromGamePath, sentence, timeClassLabel } from './games/format';
+import { OpeningSummary, PlyDetail } from './games/OpeningPanel';
 
 type Exit = Extract<GameOutcome, { kind: 'myDeviation' | 'gap' }>;
 
@@ -122,6 +126,14 @@ function Player({
   const [reviewing, setReviewing] = useState(false);
   const reviewBusy = useRef(false);
   const strip = useRef<HTMLDivElement>(null);
+  const fichas = useLibrary().fichas;
+  const eco = useEco();
+  const token = useSettings()?.lichessToken;
+  // Mientras carga la biblioteca se cruza igual con el repertorio y los nombres ECO.
+  const insight = useMemo(
+    () => openingInsight(moves, game.myColor, graph, fichas ?? [], eco),
+    [moves, game.myColor, graph, fichas, eco],
+  );
 
   const go = (n: number) => setPly(Math.max(0, Math.min(moves.length, n)));
 
@@ -170,6 +182,7 @@ function Player({
       {/* El aviso va arriba del tablero: así se ve con su acción principal aunque "Analizar" ocupe lugar abajo. */}
       <div className="safe-top shrink-0 px-4 pb-2">
         <GameHeader game={game} aside={<Toggle label="Analizar" checked={analyze} onChange={setAnalyze} />} />
+        <OpeningSummary insight={insight} moves={moves} onGo={go} />
         {o.kind === 'myDeviation' || o.kind === 'gap' ? (
           <ExitNotice
             exit={o}
@@ -215,7 +228,17 @@ function Player({
         />
       </div>
 
-      <div className="min-h-0 flex-1" />
+      {/* Lo que sabe CavallChess de la jugada que se ve: ocupa el alto que sobra y se desliza si no entra. */}
+      <div className="min-h-24 flex-1 overflow-y-auto px-4 pb-2">
+        <PlyDetail
+          insight={insight}
+          moves={moves}
+          ply={ply}
+          epd={epd}
+          known={new Set(graph.children(nodeId(game.myColor, epd)).map((e) => e.uci))}
+          token={token}
+        />
+      </div>
 
       <div className="safe-bottom shrink-0 border-t border-line bg-paper px-4 pt-2">
         {analyze && <EnginePanel epd={epd} />}

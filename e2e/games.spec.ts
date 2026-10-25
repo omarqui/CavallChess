@@ -398,3 +398,70 @@ test('partidas: cancelar la carga del historial y retomarla', async ({ page }) =
   await page.getByRole('button', { name: 'Cargar todo el historial' }).click();
   await expect(page.getByText('Ya tenías todo el historial cargado.')).toBeVisible();
 });
+
+test('partidas: el visor cruza la partida con la biblioteca (teoría, trampa y explorador apagado sin token)', async ({ page }) => {
+  await mockChesscom(page, {
+    user: 'tester',
+    months: {
+      // La trampa del caballo sin casillas de la Alapin: el rival cae con 3…♞e4 y la castigás con 4.d3.
+      '2026/10': [{ id: '7', white: 'tester', black: 'rival7', moves: '1. e4 c5 2. c3 Nf6 3. e5 Ne4 4. d3 Ng5 5. Bxg5 d6', winner: 'white' }],
+    },
+  });
+  await page.goto('/');
+  await skipIntro(page);
+  await setChesscomUser(page, 'tester');
+  await page.goto('/#/games');
+  await page.getByRole('button', { name: 'Actualizar partidas' }).click();
+  await page.getByRole('link', { name: /vs rival7/ }).click();
+
+  await expect(page.getByRole('heading', { name: 'vs rival7' })).toBeVisible();
+  await expect(page.getByText('Teoría de la biblioteca hasta 5.♝︎xg5;')).toBeVisible();
+  const trap = page.getByRole('button', { name: /Trampa a favor: El caballo sin casillas/ });
+  await expect(trap).toBeVisible();
+
+  // El chip lleva a la jugada del error del rival, con su comentario y el aviso de la trampa.
+  await trap.click();
+  await expect(page.locator('[aria-current="true"]')).toHaveText(/e4$/);
+  await expect(page.getByText('El rival cayó en la trampa «El caballo sin casillas» y lo castigaste.')).toBeVisible();
+  await expect(page.getByText('Parece una casilla activa, pero el caballo no tiene retirada.')).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Ver en la biblioteca: Variante Alapin/ })).toBeVisible();
+  // Sin token de Lichess no hay explorador.
+  await expect(page.getByText('Explorador de Lichess')).toHaveCount(0);
+  await page.waitForTimeout(300);
+  await shot(page, 'games-viewer-biblioteca');
+
+  // La salida: 5…d6 ya no es teoría.
+  await page.getByRole('button', { name: /salió en 5…d6/ }).click();
+  await expect(page.getByText('Fuera de la biblioteca')).toBeVisible();
+  await page.waitForTimeout(300);
+  await shot(page, 'games-viewer-fuera-biblioteca');
+
+  await expect(page.getByRole('button', { name: /^Ver en la biblioteca/ })).toHaveCount(0);
+
+  // Con token, el explorador (simulado) marca la jugada de la partida aunque no esté entre las más jugadas.
+  await page.route('https://explorer.lichess.org/**', (route) =>
+    route.fulfill({
+      json: {
+        white: 60,
+        draws: 20,
+        black: 20,
+        moves: [
+          { uci: 'd2d4', san: 'd4', white: 50, draws: 10, black: 10 },
+          { uci: 'g1f3', san: 'Nf3', white: 10, draws: 10, black: 10 },
+        ],
+      },
+    }),
+  );
+  await page.goto('/#/settings');
+  const token = page.getByLabel(/Token de Lichess/);
+  await token.fill('lip_prueba');
+  await token.blur();
+  await page.goBack();
+  await expect(page.getByRole('heading', { name: 'vs rival7' })).toBeVisible();
+  await page.getByRole('button', { name: /Trampa a favor/ }).click();
+  await page.getByRole('switch', { name: 'Explorador de Lichess' }).click();
+  await expect(page.getByText('d3, la jugada de la partida, casi no aparece en esta base.')).toBeVisible();
+  await page.getByText('d3, la jugada de la partida').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(300);
+  await shot(page, 'games-viewer-explorador');
+});
