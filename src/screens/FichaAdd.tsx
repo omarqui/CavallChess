@@ -16,6 +16,7 @@ import {
   FichaNotFound,
   ICONS,
   Icon,
+  LibraryLoadFailed,
   LineChips,
   LinePreview,
   StatusChip,
@@ -145,7 +146,7 @@ function Picker({
 }
 
 export function FichaAddScreen({ id }: { id: string }) {
-  const f = useFicha(id);
+  const { ficha: f, error, retry } = useFicha(id);
   const graphs = useGraphs();
   const [picked, setPicked] = useState<Set<string> | null>(null);
   const [review, setReview] = useState<{ pgn: string; ids: string[]; graph: RepertoireGraph } | null>(null);
@@ -158,6 +159,7 @@ export function FichaAddScreen({ id }: { id: string }) {
     if (main) main.scrollTop = 0;
   }, [review]);
 
+  if (error) return <LibraryLoadFailed onRetry={retry} />;
   if (f === null || !graphs) return <div ref={top} />;
   if (!f) return <FichaNotFound />;
 

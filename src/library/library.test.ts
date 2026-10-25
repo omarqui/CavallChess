@@ -9,7 +9,7 @@ import type { Note } from '../types';
 import { figurineText, parseRich } from '../ui/RichText';
 import { addFicha } from './add';
 import { checkLine, entradaVigente, MIN_PREVIA_FAVOR, MIN_TRAS_ERROR_FAVOR, MAX_CONTRA_CAIDA_1, VERSION_VERIFICACION } from './thresholds';
-import { groupFichas, parseLibrary, searchFichas } from './catalog';
+import { createLibraryStore, groupFichas, parseLibrary, searchFichas } from './catalog';
 import { FICHA_PRUEBA } from './fixture';
 import { parseFicha } from './parse';
 import { fichaNames, fichaPgn } from './pgn';
@@ -226,6 +226,45 @@ describe('biblioteca: carga, estado y agregado', () => {
     expect(searchFichas([f], 'test defense')).toEqual([f]);
     expect(searchFichas([f], 'B12')).toEqual([f]);
     expect(searchFichas([f], 'B20')).toEqual([]);
+  });
+});
+
+describe('carga de la biblioteca', () => {
+  const fuentes = { '/content/biblioteca/negras/prueba.md': FICHA_PRUEBA };
+
+  it('un fallo queda como error, distinto de "cargando", y reintentar vuelve a cargar', async () => {
+    let falla = true;
+    const store = createLibraryStore(async () => {
+      if (falla) throw new Error('sin conexión');
+      return fuentes;
+    });
+    expect(store.get()).toEqual({ fichas: null, error: null });
+    await expect(store.load()).rejects.toThrow('sin conexión');
+    expect(store.get().fichas).toBeNull();
+    expect(store.get().error?.message).toBe('sin conexión');
+
+    // La promesa fallida no queda guardada: la próxima carga vuelve a intentar y pasa por "cargando".
+    falla = false;
+    const otra = store.load();
+    expect(store.get()).toEqual({ fichas: null, error: null });
+    const fichas = await otra;
+    expect(fichas.map((x) => x.id)).toEqual(['prueba']);
+    expect(store.get()).toEqual({ fichas, error: null });
+  });
+
+  it('carga una sola vez y avisa a quienes la miran', async () => {
+    let cargas = 0;
+    const store = createLibraryStore(async () => {
+      cargas++;
+      return fuentes;
+    });
+    let avisos = 0;
+    const baja = store.subscribe(() => avisos++);
+    await Promise.all([store.load(), store.load()]);
+    await store.load();
+    expect(cargas).toBe(1);
+    expect(avisos).toBe(1);
+    baja();
   });
 });
 

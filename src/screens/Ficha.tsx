@@ -8,6 +8,7 @@ import type { Ficha, FichaLine } from '../library/types';
 import type { Note } from '../types';
 import { Board } from '../ui/Board';
 import { MoveLine, Screen, Segmented } from '../ui/kit';
+import { LibraryError } from '../ui/LibraryError';
 import { Tip } from '../ui/Tip';
 import { RichInline, RichText } from '../ui/RichText';
 import { href, navigate } from '../ui/router';
@@ -558,8 +559,17 @@ export function FichaNotFound() {
   );
 }
 
+/** La biblioteca no cargó (ficha, visor y agregar). */
+export function LibraryLoadFailed({ onRetry }: { onRetry: () => void }) {
+  return (
+    <Screen title="Biblioteca">
+      <LibraryError onRetry={onRetry} />
+    </Screen>
+  );
+}
+
 export function FichaScreen({ id, tab }: { id: string; tab: FichaTab }) {
-  const f = useFicha(id);
+  const { ficha: f, error, retry } = useFicha(id);
   const graphs = useGraphs();
   const notes = useNotes();
   const anchor = useRef<HTMLDivElement>(null);
@@ -582,6 +592,7 @@ export function FichaScreen({ id, tab }: { id: string; tab: FichaTab }) {
     [f, graph],
   );
 
+  if (error) return <LibraryLoadFailed onRetry={retry} />;
   if (f === null) return null;
   if (!f) return <FichaNotFound />;
 

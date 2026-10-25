@@ -5,12 +5,13 @@ import { displaySquares, figurine, INITIAL_EPD, playSan, playUci } from '../ches
 import { setSettings } from '../db/repo';
 import { useCards, useEvents, useGraphs, useSettings } from '../db/hooks';
 import { addFicha } from '../library/add';
-import { loadLibrary, useLibrary } from '../library/catalog';
+import { preloadLibrary, useLibrary } from '../library/catalog';
 import type { Ficha } from '../library/types';
 import { buildDailyQueue } from '../srs/queue';
 import { arrow, Board, type Flash } from '../ui/Board';
 import { playCorrect, playWrong } from '../ui/feedback';
 import { Banner, Button, MoveLine } from '../ui/kit';
+import { LibraryError } from '../ui/LibraryError';
 import { MiniBoard } from '../ui/MiniBoard';
 import { navigate } from '../ui/router';
 import { showToast } from '../ui/toast';
@@ -50,7 +51,7 @@ export function IntroScreen() {
   const next = () => setAt((i) => Math.min(steps.length - 1, i + 1));
 
   // La biblioteca se carga desde ya, para que el paso de elegir aperturas no espere.
-  useEffect(() => void loadLibrary(), []);
+  useEffect(preloadLibrary, []);
 
   let body: ReactNode;
   switch (step) {
@@ -411,7 +412,7 @@ function Demo({ onNext }: { onNext: () => void }) {
 type Picks = Partial<Record<IntroChoice['key'], string>>;
 
 function Choose({ onDone }: { onDone: (added: Ficha[]) => void }) {
-  const fichas = useLibrary();
+  const { fichas, error: loadError, retry } = useLibrary();
   const settings = useSettings();
   const [picks, setPicks] = useState<Picks>({});
   const [working, setWorking] = useState<{ i: number; n: number } | null>(null);
@@ -464,7 +465,8 @@ function Choose({ onDone }: { onDone: (added: Ficha[]) => void }) {
         </>
       }
       actions={
-        <Primary onClick={() => void add()} disabled={!fichas || !!working} aria-busy={!!working}>
+        // Si la biblioteca no cargó, "Seguir" sigue sin aperturas: el paso no queda trabado.
+        <Primary onClick={() => void add()} disabled={(!fichas && !loadError) || !!working} aria-busy={!!working}>
           {working ? (
             <>
               <Spinner />
@@ -482,6 +484,12 @@ function Choose({ onDone }: { onDone: (added: Ficha[]) => void }) {
         <div className="mt-4">
           <Banner tone="bad">{error}</Banner>
         </div>
+      )}
+      {loadError && (
+        <>
+          <LibraryError className="mt-6" onRetry={retry} />
+          <p className="mt-3 text-[15px] text-muted">Si preferís, seguí sin aperturas: las sumás después desde la Biblioteca.</p>
+        </>
       )}
       {fichas &&
         INTRO_CHOICES.map((c) => (

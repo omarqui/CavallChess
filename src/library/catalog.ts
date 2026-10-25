@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import type { Side } from '../chess/position';
 import { parseFicha } from './parse';
 import type { Ficha } from './types';
-import { GROUPS, validateFicha, validateLibrary } from './validate';
+import { GROUPS, validateLibrary } from './validate';
 
 /** Parsea cada fuente; los errores llevan el path para poder ubicarlos. */
 export function parseLibrary(sources: Record<string, string>): { fichas: Ficha[]; errors: string[] } {
@@ -16,40 +16,89 @@ export function parseLibrary(sources: Record<string, string>): { fichas: Ficha[]
   return { fichas, errors };
 }
 
-let cache: Ficha[] | null = null;
-let promise: Promise<Ficha[]> | null = null;
-
-/** Carga la biblioteca una sola vez. Las fichas con errores se omiten y se informan en la consola. */
-export function loadLibrary(): Promise<Ficha[]> {
-  promise ??= import('./bundle').then(({ sources }) => {
-    const { fichas, errors } = parseLibrary(sources);
-    const buenas = fichas.filter((f) => {
-      const e = validateFicha(f);
-      errors.push(...e);
-      return !e.length;
-    });
-    errors.push(...validateLibrary(buenas));
-    if (errors.length) console.error(`Biblioteca: ${errors.length} problema(s)\n${errors.join('\n')}`);
-    return (cache = buenas);
-  });
-  return promise;
-}
-
-/** `null` mientras carga. */
-export function useLibrary(): Ficha[] | null {
-  const [fichas, setFichas] = useState(cache);
-  useEffect(() => {
-    if (cache) return;
-    void loadLibrary().then(setFichas);
-  }, []);
+/**
+ * Catálogo a partir de las fuentes. En producción alcanza con parsear: `content.test.ts` (CI) ya garantiza que todas
+ * las fichas validan. En desarrollo se valida una vez, solo para avisar en la consola mientras escribís una ficha.
+ * Las fichas que no parsean se omiten.
+ */
+function catalogOf(sources: Record<string, string>): Ficha[] {
+  const { fichas, errors } = parseLibrary(sources);
+  if (import.meta.env.DEV) errors.push(...validateLibrary(fichas));
+  if (errors.length) console.error(`Biblioteca: ${errors.length} problema(s)\n${errors.join('\n')}`);
   return fichas;
 }
 
-/** `null` = cargando, `undefined` = no existe. */
-export function useFicha(id: string): Ficha | null | undefined {
-  const fichas = useLibrary();
-  if (!fichas) return null;
-  return fichas.find((f) => f.id === id);
+/** `fichas` y `error` en `null` = cargando. */
+export interface LibrarySnapshot {
+  fichas: Ficha[] | null;
+  error: Error | null;
+}
+
+/**
+ * Carga única de la biblioteca con su estado (cargando, lista o error). Si la carga falla, la promesa no queda
+ * guardada: la próxima `load()` vuelve a intentar (y el estado pasa otra vez por "cargando").
+ */
+export function createLibraryStore(loadSources: () => Promise<Record<string, string>>) {
+  let snapshot: LibrarySnapshot = { fichas: null, error: null };
+  let promise: Promise<Ficha[]> | null = null;
+  const listeners = new Set<() => void>();
+  const set = (s: LibrarySnapshot) => {
+    snapshot = s;
+    listeners.forEach((l) => l());
+  };
+  return {
+    load(): Promise<Ficha[]> {
+      if (promise) return promise;
+      if (snapshot.error) set({ fichas: null, error: null });
+      promise = loadSources()
+        .then(catalogOf)
+        .then(
+          (fichas) => {
+            set({ fichas, error: null });
+            return fichas;
+          },
+          (e: unknown) => {
+            promise = null;
+            const error = e instanceof Error ? e : new Error(String(e));
+            set({ fichas: null, error });
+            throw error;
+          },
+        );
+      return promise;
+    },
+    get: (): LibrarySnapshot => snapshot,
+    subscribe(l: () => void): () => void {
+      listeners.add(l);
+      return () => listeners.delete(l);
+    },
+  };
+}
+
+const store = createLibraryStore(() => import('./bundle').then((m) => m.sources));
+
+/** Empieza a cargar la biblioteca si hace falta; el resultado (o el error) llega por `useLibrary`. */
+export function preloadLibrary(): void {
+  store.load().catch(() => {});
+}
+
+export interface LibraryState extends LibrarySnapshot {
+  /** Vuelve a intentar la carga después de un error. */
+  retry: () => void;
+}
+
+/** `fichas` en `null` mientras carga o si falló; `error` distingue el fallo. */
+export function useLibrary(): LibraryState {
+  const snap = useSyncExternalStore(store.subscribe, store.get);
+  useEffect(() => {
+    if (!snap.fichas && !snap.error) preloadLibrary();
+  }, [snap.fichas, snap.error]);
+  return { ...snap, retry: preloadLibrary };
+}
+
+/** `ficha`: `null` mientras carga o si falló (mirá `error`), `undefined` si no existe. */
+export function useFicha(id: string): { ficha: Ficha | null | undefined; error: Error | null; retry: () => void } {
+  const { fichas, error, retry } = useLibrary();
+  return { ficha: fichas ? fichas.find((f) => f.id === id) : null, error, retry };
 }
 
 /** Fichas del lado, agrupadas en el orden de `GROUPS` y ordenadas por `order`. */

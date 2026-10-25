@@ -6,7 +6,7 @@ import { toShapes, Board } from '../ui/Board';
 import { EnginePanel } from '../ui/EnginePanel';
 import { MoveLine, Segmented, Toggle } from '../ui/kit';
 import { figurineText, RichText } from '../ui/RichText';
-import { Chip, BackLink, Icon, ICONS } from './Ficha';
+import { Chip, BackLink, Icon, ICONS, LibraryLoadFailed } from './Ficha';
 
 type Mode = 'correcta' | 'cae';
 
@@ -18,7 +18,8 @@ const MODES: { value: Mode; label: string }[] = [
 const KIND_LABEL: Record<FichaLine['kind'], string> = { variante: 'Variante', favor: 'A favor', contra: 'En contra' };
 
 export function LineViewerScreen({ fichaId, lineId }: { fichaId: string; lineId: string }) {
-  const ficha = useFicha(fichaId);
+  const { ficha, error, retry } = useFicha(fichaId);
+  if (error) return <LibraryLoadFailed onRetry={retry} />;
   if (ficha === null) return null;
   const line = ficha?.lines.find((l) => l.id === lineId);
   if (!ficha || !line) {

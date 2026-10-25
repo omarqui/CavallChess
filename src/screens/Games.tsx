@@ -106,7 +106,7 @@ function GapItem({ gap, graphs }: { gap: Gap; graphs: NonNullable<ReturnType<typ
   const covered = g.edges.has(`${id}|${gap.uci}`);
   const [from, to] = [gap.uci.slice(0, 2), gap.uci.slice(2, 4)];
   const played = playUci(gap.epd, gap.uci);
-  const lib = useLibrary();
+  const lib = useLibrary().fichas;
   const ficha = lib ? findFichasForMove(lib, gap.side, gap.epd, gap.uci)[0] : undefined;
   return (
     <li className="flex gap-3 rounded-xl p-3 ring-1 ring-line">

@@ -4,6 +4,7 @@ import { useGraphs } from '../db/hooks';
 import { groupFichas, searchFichas, useLibrary } from '../library/catalog';
 import { fichaProgress } from '../library/status';
 import type { Ficha } from '../library/types';
+import { LibraryError } from '../ui/LibraryError';
 import { MiniBoard } from '../ui/MiniBoard';
 import { href, navigate, useRoute } from '../ui/router';
 import { Screen, Segmented } from '../ui/kit';
@@ -57,7 +58,7 @@ function FichaRow({ ficha, progress }: { ficha: Ficha; progress?: { added: numbe
 
 export function LibraryScreen() {
   const route = useRoute();
-  const fichas = useLibrary();
+  const { fichas, error, retry } = useLibrary();
   const graphs = useGraphs();
   const [query, setQuery] = useState('');
   const side: Side = route.params.get('lado') === 'black' ? 'black' : 'white';
@@ -94,7 +95,9 @@ export function LibraryScreen() {
         className="mt-3 min-h-11 w-full rounded-xl bg-surface px-4 text-base text-ink ring-1 ring-line placeholder:text-muted focus:outline-2 focus:outline-brass"
       />
 
-      {!fichas ? null : searching ? (
+      {error ? (
+        <LibraryError className="mt-6" onRetry={retry} />
+      ) : !fichas ? null : searching ? (
         found.length ? (
           <div className="mt-5 flex flex-col gap-3">{found.map(row)}</div>
         ) : (
