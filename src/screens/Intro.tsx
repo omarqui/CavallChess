@@ -17,6 +17,7 @@ import { navigate } from '../ui/router';
 import { showToast } from '../ui/toast';
 import { Icon } from './Ficha';
 import { INTRO_CHOICES, type IntroChoice } from './intro/choices';
+import { defendsSquare } from './intro/demo';
 import { needsInstallStep } from './intro/gate';
 
 type StepId = 'hola' | 'instalar' | 'demo' | 'repertorio' | 'chesscom' | 'listo';
@@ -318,7 +319,7 @@ const TARGET: DrawShape = { orig: 'e5' as Key, brush: 'yellow' };
 function Demo({ onNext }: { onNext: () => void }) {
   const [epd, setEpd] = useState(DEMO.epd);
   const [lastMove, setLastMove] = useState(DEMO.last);
-  const [result, setResult] = useState<{ kind: 'good'; san: string } | { kind: 'retry' } | null>(null);
+  const [result, setResult] = useState<{ kind: 'good'; san: string } | { kind: 'retry'; defends: boolean } | null>(null);
   const [locked, setLocked] = useState(false);
   const [flash, setFlash] = useState<Flash>();
   const [shake, setShake] = useState(0);
@@ -346,11 +347,11 @@ function Demo({ onNext }: { onNext: () => void }) {
       setResult({ kind: 'good', san: played.san });
       return;
     }
-    // Otra jugada: sacudida y el tablero vuelve a la pregunta; mientras tanto no acepta jugadas.
+    // Otra jugada (aunque también defienda el peón): sacudida y el tablero vuelve a la pregunta; mientras tanto no acepta jugadas.
     setFlash({ square: dest, kind: 'bad', key: Date.now() });
     setShake((n) => n + 1);
     playWrong();
-    setResult({ kind: 'retry' });
+    setResult({ kind: 'retry', defends: defendsSquare(DEMO.epd, played.uci, 'e5') });
     setLocked(true);
     later(450, () => {
       setEpd(DEMO.epd);
@@ -396,7 +397,11 @@ function Demo({ onNext }: { onNext: () => void }) {
           <>
             <p className="font-book text-xl font-semibold">¿Cómo defendés el peón de e5?</p>
             {result?.kind === 'retry' ? (
-              <p className="mt-1 text-[15px] text-bad">Probá de nuevo: buscá cómo proteger el peón.</p>
+              <p className="mt-1 text-[15px] text-bad">
+                {result.defends
+                  ? 'Eso también lo defiende, pero acá buscamos desarrollar: probá con una pieza menor o un peón central.'
+                  : 'Probá de nuevo: buscá cómo proteger el peón.'}
+              </p>
             ) : (
               <p className="mt-1 text-[15px] text-muted">Jugás con negras: tocá una pieza y después la casilla, o arrastrala.</p>
             )}
@@ -575,6 +580,7 @@ function ChoiceGroup({
 function Chesscom({ onNext }: { onNext: () => void }) {
   const settings = useSettings();
   const [user, setUser] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const value = user ?? settings?.chesscomUser ?? '';
 
   const save = async (e?: React.FormEvent) => {
@@ -582,7 +588,13 @@ function Chesscom({ onNext }: { onNext: () => void }) {
     const u = value.trim();
     // Otro usuario: se vuelve a empezar por los últimos meses (como en Ajustes).
     if (u && u !== settings?.chesscomUser) {
-      await setSettings({ chesscomUser: u, chesscomMonths: undefined, lastChesscomSync: undefined });
+      try {
+        setError(null);
+        await setSettings({ chesscomUser: u, chesscomMonths: undefined, lastChesscomSync: undefined });
+      } catch (err) {
+        setError(`No se pudo guardar el usuario: ${(err as Error).message}. Probá de nuevo o dejalo para después en Ajustes.`);
+        return;
+      }
     }
     onNext();
   };
@@ -617,6 +629,11 @@ function Chesscom({ onNext }: { onNext: () => void }) {
           />
         </label>
         <p className="mt-2 text-[15px] text-muted">Es opcional y lo podés cambiar en Ajustes.</p>
+        {error && (
+          <div className="mt-4" role="alert">
+            <Banner tone="bad">{error}</Banner>
+          </div>
+        )}
       </form>
     </Step>
   );

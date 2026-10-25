@@ -45,6 +45,11 @@ test('bienvenida: en Safari de iPhone explica cómo instalarla y la demo corrige
   await expect(page.getByRole('heading', { name: 'Así se estudia' })).toBeVisible();
   await move(page, 'a7a6', 'black');
   await expect(page.getByText('Probá de nuevo: buscá cómo proteger el peón.')).toBeVisible();
+  // Una que también defiende, pero no desarrolla: lo reconoce y pide otra.
+  await move(page, 'd8e7', 'black');
+  await expect(page.getByText(/Eso también lo defiende, pero acá buscamos desarrollar/)).toBeVisible();
+  await page.waitForTimeout(700);
+  await shot(page, '32-bienvenida-demo');
   await move(page, 'd7d6', 'black');
   await expect(page.getByText(/Así es cada repaso/)).toBeVisible();
   await page.getByRole('button', { name: 'Siguiente' }).click();
