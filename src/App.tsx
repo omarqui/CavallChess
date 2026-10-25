@@ -18,6 +18,7 @@ import { RepertoireScreen } from './screens/Repertoire';
 import { SettingsScreen } from './screens/Settings';
 import { TrainScreen } from './screens/Train';
 import type { Side } from './types';
+import { appearanceMigration } from './ui/appearance';
 import { configureFeedback } from './ui/feedback';
 import { href, navigate, useRoute } from './ui/router';
 import { showToast, useToast } from './ui/toast';
@@ -50,6 +51,12 @@ async function introGate() {
   if (shouldMarkIntroSeen(s, totalCards)) await setSettings({ introSeenAt: Date.now() });
   const first = window.location.hash.slice(1).split('?')[0].split('/').filter(Boolean)[0];
   if (shouldShowIntro(s, totalCards) && first !== 'intro') navigate('/intro', true);
+}
+
+/** Al abrir la app, pasa una sola vez al tablero y las piezas del tema estilo Chess.com (ver `appearanceMigration`). */
+async function migrateAppearance() {
+  const patch = appearanceMigration(await getSettings());
+  if (patch) await setSettings(patch);
 }
 
 export default function App() {
@@ -98,6 +105,7 @@ export default function App() {
 
   useEffect(() => {
     void ensureRoots()
+      .then(() => migrateAppearance().catch(() => undefined))
       .then(() => introGate().catch(() => undefined))
       .then(() => setReady(true));
     void navigator.storage?.persist?.().catch(() => undefined);

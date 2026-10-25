@@ -108,6 +108,7 @@ export interface Settings {
   colorScheme: 'system' | 'light' | 'dark';
   sound: boolean;
   haptics: boolean;
+  appearanceVersion?: number; // migraciones de apariencia ya hechas (src/ui/appearance.ts)
   lichessToken?: string;
   chesscomUser?: string;
   lastBackupAt?: number;
