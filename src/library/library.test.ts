@@ -146,6 +146,29 @@ describe('biblioteca: carga, estado y agregado', () => {
     ]);
   });
 
+  describe('con nombrar-raiz: no', () => {
+    const sinRaiz = parseFicha(
+      FICHA_PRUEBA.replace('resumen: Ficha de prueba.', 'resumen: Ficha de prueba.\nnombrar-raiz: no'),
+    ).ficha!;
+
+    it('fichaNames no propone la ficha y prefija las variantes', () => {
+      const names = fichaNames(sinRaiz, ['mate', 'karpov', 'avance']);
+      expect(names.some((x) => x.name === 'Defensa de Prueba')).toBe(false);
+      expect(names.map((x) => [x.name, x.chapter])).toEqual([
+        ['Defensa de Prueba: Avance', 0],
+        ['Defensa de Prueba: Karpov', 1],
+      ]);
+    });
+
+    it('addFicha deja sin nombre la posición de la ficha', async () => {
+      await addFicha(sinRaiz, undefined, d);
+      const g = await loadGraph('black', d);
+      expect(g.labelsFor(nodeId('black', epdAfter(['e4', 'c6'])))).toEqual([]);
+      const tras = nodeId('black', epdAfter(['e4', 'c6', 'd4', 'd5', 'e5']));
+      expect(g.labelsFor(tras).map((x) => x.name)).toEqual(['Defensa de Prueba: Avance']);
+    });
+  });
+
   it('notas de líneas que ya no están', () => {
     const notes = new Map([
       ['prueba', note('prueba')],

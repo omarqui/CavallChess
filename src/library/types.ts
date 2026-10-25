@@ -44,6 +44,8 @@ export interface Ficha {
   eco: string;
   levels: FichaLevel[];
   summary: string;
+  /** Si el nombre de la ficha se propone en la posición de `start` (falso para posiciones genéricas como 1.d4). */
+  nameAtStart: boolean;
   /** `jugadas` del frontmatter: hasta la posición característica. */
   start: LibMove[];
   basics: string;

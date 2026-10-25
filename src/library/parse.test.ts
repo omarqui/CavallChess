@@ -116,6 +116,20 @@ describe('validateFicha', () => {
     ok(FICHA_PRUEBA.replace('Ficha de prueba.\n---\n', 'Ficha de prueba.\n--- \n'));
   });
 
+  it('nombrar-raiz: no apaga el nombre en la posición de la ficha; por defecto está prendido', () => {
+    const con = (v: string) => FICHA_PRUEBA.replace('resumen: Ficha de prueba.', `resumen: Ficha de prueba.\nnombrar-raiz: ${v}`);
+    expect(f.nameAtStart).toBe(true);
+    expect(ok(con('no')).nameAtStart).toBe(false);
+    expect(ok(con('sí')).nameAtStart).toBe(true);
+    expect(ok(con('si')).nameAtStart).toBe(true);
+  });
+
+  it('nombrar-raiz con otro valor es un error', () => {
+    const r = parseFicha(FICHA_PRUEBA.replace('resumen: Ficha de prueba.', 'resumen: Ficha de prueba.\nnombrar-raiz: quizás'));
+    expect(r.ficha).toBeUndefined();
+    expect(r.errors.join('\n')).toMatch(/nombrar-raiz/);
+  });
+
   it('rechaza un grupo que no es del lado', () => {
     const r = parseFicha(FICHA_PRUEBA.replace('grupo: Contra 1.e4', 'grupo: Abrís con 1.e4'));
     expect(validateFicha(r.ficha!).join('\n')).toMatch(/grupo/);

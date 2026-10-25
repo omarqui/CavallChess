@@ -61,12 +61,15 @@ export function fichaPgn(f: Ficha, lineIds: string[]): string {
     .join('\n\n');
 }
 
-/** Nombre de la ficha en su posición característica y de cada variante en su raíz. */
+/**
+ * Nombre de la ficha en su posición característica y de cada variante en su raíz.
+ * Con `nameAtStart` en falso (posición genérica) no se nombra la posición y cada variante lleva el nombre de la ficha de prefijo.
+ */
 export function fichaNames(f: Ficha, lineIds: string[]): NameProposal[] {
-  const out: NameProposal[] = [{ chapter: 0, root: f.start.length, name: f.name, enabled: true }];
+  const out: NameProposal[] = f.nameAtStart ? [{ chapter: 0, root: f.start.length, name: f.name, enabled: true }] : [];
   ordered(f, lineIds).forEach((l, chapter) => {
     if (l.kind === 'variante' && l.rootPly !== undefined) {
-      out.push({ chapter, root: l.rootPly, name: l.name, enabled: true });
+      out.push({ chapter, root: l.rootPly, name: f.nameAtStart ? l.name : `${f.name}: ${l.name}`, enabled: true });
     }
   });
   return out;
