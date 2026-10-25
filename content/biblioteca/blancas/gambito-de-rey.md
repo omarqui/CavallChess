@@ -153,7 +153,7 @@ Nf6 5. dxe4 Nxe4 6. Nf3 { [%hint Desarrollá y controlá e5.] }
 Bc5 7. Qe2 { [%hint Clavá el caballo de e4 contra el rey.] }
 Bf2+? { Parece ganar tiempo con jaque, pero el caballo de e4 se queda sin apoyo. }
 8. Kd1 { El rey no puede tomar en f2: el caballo de e4 cuida esa casilla. }
-Qxd5+ 9. Nfd2 { [%hint Tapá el jaque sin sacar a tu dama de la columna e.] El caballo de d2 queda clavado por la dama negra, pero la amenaza es `10.Qxe4+ Qxe4 11.Nxe4`, y ganás el caballo. Si las negras lo defienden con `9...Bf5`, `10.Nc3` ataca a la dama y suma un tercer atacante sobre e4: las negras no pueden sostener el caballo y lo pierden. }
+Qxd5+ 9. Nfd2 { [%hint Tapá el jaque sin sacar a tu dama de la columna e.] El caballo de d2 queda clavado por la dama negra, pero la amenaza es 10.Qxe4+ Qxe4 11.Nxe4, y ganás el caballo. Si las negras lo defienden con 9...Bf5, 10.Nc3 ataca a la dama y suma un tercer atacante sobre e4: las negras no pueden sostener el caballo y lo pierden. }
 ```
 
 Las negras pierden material: el caballo de e4 tiene demasiados atacantes y el alfil de f2 quedó lejos de casa. Seguí con Nc3 para sumar presión, y con material de más el rey irá a un lugar seguro.

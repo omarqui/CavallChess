@@ -66,6 +66,10 @@ describe('validateFicha', () => {
     const g = ok(m![1]);
     expect(validateFicha(g)).toEqual([]);
     expect(GROUPS[g.side]).toContain(g.group);
+    // Muestra los tres tipos de línea; la trampa a favor marca el error del rival.
+    expect(new Set(g.lines.map((l) => l.kind))).toEqual(new Set(['variante', 'favor', 'contra']));
+    const favor = g.lines.find((l) => l.kind === 'favor')!;
+    expect(favor.moves[favor.trapPly!].san).toBe('Nd6+');
   });
 
   const quitarConsejos = (s: string) => s.replace(/## Consejos\n(?:- .*\n)+/, '');
@@ -91,6 +95,21 @@ describe('validateFicha', () => {
     ['sin Consejos', quitarConsejos, /Consejos/],
     ['id de línea repetido', (s: string) => s.replace('{#karpov}', '{#avance}'), /repetid/i],
     ['hint en jugada del rival', (s: string) => s.replace('3. e5 Bf5 {', '3. e5 { [%hint no] } Bf5 {'), /hint/i],
+    [
+      'comillas invertidas en un comentario PGN',
+      (s: string) => s.replace('{ Cambiás el peón central.', '{ Cambiás el peón central con `3...dxe4`.'),
+      /comillas invertidas/,
+    ],
+    [
+      'comillas invertidas en una pista',
+      (s: string) => s.replace('[%hint Sacá el alfil antes de cerrar con e6.]', '[%hint Sacá el alfil antes de `e6`.]'),
+      /comillas invertidas/,
+    ],
+    [
+      'comillas invertidas en la caída de una trampa en contra',
+      (s: string) => s.replace('(5... Ngf6?? 6. Nd6#)', '(5... Ngf6?? { Deja libre `d6`. } 6. Nd6#)'),
+      /comillas invertidas/,
+    ],
   ])('rechaza: %s', (_caso, cambiar, msg) => {
     const md = cambiar(FICHA_PRUEBA);
     expect(md).not.toBe(FICHA_PRUEBA);

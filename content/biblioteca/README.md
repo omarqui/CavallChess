@@ -38,7 +38,7 @@ Grupos válidos:
 - `## Ideas y planes`: los planes típicos.
 - `## Consejos`: **solo ítems** que empiezan con `- `. Al menos uno.
 
-Formato de texto permitido: párrafos separados por una línea en blanco, `**negrita**`, listas con `- ` y jugadas entre comillas invertidas (`` `3...Bf5` ``), que la app muestra con figurines.
+Formato de texto permitido: párrafos separados por una línea en blanco, `**negrita**`, listas con `- ` y jugadas entre comillas invertidas (`` `3...Bf5` ``), que la app muestra con figurines. Esto vale para las secciones y los párrafos de las líneas, no para los comentarios del PGN (ver abajo).
 
 ### Líneas
 
@@ -61,6 +61,7 @@ El cuerpo de cada línea es: párrafos opcionales (la `intro`), **un único** bl
 - Podés dejar líneas en blanco dentro del bloque para espaciar: se ignoran.
 - Cada comentario `{ … }` va **después** de la jugada y la explica.
 - Un comentario puede llevar texto, `[%hint …]`, flechas `[%cal Gd2d4]` y casillas `[%csl Rd4]`, y la jugada puede llevar NAGs (`?`, `??`, `!`, `!?`…).
+- **En los comentarios no van comillas invertidas**, ni en el texto ni en `[%hint …]`: el comentario se muestra como texto plano y las comillas quedarían a la vista. Escribí las jugadas sueltas (`{ La amenaza es 10.Qxe4+ Qxe4 11.Nxe4. }`): la app pasa a figurines las que llevan letra de pieza.
 - `[%hint …]` es la pista que ve quien estudia antes de jugar: **solo en jugadas propias** (las del lado de la ficha).
 - Jugá siempre la misma jugada propia en cada posición, en todas las líneas (ver coherencia).
 
@@ -95,6 +96,7 @@ Cada mensaje nombra la ficha y la línea.
 8. **Coherencia:** en cada posición donde le toca jugar al lado de la ficha, todas las líneas (y `jugadas`) usan la misma jugada. Las variantes de caída de las trampas en contra quedan excluidas.
 9. Estructura de trampas: a favor, exactamente un `?`/`??` del rival; en contra, exactamente una variante que reemplaza una jugada propia con `?`/`??` en su primera jugada. Las variantes `( … )` no se permiten en otras líneas.
 10. `[%hint]` solo en jugadas propias.
+11. Los comentarios del PGN (texto y `[%hint]`) no llevan comillas invertidas.
 
 ## Verificación con el motor
 
@@ -150,12 +152,14 @@ Con la cadena firme y el alfil activo, tu juego está cómodo.
 
 Después del cambio de caballos, la estructura queda sana.
 
-## Trampa a favor: Alfil regalado {#alfil-regalado} [club]
-Si el rival cambia sus fuerzas con descuido, ganás material.
+## Trampa a favor: El salto a d6 sin mate {#salto-a-d6} [básica]
+Es la otra cara de la trampa en contra de abajo: con `5...Ndf6` el caballo de d7 ya no tapa a tu dama. Si el rival salta igual a d6 buscando el mate, ganás una pieza.
 
 ```pgn
-1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Bd3?? { Regala el alfil: queda sin respaldo. } Bxd3 6. Qxd3
+1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nd7 5. Qe2 Ndf6 6. Nd6+?? { Ya no es mate: con d7 libre, la dama de d8 cubre d6. } Qxd6
 ```
+
+Con una pieza de más, desarrollá el resto y no te apures a cambiar tu dama.
 
 ## Trampa en contra: Mate en d6 {#mate-en-d6} [básica]
 Cuidado con elegir el caballo equivocado.

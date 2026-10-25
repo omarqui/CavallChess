@@ -47,6 +47,10 @@ export function validateFicha(f: Ficha): string[] {
 
     for (const m of [...l.moves, ...(l.fall ?? [])]) {
       if (m.hint && !mine(m)) e(`[%hint] solo va en jugadas propias (“${m.san}” es del rival).`, l.id);
+      // Los comentarios se muestran como texto plano con `figurineText`: las comillas invertidas quedarían a la vista.
+      if (m.comment?.includes('`') || m.hint?.includes('`')) {
+        e(`el comentario de “${m.san}” lleva comillas invertidas: en los comentarios PGN las jugadas van sin ellas.`, l.id);
+      }
     }
 
     if (l.kind === 'favor') {
