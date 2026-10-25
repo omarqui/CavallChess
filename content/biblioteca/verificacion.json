@@ -1,1 +1,65 @@
-{}
+{
+  "contra-inglesa": {
+    "hash": "30d94a67e9ab1cea5c9b4652ad7f13550e883e54634ce101ab444c0e938bbab7",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "cuatro-caballos-g3": -0.09,
+      "cambio-en-d4": -0.19,
+      "dragon-invertido": 0.01,
+      "2g3": -0.05,
+      "mate-en-f3": 1000
+    }
+  },
+  "contra-londres": {
+    "hash": "059d64f91b9785e26982fdc0d8a4d4b9faa778c506d9b9b5b112a1b8634d2a7c",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "c3-dama-b6": 0,
+      "cambio-de-damas": 0.36,
+      "nbd2": 0.04,
+      "dxc5": 0.12,
+      "dama-antes-de-tiempo": -3.68,
+      "dama-come-alfil": 5.5,
+      "b4-y-dama-f6": 6.31
+    }
+  },
+  "contragambito-albin": {
+    "hash": "8b5913424e5a06a4fcd49fdf81569ce4feec03b038931e9d103de3ab5b85442f",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "fianchetto": -0.4,
+      "nbd2": -0.77,
+      "a3": -0.26,
+      "e3": 0.08,
+      "lasker": 9.03
+    }
+  },
+  "gambito-de-dama-aceptado": {
+    "hash": "45400e249d700070aa54ffb97c18de63d9053f858786a7aa5c26f11678becb78",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "clasica-cambio": -0.08,
+      "clasica-a4": -0.18,
+      "central": -0.37,
+      "con-e3": 0,
+      "peon-con-b5": -5.85
+    }
+  },
+  "benoni-y-benko": {
+    "hash": "3bce4932d7fc7dc7ab4421c324c6d5b7f75e48b4bda8de21d925136416bdbebb",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "fianchetto": -0.65,
+      "rey-a-g2": -0.66,
+      "rehusado": 0.26,
+      "benoni-moderna": -0.52,
+      "avance-e5": -2.19,
+      "rayos-x": 4.24
+    }
+  }
+}
