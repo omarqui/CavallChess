@@ -50,4 +50,3 @@ export function useSettings(): Settings | undefined {
 }
 
 export const useGaps = () => useLiveQuery(() => db.gaps.orderBy('count').reverse().toArray());
-export const useGames = () => useLiveQuery(() => db.games.orderBy('endTime').reverse().limit(60).toArray());

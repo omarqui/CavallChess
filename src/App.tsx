@@ -4,6 +4,7 @@ import { ensureRoots, getSettings, setSettings } from './db/repo';
 import { useSettings } from './db/hooks';
 import { shouldAutoSync, syncChesscom } from './games/sync';
 import { ArchivedScreen } from './screens/Archived';
+import { BuildFromGamesScreen } from './screens/BuildFromGames';
 import { FichaScreen, parseFichaTab } from './screens/Ficha';
 import { FichaAddScreen } from './screens/FichaAdd';
 import { GamesScreen } from './screens/Games';
@@ -170,9 +171,12 @@ export default function App() {
       } else screen = <FichaScreen key={id} id={id} tab={parseFichaTab(route.params.get('tab'))} />;
       break;
     }
-    case 'games':
-      screen = <GamesScreen />;
+    case 'games': {
+      const [, id] = route.path;
+      if (id === 'armar') screen = <BuildFromGamesScreen />;
+      else screen = <GamesScreen />;
       break;
+    }
     case 'progress':
       screen = <ProgressScreen />;
       break;

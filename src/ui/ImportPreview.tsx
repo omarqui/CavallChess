@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { RepertoireGraph } from '../chess/graph';
 import { buildImportPlan, existingOf, type ImportPlan, type Resolutions } from '../chess/pgnImport';
 import { figurine, type Side } from '../chess/position';
@@ -24,6 +24,7 @@ export function ImportPreview({
   proposeNames = chapterProposals,
   onSaved,
   onBack,
+  children,
 }: {
   pgn: string;
   side: Side;
@@ -32,6 +33,8 @@ export function ImportPreview({
   proposeNames?: (plan: ImportPlan) => NameProposal[];
   onSaved: (r: { mine: number; rival: number }) => void;
   onBack: () => void;
+  /** Va debajo del resumen ("Se agregan…"): de dónde sale el PGN o una advertencia. */
+  children?: ReactNode;
 }) {
   const [resolutions, setResolutions] = useState<Resolutions>(new Map());
   const [plan, setPlan] = useState<ImportPlan>(() => buildImportPlan(pgn, side, existingOf(graph)));
@@ -73,6 +76,7 @@ export function ImportPreview({
           ? `Se agregan ${newMine} ${newMine === 1 ? 'jugada tuya' : 'jugadas tuyas'} y ${newEdges.length - newMine} del rival a tu repertorio con ${side === 'white' ? 'blancas' : 'negras'}.`
           : 'Todo lo de este PGN ya está en tu repertorio.'}
       </p>
+      {children}
       {plan.ignoredOwnVariations > 0 && (
         <p className="mt-2 text-[15px] text-muted">
           Se ignoran {plan.ignoredOwnVariations} {plan.ignoredOwnVariations === 1 ? 'variante propia' : 'variantes propias'}: en
@@ -116,52 +120,54 @@ export function ImportPreview({
         </Section>
       )}
 
-      <Section title="Nombres de apertura">
-        <p className="mb-3 text-[15px] text-muted">
-          Cada capítulo puede nombrar una posición de su línea principal; todo lo que cuelga de ahí lleva ese nombre.
-        </p>
-        <ul className="space-y-3">
-          {naming.map((n, i) => {
-            const c = plan.chapters[n.chapter];
-            if (!c) return null;
-            const set = (patch: Partial<NameProposal>) =>
-              setNaming((all) => all.map((x, j) => (j === i ? { ...x, ...patch } : x)));
-            return (
-              <li key={i} className="rounded-xl p-3 ring-1 ring-line">
-                <label className="flex items-center gap-3">
-                  <input type="checkbox" checked={n.enabled} onChange={(e) => set({ enabled: e.target.checked })} className="size-5 accent-[var(--good)]" />
-                  <input
-                    value={n.name}
-                    onChange={(e) => set({ name: e.target.value })}
-                    className="flex-1 rounded-lg bg-surface px-3 py-2 text-[16px] ring-1 ring-line outline-none focus:ring-brass"
-                  />
-                </label>
-                {n.enabled && c.mainline.length > 1 && (
-                  <label className="mt-2 block text-sm text-muted">
-                    Después de
-                    <select
-                      value={n.root}
-                      onChange={(e) => set({ root: Number(e.target.value) })}
-                      className="mt-1 block w-full rounded-lg bg-surface px-2 py-2 text-[15px] text-ink ring-1 ring-line"
-                    >
-                      {c.mainline.map((_m, j) => (
-                        <option key={j} value={j}>
-                          {j === 0
-                            ? 'Posición inicial'
-                            : c.mainline
-                                .slice(1, j + 1)
-                                .map((x, k) => `${k % 2 === 0 ? `${k / 2 + 1}.` : ''}${figurine(x.san ?? '')}`)
-                                .join(' ')}
-                        </option>
-                      ))}
-                    </select>
+      {naming.length > 0 && (
+        <Section title="Nombres de apertura">
+          <p className="mb-3 text-[15px] text-muted">
+            Cada capítulo puede nombrar una posición de su línea principal; todo lo que cuelga de ahí lleva ese nombre.
+          </p>
+          <ul className="space-y-3">
+            {naming.map((n, i) => {
+              const c = plan.chapters[n.chapter];
+              if (!c) return null;
+              const set = (patch: Partial<NameProposal>) =>
+                setNaming((all) => all.map((x, j) => (j === i ? { ...x, ...patch } : x)));
+              return (
+                <li key={i} className="rounded-xl p-3 ring-1 ring-line">
+                  <label className="flex items-center gap-3">
+                    <input type="checkbox" checked={n.enabled} onChange={(e) => set({ enabled: e.target.checked })} className="size-5 accent-[var(--good)]" />
+                    <input
+                      value={n.name}
+                      onChange={(e) => set({ name: e.target.value })}
+                      className="flex-1 rounded-lg bg-surface px-3 py-2 text-[16px] ring-1 ring-line outline-none focus:ring-brass"
+                    />
                   </label>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </Section>
+                  {n.enabled && c.mainline.length > 1 && (
+                    <label className="mt-2 block text-sm text-muted">
+                      Después de
+                      <select
+                        value={n.root}
+                        onChange={(e) => set({ root: Number(e.target.value) })}
+                        className="mt-1 block w-full rounded-lg bg-surface px-2 py-2 text-[15px] text-ink ring-1 ring-line"
+                      >
+                        {c.mainline.map((_m, j) => (
+                          <option key={j} value={j}>
+                            {j === 0
+                              ? 'Posición inicial'
+                              : c.mainline
+                                  .slice(1, j + 1)
+                                  .map((x, k) => `${k % 2 === 0 ? `${k / 2 + 1}.` : ''}${figurine(x.san ?? '')}`)
+                                  .join(' ')}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </Section>
+      )}
 
       <div className="mt-8 flex flex-col gap-3">
         {saveError && (
