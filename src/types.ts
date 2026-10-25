@@ -113,7 +113,7 @@ export interface Settings {
   introSeenAt?: number; // cuándo se vio la intro de primer uso
   tipsSeen?: string[]; // ids de consejos ya mostrados
   lastChesscomSync?: number;
-  chesscomMonths?: Record<string, string>; // url de archivo mensual -> etag
+  chesscomMonths?: Record<string, string>; // url de archivo mensual -> "" (la clave indica que el mes ya se leyó; ya no se guarda ETag)
 }
 
 export const DEFAULT_SETTINGS: Settings = {
