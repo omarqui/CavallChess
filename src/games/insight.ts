@@ -1,5 +1,5 @@
 import type { RepertoireGraph } from '../chess/graph';
-import { edgeId, nodeId, type Side } from '../chess/position';
+import { edgeId, nodeId, turnOf, type Side } from '../chess/position';
 import type { Ficha, FichaLine, LibMove } from '../library/types';
 import type { MoveEdge } from '../types';
 import type { GameMove } from './gamePgn';
@@ -38,8 +38,11 @@ export interface OpeningInsight {
   theory: number;
   /** La línea de la última jugada de teoría. */
   last?: LibHit;
-  /** Si la partida salió de la biblioteca en una posición que la biblioteca conoce: lo que juega ahí. */
-  known: LibMove[];
+  /**
+   * Dónde salió la partida de la biblioteca (`moves[ply]`, la primera jugada que no está), si había entrado: quién
+   * salió y qué juega la biblioteca en esa posición.
+   */
+  exit?: { ply: number; mine: boolean; known: LibMove[] };
   traps: TrapEvent[];
   /** Nombre de la apertura de la partida: el más profundo de tu repertorio, si no el de la última jugada de teoría, si no el ECO. */
   name?: string;
@@ -138,12 +141,15 @@ export function openingInsight(
   }
 
   const last = theory > 0 ? plies[theory - 1].lib : undefined;
-  const known = theory < moves.length ? (index.byPos.get(moves[theory].fromEpd) ?? []) : [];
+  const exit =
+    theory > 0 && theory < moves.length
+      ? { ply: theory, mine: turnOf(moves[theory].fromEpd) === side, known: index.byPos.get(moves[theory].fromEpd) ?? [] }
+      : undefined;
   return {
     plies,
     theory,
     last,
-    known,
+    exit,
     traps: trapEvents(moves, fichas, side),
     // Tus nombres primero, después la biblioteca (en castellano y con la variante) y por último el ECO.
     name: repName ?? (last && libName(last)) ?? ecoName,

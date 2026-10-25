@@ -22,8 +22,9 @@ describe('openingInsight: la partida frente a la biblioteca', () => {
     expect(r.plies[5].comment).toBeUndefined();
     expect(r.plies[5].lib?.move.hint).toBe('Sacá el alfil antes de cerrar con e6.');
     expect(r.plies[8].lib).toBeUndefined();
-    // La biblioteca conoce la posición de la salida: sigue con 5.Bd3 (la trampa a favor).
-    expect(r.known.map((m) => m.san)).toEqual(['Bd3']);
+    // Salió el rival (las blancas, con 5.c3); la biblioteca esperaba 5.Bd3 (la trampa a favor).
+    expect(r.exit).toMatchObject({ ply: 8, mine: false });
+    expect(r.exit!.known.map((m) => m.san)).toEqual(['Bd3']);
   });
 
   it('elige la línea que más acompaña a la partida y trae su comentario', () => {
@@ -32,13 +33,14 @@ describe('openingInsight: la partida frente a la biblioteca', () => {
     expect(r.theory).toBe(10);
     expect(r.last && libName(r.last)).toBe('Defensa de Prueba › Karpov');
     expect(r.plies[5].comment).toBe('Cambiás el peón central.');
-    expect(r.known).toEqual([]);
+    expect(r.exit).toBeUndefined();
   });
 
   it('una partida que no pasa por la biblioteca no tiene teoría', () => {
     const r = openingInsight(movesOf('1. d4 d5'), 'black', empty, fichas, null);
     expect(r.theory).toBe(0);
     expect(r.last).toBeUndefined();
+    expect(r.exit).toBeUndefined();
     expect(r.plies.every((p) => !p.lib)).toBe(true);
     // Solo mira las fichas del color con el que jugaste.
     expect(openingInsight(movesOf('1. e4 c6'), 'white', graphOf(emptyRepo('white'), 'white'), fichas, null).theory).toBe(0);
@@ -61,6 +63,8 @@ describe('openingInsight: la partida frente a la biblioteca', () => {
     const bad = openingInsight(movesOf(`${base} Ngf6 6. Nd6#`), 'black', empty, fichas, null);
     expect(bad.traps).toMatchObject([{ kind: 'caiste', ply: 9 }]);
     expect(bad.theory).toBe(9);
+    // Caer en la trampa es salir vos de la teoría: la ficha juega 5…Ndf6.
+    expect(bad.exit).toMatchObject({ ply: 9, mine: true, known: [{ san: 'Ndf6' }] });
     expect(bad.plies[9].lib?.fall).toBe(true);
     expect(bad.plies[10].lib?.fall).toBe(true);
   });

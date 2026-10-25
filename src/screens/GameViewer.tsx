@@ -16,7 +16,8 @@ import { useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
 import { showToast } from '../ui/toast';
 import { gamePath, gapRepertoirePath, resultLabel, reviewFromGamePath, sentence, timeClassLabel } from './games/format';
-import { OpeningSummary, PlyDetail } from './games/OpeningPanel';
+import { JudgementLine, OpeningSummary, PlyDetail } from './games/OpeningPanel';
+import { useJudgements, type MoveJudgement } from './games/useJudgements';
 
 type Exit = Extract<GameOutcome, { kind: 'myDeviation' | 'gap' }>;
 
@@ -158,7 +159,20 @@ function Player({
   const current = ply > 0 ? moves[ply - 1] : undefined;
   const epd = current?.epd ?? INITIAL_EPD;
   const exitMove = exit ? moves[exit.ply] : undefined;
-  const shapes = exit && exitMove && ply === exit.ply ? exitShapes(exit, exitMove, graph) : undefined;
+  const libExit = insight.exit?.mine ? insight.exit : undefined;
+  // Tus salidas (de la teoría y del repertorio) las califica el motor, salvo mientras "Analizar" lo usa.
+  const judging = useMemo(
+    () => [...new Set([libExit?.ply, o.kind === 'myDeviation' ? o.ply : undefined])].filter((n) => n !== undefined).sort((a, b) => a - b),
+    [libExit?.ply, o],
+  );
+  const judgements = useJudgements(moves, judging, game.myColor, analyze);
+  // Después de tu salida de la teoría, en verde lo que juega la ficha (tu jugada queda resaltada como la última).
+  const shapes =
+    exit && exitMove && ply === exit.ply
+      ? exitShapes(exit, exitMove, graph)
+      : libExit && ply === libExit.ply + 1
+        ? libExit.known.map((m) => arrow(...displaySquares(m.fromEpd, m.uci), 'green'))
+        : undefined;
   const agregar = (plies: number) => navigate(`${gamePath(game.id)}/agregar?hasta=${plies}`);
 
   /** Deja vencida la tarjeta y la repasa sola. Un segundo toque mientras tanto no hace nada. */
@@ -182,7 +196,7 @@ function Player({
       {/* El aviso va arriba del tablero: así se ve con su acción principal aunque "Analizar" ocupe lugar abajo. */}
       <div className="safe-top shrink-0 px-4 pb-2">
         <GameHeader game={game} aside={<Toggle label="Analizar" checked={analyze} onChange={setAnalyze} />} />
-        <OpeningSummary insight={insight} moves={moves} onGo={go} />
+        <OpeningSummary insight={insight} moves={moves} judgements={judgements} onGo={go} />
         {o.kind === 'myDeviation' || o.kind === 'gap' ? (
           <ExitNotice
             exit={o}
@@ -191,6 +205,7 @@ function Player({
             at={ply}
             canAddReply={o.kind === 'gap' && moves.length >= o.ply + 2}
             reviewing={reviewing}
+            judgement={o.kind === 'myDeviation' ? judgements.get(o.ply) : null}
             onGo={() => go(o.ply)}
             onReview={(id) => void review(id)}
             onAddReply={() => agregar(o.ply + 2)}
@@ -237,6 +252,8 @@ function Player({
           epd={epd}
           known={new Set(graph.children(nodeId(game.myColor, epd)).map((e) => e.uci))}
           token={token}
+          judging={judging}
+          judgements={judgements}
         />
       </div>
 
@@ -267,6 +284,7 @@ function ExitNotice({
   at,
   canAddReply,
   reviewing,
+  judgement,
   onGo,
   onReview,
   onAddReply,
@@ -277,6 +295,8 @@ function ExitNotice({
   at: number;
   canAddReply: boolean;
   reviewing: boolean;
+  /** Tu desvío según el motor (undefined: calculando; null: no corresponde). */
+  judgement: MoveJudgement | null | undefined;
   onGo: () => void;
   onReview: (cardId: string) => void;
   onAddReply: () => void;
@@ -292,6 +312,7 @@ function ExitNotice({
         <p>
           Acá jugaste {figurine(exit.playedSan)}; en tu repertorio va {figurine(exit.expectedSan)}.
         </p>
+        <JudgementLine judgement={judgement} className="text-sm" />
         <div className="mt-2 flex flex-wrap gap-2">
           <Button
             variant="primary"
