@@ -8,6 +8,7 @@ import { edgeAt, emptyRepo, graphOf, importInto, repoFrom } from '../test/helper
 import type { Note } from '../types';
 import { figurineText, parseRich } from '../ui/RichText';
 import { addFicha } from './add';
+import { checkLine, entradaVigente, MIN_PREVIA_FAVOR, VERSION_VERIFICACION } from './thresholds';
 import { groupFichas, parseLibrary, searchFichas } from './catalog';
 import { FICHA_PRUEBA } from './fixture';
 import { parseFicha } from './parse';
@@ -231,5 +232,39 @@ describe('figurineText', () => {
   });
   it('no toca palabras que empiezan con letra de pieza', () => {
     expect(figurineText('Bb5 pero Bad4x y Nada')).toBe(`${figurine('Bb5')} pero Bad4x y Nada`);
+  });
+});
+
+describe('umbrales del motor (checkLine, sin motor)', () => {
+  it('favor: la posición previa a −0,6 falla aunque el final sea bueno', () => {
+    const fallas = checkLine('favor', false, { previa: -0.6, final: 2.1 });
+    expect(fallas).toHaveLength(1);
+    expect(fallas[0]).toContain('posición previa');
+    expect(fallas[0]).toContain('-0.60');
+    expect(fallas[0]).toContain(`>= ${MIN_PREVIA_FAVOR}`);
+  });
+  it('favor: previa −0,4 y final +2,1 pasa', () => {
+    expect(checkLine('favor', false, { previa: -0.4, final: 2.1 })).toEqual([]);
+  });
+  it('favor: final por debajo de +2 falla', () => {
+    expect(checkLine('favor', false, { previa: 0, final: 1.5 })).toHaveLength(1);
+  });
+  it('variante: -0,7 normal y -1,5 con gambito', () => {
+    expect(checkLine('variante', false, { final: -0.7 })).toEqual([]);
+    expect(checkLine('variante', false, { final: -0.8 })).toHaveLength(1);
+    expect(checkLine('variante', true, { final: -1.4 })).toEqual([]);
+    expect(checkLine('variante', true, { final: -1.6 })).toHaveLength(1);
+  });
+  it('contra: correcta >= −0,5 y caída <= −2', () => {
+    expect(checkLine('contra', false, { correcta: -0.5, caida: -2 })).toEqual([]);
+    expect(checkLine('contra', false, { correcta: -0.6, caida: -2.5 })).toHaveLength(1);
+    expect(checkLine('contra', false, { correcta: 0, caida: -1.9 })).toHaveLength(1);
+  });
+  it('una entrada es vigente solo con la versión actual y el mismo hash', () => {
+    expect(entradaVigente({ version: VERSION_VERIFICACION, hash: 'a' }, 'a')).toBe(true);
+    expect(entradaVigente({ hash: 'a' }, 'a')).toBe(false);
+    expect(entradaVigente({ version: 1, hash: 'a' }, 'a')).toBe(false);
+    expect(entradaVigente({ version: VERSION_VERIFICACION, hash: 'a' }, 'b')).toBe(false);
+    expect(entradaVigente(undefined, 'a')).toBe(false);
   });
 });

@@ -96,6 +96,16 @@ Cada mensaje nombra la ficha y la línea.
 9. Estructura de trampas: a favor, exactamente un `?`/`??` del rival; en contra, exactamente una variante que reemplaza una jugada propia con `?`/`??` en su primera jugada. Las variantes `( … )` no se permiten en otras líneas.
 10. `[%hint]` solo en jugadas propias.
 
+## Verificación con el motor
+
+`MOTOR=1 npm run biblioteca:motor` evalúa cada ficha con Stockfish (desde el lado de la ficha, en peones) y guarda el resultado en `verificacion.json`. Umbrales (`src/library/thresholds.ts`):
+
+- Variante: final `>= -0,7` (`>= -1,5` si es gambito).
+- Trampa a favor: final `>= +2,0` **y** la posición previa al error del rival (la que deja tu última jugada propia, `trapPly`) `>= -0,5`. Así también se verifican las jugadas propias que llevan a la trampa.
+- Trampa en contra: la jugada correcta `>= -0,5` y el final de la caída `<= -2,0`.
+
+Cada entrada lleva `"version": 2`; una entrada es vigente solo con esa versión y el hash de la ficha. Al cambiar los criterios se sube `VERSION_VERIFICACION` y se re-verifica todo el catálogo.
+
 ## Ejemplo completo
 
 ````markdown

@@ -3,6 +3,7 @@ import verificacion from '../../content/biblioteca/verificacion.json';
 import { sources } from './bundle';
 import { parseLibrary } from './catalog';
 import { fichaHash } from './hash';
+import { entradaVigente } from './thresholds';
 import { validateFicha, validateLibrary } from './validate';
 
 describe('contenido de la biblioteca', () => {
@@ -14,8 +15,8 @@ describe('contenido de la biblioteca', () => {
 
   it('cada ficha tiene una verificación vigente', () => {
     const { fichas } = parseLibrary(sources);
-    const registro = verificacion as Record<string, { hash: string }>;
-    const vencidas = fichas.filter((f) => registro[f.id]?.hash !== fichaHash(f)).map((f) => f.id);
+    const registro = verificacion as Record<string, { version?: number; hash: string }>;
+    const vencidas = fichas.filter((f) => !entradaVigente(registro[f.id], fichaHash(f))).map((f) => f.id);
     expect(
       vencidas,
       `Fichas sin verificación vigente: ${vencidas.join(', ')}. Corré MOTOR=1 npm run biblioteca:motor (PowerShell: $env:MOTOR=1)`,
