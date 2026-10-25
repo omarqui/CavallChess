@@ -1,8 +1,8 @@
 {
   "gambito-evans": {
-    "hash": "6f7c0f80aba5b6c6fa1339559f710df1b1f7236f7b4785987247a353c8748527",
+    "hash": "bc9218a89241a427e66ad560f79a0ad16fde58d0f1dd5fbe3f5ec97f34a29f2d",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "aceptado-nge7": -0.04,
       "aceptado-nf6": -0.27,
@@ -39,9 +39,9 @@
     }
   },
   "vienesa": {
-    "hash": "d4e5bcd57329af9474f1dbb275a14a290d80bea572809ecd16417abd3c3a4a40",
+    "hash": "105edc8539a0a507bb3f5ef56ae5c7ce0696bc2d6342c10361a54150a0047c6c",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "gambito-d5": 0.07,
       "gambito-aceptado": 0.51,

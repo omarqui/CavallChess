@@ -37,7 +37,7 @@ La respuesta más fuerte: las negras contragolpean en el centro. Tomás en e5 y 
 
 ```pgn
 1. e4 e5 2. Nc3 { [%hint Desarrollá una pieza que defienda e4 y deje libre el peón de f.] La Vienesa: el caballo cuida e4 y el peón de f queda listo para avanzar. }
-Nf6 3. f4 { [%hint Golpeá el peón de e5 con el peón de f.] El Gambito Vienés. }
+Nf6 3. f4 { [%hint Atacá el centro negro desde el flanco, como en el Gambito de Rey.] El Gambito Vienés. }
 d5 { Contragolpe central: es la mejor respuesta. }
 4. fxe5 { [%hint Ganá espacio y atacá al caballo de f6 al mismo tiempo.] }
 Nxe4 5. Nf3 { [%hint Desarrollá el caballo y controlá d4.] }
@@ -51,15 +51,15 @@ dxe4 11. Bxe4 { Ganás un peón, pero mirá tu peón de d4: lo atacan tres pieza
 
 Las negras recuperan el peón con `11...Nxd4`. Ahí no retomes con el caballo: mirá la trampa en contra "La recaptura en d4". Con `12.c3` se cambian damas y queda un final parejo.
 
-## Variante: Gambito Vienés aceptado (3...exf4) {#gambito-aceptado} [club]
+## Variante: Gambito Vienés aceptado (3...exf4) {#gambito-aceptado} [club] [gambito]
 Si las negras toman el peón, lo echás con e5 y lo recuperás más tarde con el alfil, con mejor desarrollo.
 
 ```pgn
 1. e4 e5 2. Nc3 { [%hint Desarrollá una pieza que defienda e4 y deje libre el peón de f.] }
-Nf6 3. f4 { [%hint Golpeá el peón de e5 con el peón de f.] }
+Nf6 3. f4 { [%hint Atacá el centro negro desde el flanco, como en el Gambito de Rey.] }
 exf4 { Las negras aceptan el gambito. }
 4. e5 { [%hint Echá al caballo con un peón.] }
-Ng8 5. Nf3 { [%hint Desarrollá y tapá la diagonal por donde la dama negra daría jaque.] Así ...Qh4+ ya no molesta. }
+Ng8 5. Nf3 { [%hint Desarrollá y quitale a la dama negra la casilla del jaque.] El caballo controla h4: así ...Qh4+ ya no molesta. }
 d6 6. d4 { [%hint Ocupá el centro.] }
 dxe5 7. Qe2 { [%hint Recuperá el peón con una pieza que además mire la columna del rey negro.] }
 Be7 8. Qxe5 { Recuperás el peón: tu dama queda activa y el alfil de e7, clavado. }
@@ -77,7 +77,7 @@ Contra `2...Nc6`, el alfil va a c4 y el centro se arma con d3. Recién después 
 1. e4 e5 2. Nc3 { [%hint Desarrollá una pieza que defienda e4 y deje libre el peón de f.] }
 Nc6 3. Bc4 { [%hint Desarrollá el alfil apuntando a f7.] }
 Nf6 4. d3 { [%hint Sostené el peón de e4 con un peón antes de abrir el juego.] }
-Bc5 5. f4 { [%hint Con el centro firme, golpeá el peón de e5 con el peón de f.] }
+Bc5 5. f4 { [%hint Con tu centro firme, atacá el centro negro desde el flanco, como en el Gambito de Rey.] }
 d6 6. Nf3 { Desarrollás y presionás e5 dos veces. }
 Bg4 { Clava tu caballo. }
 7. Na4 { [%hint Antes de ocuparte de la clavada, atacá al alfil que apunta a tu rey.] El alfil de c5 es la mejor pieza negra: mira g1. }
@@ -100,21 +100,21 @@ d6 8. Ng3 { [%hint Llevá el caballo hacia el flanco de rey, donde va a pelear.]
 Be6 9. Qd3 { Defendés el peón de c4 y conectás tus piezas. }
 ```
 
-Con la dama en d3 y el caballo en g3 tenés el salto a f5 y la opción de f4 para abrir la columna de tu torre.
+Con la dama en d3 y el caballo en g3 tenés el salto a f5 y, después de Kh1, la opción de f4 para abrir la columna de tu torre: mientras el rey esté en g1, el alfil de c5 clava el peón de f2.
 
 ## Trampa en contra: La recaptura en d4 {#recaptura-d4} [club]
 En el Gambito Vienés con `3...d5`, las negras recuperan el peón con `11...Nxd4`. Retomar con el caballo parece obvio, pero abre la diagonal de tu rey.
 
 ```pgn
 1. e4 e5 2. Nc3 { [%hint Desarrollá una pieza que defienda e4 y deje libre el peón de f.] }
-Nf6 3. f4 { [%hint Golpeá el peón de e5 con el peón de f.] }
+Nf6 3. f4 { [%hint Atacá el centro negro desde el flanco, como en el Gambito de Rey.] }
 d5 4. fxe5 { [%hint Ganá espacio y atacá al caballo de f6 al mismo tiempo.] }
 Nxe4 5. Nf3 { [%hint Desarrollá el caballo y controlá d4.] }
 Be7 6. d4 { [%hint Ocupá el centro con el peón de d.] }
 O-O 7. Bd3 { [%hint Desarrollá el alfil apuntando al caballo de e4 y al enroque negro.] }
 f5 8. exf6 Bxf6 9. O-O Nc6 10. Nxe4 { [%hint Cambiá el caballo fuerte de las negras.] }
 dxe4 11. Bxe4 Nxd4 { Las negras recuperan el peón: el alfil de f6 y la dama apoyan al caballo. }
-12. c3 { [%hint Echá al caballo con un peón en vez de recapturar.] Atacás al caballo sin abrir la diagonal de tu rey. }
+12. c3 { [%hint Antes de recapturar, mirá la diagonal que va de d4 a tu rey.] Atacás al caballo sin abrir la diagonal de tu rey. }
 (12. Nxd4?? Qxd4+ { Jaque por la diagonal de tu rey. Y si cambiás damas, el alfil de f6 retoma con jaque y también perdés material. } 13. Kh1 Qxe4 { Las negras ganaron una pieza. })
 Nxf3+ 13. Bxf3 Qxd1 14. Rxd1 { Final parejo, sin sustos. }
 ```
@@ -126,7 +126,7 @@ En el Gambito Vienés aceptado, después de `4.e5` muchos jugadores llevan el ca
 
 ```pgn
 1. e4 e5 2. Nc3 { [%hint Desarrollá una pieza que defienda e4 y deje libre el peón de f.] }
-Nf6 3. f4 { [%hint Golpeá el peón de e5 con el peón de f.] }
+Nf6 3. f4 { [%hint Atacá el centro negro desde el flanco, como en el Gambito de Rey.] }
 exf4 4. e5 { [%hint Echá al caballo con un peón.] }
 Nh5?? { Parece sostener el peón de f4, pero el caballo queda en la diagonal de tu dama. }
 5. Qxh5 { [%hint Mirá la diagonal de tu dama: con el caballo de g1 en casa, está abierta.] Ganaste un caballo. }
@@ -141,7 +141,7 @@ En la línea de `3.Bc4`, después de `5.f4` las negras a veces saltan a g4 para 
 1. e4 e5 2. Nc3 { [%hint Desarrollá una pieza que defienda e4 y deje libre el peón de f.] }
 Nc6 3. Bc4 { [%hint Desarrollá el alfil apuntando a f7.] }
 Nf6 4. d3 { [%hint Sostené el peón de e4 con un peón antes de abrir el juego.] }
-Bc5 5. f4 { [%hint Con el centro firme, golpeá el peón de e5 con el peón de f.] }
+Bc5 5. f4 { [%hint Con tu centro firme, atacá el centro negro desde el flanco, como en el Gambito de Rey.] }
 Ng4?? { Busca atacar f2 con el caballo y el alfil, pero nadie defiende al caballo. }
 6. Qxg4 { [%hint Mirá la diagonal de tu dama: con el caballo de g1 en casa, está abierta.] Ganaste un caballo. }
 ```

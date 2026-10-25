@@ -13,7 +13,7 @@ resumen: Entregás el peón de f para sacar el peón de e5 del centro y abrir la
 ## Para empezar
 Con `2.f4` ofrecés un peón para desviar el peón de e5. Si las negras lo toman, jugás d4 y armás un centro de peones en e4 y d4 que ya no tiene enfrente al peón de e5, además de la columna f para tu torre después del enroque.
 
-El precio es real: tu rey queda más expuesto, sobre todo en la diagonal de h4 a e1. Por eso, después de `2...exf4`, `3.Nf3` es casi obligatorio: desarrolla y tapa el jaque ...Qh4+.
+El precio es real: tu rey queda más expuesto, sobre todo en la diagonal de h4 a e1. Por eso, después de `2...exf4`, `3.Nf3` es casi obligatorio: desarrolla y le quita a la dama negra la casilla del jaque, h4.
 
 - Contra `2...exf4`, jugá `3.Nf3`.
 - Recuperá el peón de f4 cuando lo puedas hacer con desarrollo, no a cualquier precio.
@@ -24,7 +24,7 @@ El precio es real: tu rey queda más expuesto, sobre todo en la diagonal de h4 a
 - **El peón de f4.** Si las negras lo sostienen, tapa tu alfil de c1 y tu columna f. Muchas líneas giran alrededor de recuperarlo o de romper la cadena que lo defiende.
 - **El punto f7.** Con el alfil en c4, el caballo en e5 o g5 y la torre en la columna f, f7 es el punto débil negro.
 - **Contra `2...Bc5`.** El alfil controla g1 y no te deja enrocar corto por un rato. Con c3 y d4 lo echás y armás el centro.
-- **Contra el Falkbeer (`2...d5 3.exd5 e4`).** Las negras ofrecen su propio peón para ganar tiempo; con d3 atacás el peón de e4, y en muchas líneas te queda un peón de más en d5.
+- **Contra el Falkbeer (`2...d5 3.exd5 e4`).** Las negras ofrecen su propio peón para ganar tiempo; con d3 atacás el peón de e4, y el peón de d5 te queda como una cuña, aunque el material suele igualarse.
 - **Es un gambito de verdad.** El motor considera que las negras están bien en casi todas las líneas: tu compensación es la iniciativa, no una ventaja objetiva. Jugalo con energía.
 
 ## Consejos
@@ -40,7 +40,7 @@ La respuesta más sana: las negras devuelven un peón para desarrollarse rápido
 
 ```pgn
 1. e4 e5 2. f4 { [%hint Ofrecé el peón de f para desviar el peón de e5.] El Gambito de Rey. }
-exf4 3. Nf3 { [%hint Desarrollá una pieza que tape la diagonal del jaque de la dama negra.] Tapa ...Qh4+ y prepara d4. }
+exf4 3. Nf3 { [%hint Desarrollá y quitale a la dama negra la casilla del jaque.] Controla h4, así que ya no hay ...Qh4+, y prepara d4. }
 d5 { Las negras devuelven un peón para desarrollarse. }
 4. exd5 Nf6 5. Bb5+ { [%hint Desarrollá el alfil con jaque para estorbar el desarrollo negro.] }
 c6 6. dxc6 Nxc6 { El material está parejo y las negras tienen buen desarrollo. }
@@ -51,12 +51,14 @@ Be6 9. Nd4 { [%hint Atacá a la pieza que acaba de tapar el jaque.] El caballo v
 
 Si las negras enrocan, cambiá en e6 y te quedás con la pareja de alfiles. Para el motor la posición está pareja: jugá con desarrollo rápido y presión sobre el peón de f4, que está adelantado.
 
+Si en la sexta jugada las negras retoman con el peón (`6...bxc6`), el alfil vuelve a la diagonal de f7 con `7.Bc4`.
+
 ## Variante: Aceptado, Gambito Kieseritzky (3...g5) {#kieseritzky} [club] [gambito]
 Las negras sostienen el peón de f4 con ...g5. Con h4 rompés la cadena y el caballo salta a e5.
 
 ```pgn
 1. e4 e5 2. f4 { [%hint Ofrecé el peón de f para desviar el peón de e5.] }
-exf4 3. Nf3 { [%hint Desarrollá una pieza que tape la diagonal del jaque de la dama negra.] }
+exf4 3. Nf3 { [%hint Desarrollá y quitale a la dama negra la casilla del jaque.] }
 g5 { Las negras defienden el peón de f4 con otro peón. }
 4. h4 { [%hint Atacá la cadena de peones negros antes de que se afirme.] }
 g4 5. Ne5 { [%hint El caballo atacado salta al centro.] El Gambito Kieseritzky: el caballo apunta a f7 y a g4. }
@@ -67,7 +69,7 @@ Qe7 { Amenaza mover el caballo con jaque descubierto. }
 9. Qe2 { [%hint Tapá la columna del rey antes de que el caballo se mueva con jaque.] }
 Bg7 10. c3 { [%hint Defendé el peón de d4, que ahora mira el alfil de g7.] }
 h5 11. Nd2 { [%hint Desafiá al caballo de e4.] }
-Nxd2 12. Kxd2 { Retomás con el rey: si lo hacés con la dama, la columna e queda abierta hacia tu rey. }
+Nxd2 12. Kxd2 { La dama está clavada y no puede retomar; con el rey conservás el alfil activo en f4, y sin damas el rey está cómodo en d2. }
 Qxe2+ 13. Bxe2 { Un final sin damas. }
 ```
 
@@ -78,7 +80,7 @@ Las negras atacan e4 con el caballo. Lo echás con e5 y, con algo de paciencia, 
 
 ```pgn
 1. e4 e5 2. f4 { [%hint Ofrecé el peón de f para desviar el peón de e5.] }
-exf4 3. Nf3 { [%hint Desarrollá una pieza que tape la diagonal del jaque de la dama negra.] }
+exf4 3. Nf3 { [%hint Desarrollá y quitale a la dama negra la casilla del jaque.] }
 Nf6 { Ataca el peón de e4. }
 4. e5 { [%hint Echá al caballo con un peón.] }
 Nh5 { Desde h5 el caballo defiende el peón de f4. }
@@ -92,6 +94,8 @@ Bb6 10. Nxf4 { Recuperaste el peón del gambito. }
 ```
 
 Material parejo, desarrollo cómodo y la columna f abierta para tu torre. Seguí con d3, c3 y el alfil de c1 al juego.
+
+Cuidado con `8...Ng3+`: después de `9.hxg3 fxg3` las negras amenazan ...Qh4 con mate. Contra eso, `10.Nf3` cubre h4 y h2, y quedás con una pieza de más.
 
 ## Variante: Rehusado clásico (2...Bc5) {#rehusado-bc5} [básica]
 Las negras no toman el peón y ponen el alfil en c5, donde te impide enrocar corto. Lo echás con c3 y d4.
@@ -136,7 +140,7 @@ Bc5 3. Nf3 { [%hint Desarrollá y quitale a la dama negra la casilla del jaque.]
 d6 4. c3 { [%hint Prepará el avance central que echa al alfil.] }
 ```
 
-El peón de e5 no se va a ningún lado: primero desarrollá el caballo a f3, que tapa h4, y después pensá en tomar.
+El peón de e5 no se va a ningún lado: primero desarrollá el caballo a f3, que controla h4, y después pensá en tomar.
 
 ## Trampa a favor: El jaque en f2 del Falkbeer {#falkbeer-f2} [club]
 En el Falkbeer, con tu dama en e2 clavando el caballo de e4, el jaque ...Bf2+ parece molesto. En realidad deja al caballo sin apoyo.
@@ -149,10 +153,10 @@ Nf6 5. dxe4 Nxe4 6. Nf3 { [%hint Desarrollá y controlá e5.] }
 Bc5 7. Qe2 { [%hint Clavá el caballo de e4 contra el rey.] }
 Bf2+? { Parece ganar tiempo con jaque, pero el caballo de e4 se queda sin apoyo. }
 8. Kd1 { El rey no puede tomar en f2: el caballo de e4 cuida esa casilla. }
-Qxd5+ 9. Nfd2 { [%hint Tapá el jaque con una pieza que además ataque al caballo de e4.] El caballo de e4 está atacado dos veces y defendido una sola: las negras pierden una pieza. }
+Qxd5+ 9. Nfd2 { [%hint Tapá el jaque sin sacar a tu dama de la columna e.] El caballo de d2 queda clavado por la dama negra, pero la amenaza es `10.Qxe4+ Qxe4 11.Nxe4`, y ganás el caballo. Si las negras lo defienden con `9...Bf5`, `10.Nc3` suma otro atacante y el caballo cae igual. }
 ```
 
-Las negras no pueden salvar a la vez el caballo de e4 y el alfil de f2. Con una pieza de más, completá el desarrollo con Nc3 y el rey irá a un lugar seguro.
+Las negras pierden material: el caballo de e4 tiene demasiados atacantes y el alfil de f2 quedó lejos de casa. Seguí con Nc3 para sumar presión, y con material de más el rey irá a un lugar seguro.
 
 ## Trampa a favor: La clavada que no alcanza {#clavada-e4} [club]
 En el rehúse con `2...Bc5`, después del cambio de alfiles en d2 las negras pueden tomar en e4 pensando en clavar tu caballo en la columna e. La clavada tiene solución.

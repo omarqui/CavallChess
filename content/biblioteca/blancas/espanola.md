@@ -30,7 +30,7 @@ El plan blanco es siempre parecido: enroque corto, torre a e1 para cuidar e4, c3
 ## Consejos
 - No cambies en c6 por costumbre: en la línea principal el alfil es tu mejor pieza.
 - Después de ...b5, retirá el alfil a b3; si te lo atacan con ...Na5, llevalo a c2.
-- Antes de jugar d4, prepará con c3 y h3: si no, ...Bg4 clava tu caballo y presiona d4.
+- En la Cerrada, antes de jugar d4, prepará con c3 y h3: si no, ...Bg4 clava tu caballo y presiona d4.
 - Contra la Berlinesa, `4.d3` evita el final sin damas que tanto les gusta a las negras y deja muchas piezas en el tablero.
 - Cuidado con comerte el peón de e5 apenas se va su defensor: en varias líneas las negras lo recuperan con ventaja.
 
@@ -47,7 +47,7 @@ O-O 9. h3 { [%hint Quitale al alfil negro la casilla desde donde clavaría tu ca
 Na5 { La Chigorin: el caballo echa a tu alfil y le abre paso al peón de c. }
 10. Bc2 { El alfil se retira a c2, donde sigue apoyando e4. }
 c5 11. d4 { [%hint Con todo preparado, ocupá el centro.] }
-Qc7 12. Nbd2 { [%hint Desarrollá el último caballo sin tapar el peón de c.] El caballo sale por d2: después va a f1 y g3, o a b3 si se abre la columna c. }
+Qc7 12. Nbd2 { [%hint Te queda una pieza menor en casa: empezá su viaje hacia el flanco de rey.] El caballo sale por d2: después va a f1 y g3, o a b3 si se abre la columna c. }
 ```
 
 Las negras suelen seguir con `12...cxd4 13.cxd4 Nc6`. Ahí tu caballo va a b3, y tu centro e4-d4 te da más espacio. Es una partida larga de maniobras: no apures el ataque.
@@ -80,6 +80,8 @@ O-O { Las negras usan la columna f y el alfil de c5 contra f2. }
 ```
 
 Tenés un peón de más. Las negras tienen la columna f abierta y el alfil apuntando a f2: cuidá esa casilla, por ejemplo con el caballo a d3 o el alfil a e3 en el momento justo, y tu ventaja va a pesar.
+
+Si en la séptima jugada las negras retoman con el peón de d (`7...dxc6`), cambiá damas primero con `8.Qxd8+` y recién después tomá en e5. Si tomás enseguida, `8.Nxe5? Qxd1 9.Rxd1 Nxe4` les devuelve el peón.
 
 ## Variante: Defensa Bird (3...Nd4) {#bird} [club]
 Con `3...Nd4` las negras cambian caballos y dejan un peón en d4 que molesta, pero que también puede quedar débil.
@@ -127,6 +129,8 @@ Qd7?? { Parece natural, pero deja a la dama negra en la misma columna que la tuy
 ```
 
 Ganaste una pieza. La idea sirve más allá de esta posición: un peón que tapa la línea entre dos damas no puede capturar sin regalar la suya.
+
+Si las negras no caen y juegan `11...Nxe5`, recuperan el peón. Seguí con `12.Nd2` para cambiar el caballo de e4: el motor ve una posición jugable, apenas mejor para las negras.
 
 ## Trampa en contra: La Trampa de Mortimer {#mortimer} [básica]
 Contra la Berlinesa con `4.d3`, las negras a veces juegan `4...Ne7`, que parece dejar el peón de e5 sin defensa. Es una invitación: si lo tomás, perdés el caballo.
