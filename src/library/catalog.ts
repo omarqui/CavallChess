@@ -81,8 +81,17 @@ export function preloadLibrary(): void {
   store.load().catch(() => {});
 }
 
+/**
+ * Reintento después de un error. Primero vuelve a cargar en la página; si falla otra vez, la recarga entera: Chrome
+ * (y el estándar) guardan el fallo de un `import()` en el mapa de módulos, así que el mismo trozo no se vuelve a pedir
+ * hasta recargar. Recargar también arregla el caso típico de después de publicar, cuando el trozo viejo ya no está.
+ */
+function retryLibrary(): void {
+  store.load().catch(() => window.location.reload());
+}
+
 export interface LibraryState extends LibrarySnapshot {
-  /** Vuelve a intentar la carga después de un error. */
+  /** Vuelve a intentar la carga después de un error (puede recargar la página). */
   retry: () => void;
 }
 
@@ -92,7 +101,7 @@ export function useLibrary(): LibraryState {
   useEffect(() => {
     if (!snap.fichas && !snap.error) preloadLibrary();
   }, [snap.fichas, snap.error]);
-  return { ...snap, retry: preloadLibrary };
+  return { ...snap, retry: retryLibrary };
 }
 
 /** `ficha`: `null` mientras carga o si falló (mirá `error`), `undefined` si no existe. */

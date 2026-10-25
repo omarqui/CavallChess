@@ -14,6 +14,31 @@ test('biblioteca: catálogo por color y buscador', async ({ page }) => {
   await page.getByLabel('Buscar aperturas').fill('B12');
   await expect(page.getByText('Defensa Caro-Kann')).toBeVisible();
   await shot(page, '20-biblioteca');
+
+  // La búsqueda mezcla colores: cada fila dice el suyo.
+  await page.getByLabel('Buscar aperturas').fill('gambito de');
+  await expect(page.getByRole('link', { name: /^Gambito de Rey[\s\S]*Con blancas/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /^Gambito de Dama Aceptado[\s\S]*Con negras/ })).toBeVisible();
+  await page.evaluate(() => document.querySelector('main')?.scrollTo(0, 0));
+  await shot(page, '20b-biblioteca-busqueda');
+});
+
+test('biblioteca: si no carga, avisa y se puede reintentar', async ({ page }) => {
+  // El trozo con las fichas (bundle-*.js) falla la primera vez (la bienvenida ya lo pide al abrir).
+  let pedidos = 0;
+  await page.route(/\/assets\/bundle-[^/]*\.js$/, (route) =>
+    pedidos++ === 0 ? route.abort('internetdisconnected') : route.continue(),
+  );
+  await page.goto('/');
+  await skipIntro(page);
+  await page.getByRole('link', { name: 'Biblioteca' }).click();
+  await expect(page.getByText('No se pudo cargar la biblioteca.')).toBeVisible();
+  await shot(page, '23-biblioteca-error');
+  // Chrome no vuelve a pedir un import() fallido: "Reintentar" termina recargando la página, que sí lo pide.
+  await page.getByRole('button', { name: 'Reintentar' }).click();
+  await expect(page.getByText('Sistema Londres')).toBeVisible();
+  await expect(page.getByText('No se pudo cargar la biblioteca.')).toBeHidden();
+  expect(pedidos).toBe(2);
 });
 
 test('ficha: leer y agregar al repertorio', async ({ page }) => {
