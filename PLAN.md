@@ -61,7 +61,7 @@ interface Gap { id: string; side: Side; epd: string; uci: string; san: string; c
 
 ### Entrenador
 - **Sesión por tarjetas, con línea animada y encadenada:** la app reproduce rápido (≈150 ms/jugada, un toque salta) el camino más corto desde el inicio hasta la posición; jugás; el rival responde (≈300 ms) eligiendo **la respuesta cuyo subárbol tiene más tarjetas pendientes**; si tu siguiente posición está pendiente, seguís; si hay pendientes más abajo, la app juega tu jugada ya sabida y sigue; si no, salta a la próxima tarjeta.
-- **Cola:** primero vencidas, después nuevas (límite diario, 10 por defecto), ambas en orden DFS del grafo.
+- **Cola:** primero vencidas (orden DFS), después nuevas (límite diario, 10 por defecto) alternando blancas y negras, cada color en orden DFS.
 - **Calificación automática:** acierto al primer intento = Good; acierto tras ver la pista = Hard; error = Again. Al fallar se muestra la correcta con flecha y hay que jugarla; la tarjeta vuelve al final de la sesión. "Fue un error de dedo" anula el fallo mientras no jugaste la correcta.
 - **Modo aprender:** una tarjeta nueva primero se **muestra** (jugada con flecha + explicación), y enseguida se **pide**.
 - **Modo "¿por qué?":** botón de pista solo si la jugada tiene `hint`; tras responder se muestra la explicación completa y las flechas del PGN.
