@@ -23,7 +23,7 @@
     }
   },
   "grunfeld": {
-    "hash": "4379f083637188d5eb8e555263016f1c6c6f362cad06a35e6ce25e35686dfc28",
+    "hash": "af1cde982a64be47e16ce8d8dfdc183b18bf81c124b5ba125c12a70c8d01b183",
     "profundidad": 18,
     "fecha": "2026-10-24",
     "evals": {
@@ -31,6 +31,7 @@
       "cambio-bc4": -0.09,
       "cambio-rb1": -0.35,
       "nf3-bf4": -0.2,
+      "sistema-ruso": -0.21,
       "captura-en-e5": 4.33
     }
   },

@@ -23,6 +23,8 @@ Con `3...d5` desafiás el centro de inmediato. Si las blancas cambian en d5 y ar
 - **Cambio con Bc4 y Ne2:** el caballo va a e2 para no quedar clavado. Vos sumás presión con `...Nc6` y `...Bg4`, y el caballo de c6 va a a5 para echar al alfil de c4. Si las blancas cambian con Bxf7+, recapturá con la torre: el rey en f7 queda expuesto a un jaque a la descubierta por la columna f.
 - **Cambio con Nf3 y Rb1:** la torre ataca b7. Vos cambiás en d4, das jaque en a5 y comés el peón de a2. Las blancas tienen iniciativa, pero tus peones de a y b quedan pasados.
 - **`4.Nf3` con `5.Bf4`:** sin cambio en d5, el alfil de f4 vigila c7. Enrocás, jugás `...c5` y, si las blancas lo toman, `...Qa5` clava al caballo de c3 y recupera el peón. Contra `4.Bf4` sin Nf3 el plan es el mismo: `...Bg7`, `...c5` y `...Qa5`.
+- **Sistema Ruso (`4.Nf3` y `5.Qb3`):** la dama presiona d5. Cambiás en c4 y, cuando la dama recaptura, enrocás; si las blancas arman el centro con e4, `...a6` y `...b5` echan a la dama con tiempo y `...c5` ataca el centro desde el costado.
+- **`4.Nf3` con `5.e3`:** las blancas juegan tranquilo y encierran su alfil de c1. Enrocá y jugá `...c5`; si cambian en d4 y recapturan con el peón de e, el caballo sale a c6 y presionás d4 como en las otras líneas.
 
 ## Consejos
 - Antes de cambiar en d4, fijate que la columna c y la diagonal de tu alfil de g7 queden a tu favor.
@@ -38,7 +40,7 @@ Después del cambio en d5 y `5.e4`, las blancas tienen el centro ideal. Con Be3 
 6. bxc3 Bg7 { [%hint Apuntá el alfil al centro blanco y a la torre de a1.] }
 7. Be3 c5 { [%hint Atacá el centro desde el costado.] }
 8. Qd2 Qa5 { [%hint Sumá la dama a la presión sobre c3.] }
-9. Rc1 cxd4 10. cxd4 Qxd2+ { [%hint Cambiá damas: en el final vale más tu mayoría en el flanco de dama.] }
+9. Rc1 cxd4 10. cxd4 Qxd2+ { [%hint Buscá un final: sin damas, tu mayoría en el flanco de dama vale más que el centro blanco.] }
 11. Kxd2 O-O 12. Nf3 Rd8 { [%hint Presioná d4 por la columna abierta.] }
 13. d5 e6 { [%hint Atacá el peón adelantado antes de que se afirme.] }
 ```
@@ -63,8 +65,8 @@ La versión moderna del Cambio: la torre va a b1 para atacar b7. Vos aceptás el
 
 ```pgn
 1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Nf3 c5 8. Rb1 O-O
-9. Be2 cxd4 10. cxd4 Qa5+ { [%hint Dale jaque y ganá un tiempo para atacar el peón del borde.] }
-11. Bd2 Qxa2 { [%hint Comé el peón que quedó sin defensa.] }
+9. Be2 cxd4 10. cxd4 Qa5+ { [%hint Activá la dama ganando un tiempo y apuntá al flanco de dama blanco.] }
+11. Bd2 Qxa2 { [%hint Buscá material en el flanco de dama blanco, donde ya no quedan peones que se defiendan entre sí.] }
 12. O-O Bg4 { [%hint Atacá al caballo que defiende d4.] }
 13. Bg5 h6 { [%hint Preguntale al alfil antes de seguir.] }
 14. Be3 Nc6 15. d5 Na5 { [%hint Llevá el caballo a una casilla donde ningún peón pueda atacarlo.] }
@@ -85,6 +87,19 @@ Sin cambio en d5, las blancas desarrollan el alfil a f4 para vigilar c7. Vos rom
 
 La posición está pareja y tus piezas, activas. Si las blancas juegan `14.Nd5`, el golpe es `14...e5`: mirá la trampa de esta ficha.
 
+## Variante: Sistema Ruso {#sistema-ruso} [club]
+Con `5.Qb3` la dama ataca d5. Cambiás en c4 y, cuando las blancas arman el centro con e4, usás los peones del flanco de dama para echar a la dama y atacar d4 (la Variante Húngara).
+
+```pgn
+1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. Nf3 Bg7 5. Qb3 dxc4 { [%hint Cambiá el peón atacado: para recuperarlo, la dama va a tener que exponerse.] }
+6. Qxc4 O-O 7. e4 a6 { [%hint Prepará el avance que echa a la dama con tiempo.] }
+8. Be2 b5 9. Qb3 c5 { [%hint Atacá el centro desde el costado ahora que la dama se alejó.] }
+10. dxc5 Bb7 { [%hint Antes de recuperar el peón, desarrollá con presión sobre e4.] }
+11. e5 Nfd7 { [%hint Retirá el caballo atacado a una casilla desde donde ataque c5 y e5.] }
+```
+
+Vas a recuperar el peón: si `12.Be3`, `12...Nxe5` gana el de e5 y la posición queda pareja. Si en la jugada 8 las blancas empujan `8.e5`, seguí con `8...b5 9.Qb3 Nfd7`: el peón de e5 pasa a ser un blanco.
+
 ## Trampa a favor: Captura en e5 {#captura-en-e5} [club]
 En la línea de `5.Bf4`, después de `14.Nd5 e5` el peón de e5 parece regalado al alfil de f4. Está defendido dos veces, por el caballo de c6 y por el alfil de g7.
 
@@ -95,4 +110,4 @@ En la línea de `5.Bf4`, después de `14.Nd5 e5` el peón de e5 parece regalado 
 Nxe5
 ```
 
-Ganaste un alfil por un peón. Si las blancas siguen con `16.Ne7+ Kh8 17.Nxf5 gxf5`, recuperan una pieza pero vos seguís con una de ventaja. Lo mejor para ellas era `15.Rxc6`, entregando la calidad a cambio de peones e iniciativa.
+Ganaste un alfil por un peón. Si las blancas siguen con `16.Ne7+ Kh8 17.Nxf5 gxf5`, cambian un caballo por tu alfil, pero seguís con una pieza de ventaja. Lo mejor para ellas era `15.Rxc6`, entregando la calidad a cambio de peones e iniciativa.

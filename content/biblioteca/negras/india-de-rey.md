@@ -52,7 +52,7 @@ Con `5.f3` las blancas sostienen e4 y preparan Be3, Qd2 y el enroque largo. Con 
 1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. f3 O-O 6. Be3 c5 { [%hint Atacá el centro desde el costado, aunque cueste un peón.] }
 7. dxc5 dxc5 8. Qxd8 Rxd8 9. Bxc5 Nc6 { [%hint Desarrollá con tiempo: la columna abierta y la diagonal larga valen más que el peón.] }
 10. Nd5 Nd7 { [%hint Atacá al alfil adelantado y despejá la diagonal de tu alfil de g7.] }
-11. Nxe7+ Nxe7 12. Bxe7 Bxb2 { [%hint Recuperá un peón con el alfil de la diagonal larga, que además ataca a la torre.] }
+11. Nxe7+ Nxe7 12. Bxe7 Bxb2 { [%hint Tu alfil de casillas oscuras tiene la diagonal abierta: aprovechala para recuperar material ganando un tiempo.] }
 13. Rd1 Re8 { [%hint Atacá al alfil que quedó adelantado.] }
 ```
 
@@ -84,4 +84,4 @@ c4 { [%hint Echá al defensor del peón central.] }
 13. Qd2 Qxd5 14. O-O Qxd2 15. Bxd2 Nxe4 { Segundo peón: si 16.Bxe4 Rxe4, sigue siendo tuyo. }
 ```
 
-Con dos peones de más y el centro blanco deshecho, cambiá piezas y andá al final. Si en la jugada 11 el alfil come en c4, `11...Nxe4 12.Nxe4 Rxe4+` da jaque y ataca al alfil de c4 al mismo tiempo.
+Con dos peones de más y el centro blanco deshecho, cambiá piezas y andá al final. Si en la jugada 11 el alfil come en c4, `11...Nxe4` recupera el peón. Después de `12.Nxe4 Rxe4+ 13.Be2` el material está igualado, pero el alfil de e2 queda clavado y tus piezas son mucho más activas: seguí con `...Nd7` y `...Nc5`. Si en cambio `12.O-O`, entonces `12...Nxc3 13.bxc3 Qb6+` y después `...Bxc3` gana material.

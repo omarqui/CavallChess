@@ -42,7 +42,7 @@ Con `4.a3` las blancas te preguntan por el alfil antes de que enroques. Lo cambi
 11. f4 f5 { El avance f5 de las blancas queda frenado y el centro, trabado. }
 ```
 
-El peón de c4 necesita cuidado todo el tiempo. Seguí con `...Na5` y `...Rc8` para sumar presión, y con `...d6` y `...Nf6` cuando el centro esté definido. Si las blancas cambian en d4, recapturá con el peón y mantené el ojo en c4.
+El peón de c4 necesita cuidado todo el tiempo. Lo habitual es cambiar vos en d4 (`...cxd4` y `cxd4`) y seguir con `...Na5` y `...Rc8` para sumar presión. Si las blancas cambian en c5, recapturá con el peón de b: c4 sigue siendo el blanco.
 
 ## Variante: Clásica {#clasica} [club]
 Con `4.Qc2` las blancas pueden recapturar en c3 con la dama y no doblarse. A cambio pierden tiempo con la dama, y vos peleás por las casillas blancas del centro.
@@ -57,7 +57,7 @@ Con `4.Qc2` las blancas pueden recapturar en c3 con la dama y no doblarse. A cam
 13. Bh4 Nd5 14. Bf2 c5 { [%hint Atacá el centro mientras el rey blanco sigue sin enrocar.] }
 ```
 
-Se cambiaron las damas y la posición está pareja: las blancas tienen la pareja de alfiles, vos el mejor desarrollo. Llevá las torres a c8 y d8, y aprovechá que el peón de e3 quedó atrasado.
+Se cambiaron las damas y la posición está pareja: las blancas tienen la pareja de alfiles, vos el mejor desarrollo. Llevá las torres a c8 y d8, y aprovechá que e3 es un punto débil: tu caballo de d5 ya lo ataca.
 
 ## Variante: Rubinstein con el plan Hübner {#hubner} [club]
 Contra `4.e3` jugás `4...c5` y, una vez que el caballo de g1 salió a f3 y ya no puede recapturar en c3 desde e2, cambiás para doblar los peones. Después cerrás el centro con `...d6` y `...e5`. Es el plan con el que Fischer le ganó a Spassky la quinta partida del Mundial de 1972 (allá el orden fue `4.Nf3 c5 5.e3`, que lleva a lo mismo).
@@ -69,7 +69,7 @@ Contra `4.e3` jugás `4...c5` y, una vez que el caballo de g1 salió a f3 y ya n
 10. Nh4 h6 { [%hint Quitale al alfil blanco la casilla desde donde clavaría a tu caballo.] }
 11. f4 Ng6 { [%hint Atacá al caballo del borde sin abrir el centro.] Cambiar en f4 parece natural, pero es justo lo que esperan las blancas: mirá la Horquilla en g5. }
 12. Nxg6 fxg6 { Recapturás hacia el centro y la columna f queda abierta para tu torre. }
-13. fxe5 dxe5 14. Be3 b6 { [%hint Reforzá el peón de c5 antes de que el alfil blanco lo ataque.] }
+13. fxe5 dxe5 14. Be3 b6 { [%hint El alfil de e3 ya ataca c5: reforzalo antes de que caiga.] }
 15. O-O O-O
 ```
 
@@ -94,7 +94,7 @@ En el plan Hübner, cuando las blancas juegan `11.f4`, cambiar en f4 y atacar co
 11. f4 Ng6 { [%hint Atacá al caballo del borde sin abrir el centro.] }
 (11... exf4? 12. Bxf4 g5?? { La horquilla parece ganar una pieza. }
 13. e5! { Ataca al caballo de f6 y abre la columna e contra tu rey. } gxh4
-14. exf6 { El material está igualado, pero tu caballo de e7 está atacado, tu rey no tiene refugio y las piezas blancas entran por la columna e y la diagonal h5-e8. })
+14. exf6 { El material está igualado, pero tu caballo de e7 está atacado, tu rey no tiene refugio y las blancas atacan por la columna e, con jaques de dama en e2, y contra f7 con la dama en h5. })
 12. Nxg6 fxg6
 ```
 
