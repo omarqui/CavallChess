@@ -43,7 +43,7 @@ Con `9.Bc4` el alfil apunta a f7 y frena tu `...d5`. Vos llevás la torre a c8, 
 10. O-O-O Rc8 { [%hint Ocupá la columna semiabierta que apunta al rey blanco.] }
 11. Bb3 Ne5 { [%hint Llevá el caballo hacia una casilla desde donde ataque a la dama y al alfil de e3.] }
 12. h4 h5 { [%hint Frená el peón que quiere abrir la columna h contra tu rey.] }
-13. Bg5 Rc5 { [%hint Sacá la torre por la quinta fila para apoyar el avance de tu peón de b.] }
+13. Bg5 Rc5 { [%hint Activá la torre de modo que apoye el avance de tu peón de b.] }
 14. Kb1 b5
 ```
 
@@ -87,7 +87,7 @@ Las blancas avanzan los peones del flanco de rey; vos tenés la columna c y la c
 11. Bf4 { El alfil esquiva el cambio. } Ne5 { [%hint Volvé con el caballo al centro, desde donde apunta a c4 y f3.] }
 ```
 
-Igualaste con comodidad: la columna b abierta presiona b2 y el alfil de g7 apunta a c3. Seguí con `...Rb8` y `...a5-a4` para echar al alfil de b3.
+Igualaste con comodidad: la columna b abierta presiona al alfil de b3 y a b2, y el alfil de g7 apunta a c3. Seguí con `...Rb8` y `...a5-a4` para echar al alfil de b3.
 
 ## Variante: Ataque Levenfish {#levenfish} [club]
 Con `6.f4` las blancas amenazan avanzar e5 enseguida. Por eso tu primera jugada no es el alfil sino el caballo de b8.
@@ -108,10 +108,10 @@ Contra `6.f4`, la jugada que pide el Dragón es `6...Bg7`. Justo ahí el avance 
 
 ```pgn
 1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. f4 Nc6 { [%hint Antes de terminar el fianchetto, sacá la pieza que vigila e5 y d4.] }
-(6... Bg7? { Lo natural, pero deja que el peón central avance con tempo. } 7. e5! { El caballo de f6 se queda sin buenas casillas: a partir de acá hay que jugar con mucha precisión. } dxe5 8. fxe5 Ng4? { Parece la casilla más activa. } 9. Bb5+! { Jaque, y el caballo de g4 queda sin defensa. Tapar con el caballo de b8 tampoco alcanza: también pierde material. } Bd7 10. Qxg4 { Las blancas ganaron una pieza: si tomás en b5, recapturan con el caballo. })
+(6... Bg7? { Lo natural, pero deja que el peón central avance con tempo. No pierde por sí sola, pero te obliga a defenderte con precisión. } 7. e5! { El caballo de f6 se queda sin buenas casillas. La defensa precisa es 7...dxe5 8.fxe5 Nfd7, y aun así las blancas quedan algo mejor. } dxe5 8. fxe5 Ng4?? { Parece la casilla más activa, pero pierde material. } 9. Bb5+! { Jaque, y el caballo de g4 queda sin defensa. Tapar con el caballo de b8 tampoco alcanza: también pierde material. } Bd7 10. Qxg4 { Las blancas ganaron una pieza: si tomás en b5, recapturan con el caballo. })
 ```
 
-Con `6...Nc6` el avance e5 pierde fuerza, porque si las blancas cambian en c6 y empujan, tu caballo vuelve a d7 con todo bajo control. Lo que sigue lo tenés en el Ataque Levenfish.
+`6...Bg7` es dudosa, no perdedora: si ya la jugaste, después de `7.e5 dxe5 8.fxe5` el caballo tiene que volver a d7, nunca a g4. Más simple es `6...Nc6`: el avance e5 pierde fuerza, porque si las blancas cambian en c6 y empujan, tu caballo vuelve a d7 con todo bajo control. Lo que sigue lo tenés en el Ataque Levenfish.
 
 ## Trampa a favor: El sacrificio en f7 que no funciona {#sacrificio-en-f7} [básica]
 Contra `6.Bc4 Bg7 7.Be3`, sin f3, tu caballo salta a g4 y ataca al alfil de e3. Algunos rivales responden con un golpe en f7 que parece ganar.

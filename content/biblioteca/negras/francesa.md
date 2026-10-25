@@ -83,7 +83,7 @@ Contra `4.Bg5` cambiás el peón central. Entregás el centro, pero esquivás la
 10. Bd3 b6 { [%hint Prepará la salida de tu alfil de casillas claras por la diagonal larga.] }
 ```
 
-Las blancas enrocaron largo; tu rey está seguro y tenés la pareja de alfiles. Seguí con `...Bb7` y `...Nf6`, y prepará `...c5` para abrir líneas contra el rey blanco.
+Las blancas enrocaron largo; tu rey va a estar seguro en cuanto vuelvas con el caballo a f6, y tenés la pareja de alfiles. Seguí con `...Bb7` y `...Nf6`, y prepará `...c5` para abrir líneas contra el rey blanco.
 
 ## Variante: Variante Tarrasch {#tarrasch} [club]
 Con `3.Nd2` las blancas evitan la clavada de `...Bb4`. El plan es el mismo de la Steinitz: `...c5`, `...Nc6` y `...f6`.
@@ -93,7 +93,7 @@ Con `3.Nd2` las blancas evitan la clavada de `...Bb4`. El plan es el mismo de la
 4. e5 Nfd7 5. Bd3 c5 { [%hint Atacá la base de la cadena.] }
 6. c3 Nc6 7. Ne2 cxd4 8. cxd4 f6 { [%hint Ahora golpeá la punta de la cadena para abrir la columna f.] }
 9. exf6 Nxf6 { El caballo vuelve a f6 y tus piezas quedan activas. }
-10. Nf3 Bd6 11. O-O O-O 12. Bf4 Bxf4 13. Nxf4 Ne4 { [%hint Instalá el caballo en la casilla central que sostiene tu peón de d5.] }
+10. Nf3 Bd6 11. O-O O-O 12. Bf4 Bxf4 13. Nxf4 Ne4 { [%hint Instalá el caballo en la casilla central que tu peón de d5 sostiene.] }
 ```
 
 Tu peón de e6 está retrasado, pero tus piezas lo compensan: el caballo de e4 es muy fuerte y la columna f está semiabierta. Seguí con `...Bd7` y `...Qf6`.

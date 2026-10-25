@@ -53,13 +53,14 @@
     }
   },
   "siciliana-taimanov": {
-    "hash": "fe55cf53d56816e987583fb1a8b3cb0036a4523c8606589929b32b0bb48cbe46",
+    "hash": "e0567df42e6acf492fe3269f07c0c323a83fbcbfb99176f9084c1a6720cf2db9",
     "profundidad": 18,
     "fecha": "2026-10-24",
     "evals": {
       "ataque-ingles": -0.16,
       "bd3": -0.1,
       "be2": -0.43,
+      "ndb5": -0.33,
       "nb5": -0.08,
       "peon-e4": 4.6
     }
