@@ -4,6 +4,7 @@ import { ensureRoots, getSettings, setSettings } from './db/repo';
 import { useSettings } from './db/hooks';
 import { shouldAutoSync, syncChesscom } from './games/sync';
 import { ArchivedScreen } from './screens/Archived';
+import { BuildFromGamesScreen } from './screens/BuildFromGames';
 import { FichaScreen, parseFichaTab } from './screens/Ficha';
 import { FichaAddScreen } from './screens/FichaAdd';
 import { GameAddScreen } from './screens/GameAdd';
@@ -175,6 +176,7 @@ export default function App() {
     case 'games': {
       const [, id, sub] = route.path;
       if (!id) screen = <GamesScreen />;
+      else if (id === 'armar' && !sub) screen = <BuildFromGamesScreen />;
       else if (!sub) {
         // Visor a pantalla completa: sin barra de pestañas.
         tab = null;

@@ -50,8 +50,6 @@ export function useSettings(): Settings | undefined {
 }
 
 export const useGaps = () => useLiveQuery(() => db.gaps.orderBy('count').reverse().toArray());
-export const useGames = () => useLiveQuery(() => db.games.orderBy('endTime').reverse().limit(60).toArray());
-
 /** Una partida por id: `undefined` mientras carga, `null` si no existe. */
 export function useGame(id: string): GameRow | null | undefined {
   const res = useLiveQuery(async () => ({ row: await db.games.get(id) }), [id]);

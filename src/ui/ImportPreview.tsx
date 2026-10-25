@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { RepertoireGraph } from '../chess/graph';
 import { buildImportPlan, existingOf, type ImportPlan, type Resolutions } from '../chess/pgnImport';
 import { figurine, type Side } from '../chess/position';
@@ -24,6 +24,7 @@ export function ImportPreview({
   proposeNames = chapterProposals,
   onSaved,
   onBack,
+  children,
 }: {
   pgn: string;
   side: Side;
@@ -32,6 +33,8 @@ export function ImportPreview({
   proposeNames?: (plan: ImportPlan) => NameProposal[];
   onSaved: (r: { mine: number; rival: number }) => void;
   onBack: () => void;
+  /** Va debajo del resumen ("Se agregan…"): de dónde sale el PGN o una advertencia. */
+  children?: ReactNode;
 }) {
   const [resolutions, setResolutions] = useState<Resolutions>(new Map());
   const [plan, setPlan] = useState<ImportPlan>(() => buildImportPlan(pgn, side, existingOf(graph)));
@@ -73,6 +76,7 @@ export function ImportPreview({
           ? `Se agregan ${newMine} ${newMine === 1 ? 'jugada tuya' : 'jugadas tuyas'} y ${newEdges.length - newMine} del rival a tu repertorio con ${side === 'white' ? 'blancas' : 'negras'}.`
           : 'Todo lo de este PGN ya está en tu repertorio.'}
       </p>
+      {children}
       {plan.ignoredOwnVariations > 0 && (
         <p className="mt-2 text-[15px] text-muted">
           Se ignoran {plan.ignoredOwnVariations} {plan.ignoredOwnVariations === 1 ? 'variante propia' : 'variantes propias'}: en
