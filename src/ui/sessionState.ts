@@ -22,3 +22,8 @@ export function useSessionState<T>(key: string, initial: T): [T, (next: T | ((pr
   );
   return [value, set];
 }
+
+/** Olvida el estado de vista cuyas claves empiezan con `prefix` (p. ej. los mensajes de otra cuenta de Chess.com). */
+export function clearSessionState(prefix: string) {
+  for (const key of [...store.keys()]) if (key.startsWith(prefix)) store.delete(key);
+}

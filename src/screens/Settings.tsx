@@ -5,6 +5,7 @@ import type { Settings } from '../types';
 import { Banner, Button, Screen, Section, Segmented, Toggle } from '../ui/kit';
 import { Board } from '../ui/Board';
 import { INITIAL_EPD } from '../chess/position';
+import { clearSessionState } from '../ui/sessionState';
 import { navigate } from '../ui/router';
 
 export function SettingsScreen() {
@@ -126,7 +127,11 @@ export function SettingsScreen() {
             onBlur={(e) => {
               const user = e.target.value.trim() || undefined;
               // Otro usuario: se vuelve a empezar por los últimos 3 meses.
-              if (user !== s.chesscomUser) set({ chesscomUser: user, chesscomMonths: undefined, lastChesscomSync: undefined });
+              if (user !== s.chesscomUser) {
+                // Otra cuenta: los mensajes de la pantalla de Partidas hablaban de la anterior.
+                clearSessionState('partidas.');
+                set({ chesscomUser: user, chesscomMonths: undefined, lastChesscomSync: undefined });
+              }
             }}
             className="mt-1 w-full rounded-xl bg-surface px-3 py-2.5 text-[16px] ring-1 ring-line outline-none focus:ring-brass"
           />
