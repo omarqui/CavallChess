@@ -1,28 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
-import { archiveMonth } from '../../games/chesscom';
+import { loadedMonths } from '../../games/chesscom';
 import { isBusy } from '../../games/lock';
 import { loadOlderGames } from '../../games/sync';
 import type { Settings } from '../../types';
 import { Section } from '../../ui/kit';
+import { useSessionState } from '../../ui/sessionState';
 import { ActionList, ActionRow } from './ActionList';
 import { Feedback } from './Feedback';
 import { monthName, plural, sentence, WAITING } from './format';
 import type { Job, RunJob } from './jobs';
 import { ProgressBox, type Progress } from './ProgressBox';
 
-/** El mes más viejo leído (las claves son urls de archivo; se aceptan también "AAAA-MM", como `olderArchives`). */
-const oldestMonth = (s: Settings) =>
-  Object.keys(s.chesscomMonths ?? {})
-    .map((k) => (k.includes('/') ? archiveMonth(k) : k))
-    .sort()[0];
+/** El mes más viejo leído de la cuenta actual (los de otra cuenta no cuentan). */
+const oldestMonth = (s: Settings) => (s.chesscomUser ? loadedMonths(s.chesscomMonths, s.chesscomUser)[0] : undefined);
 
 /** Carga hacia atrás: 6 meses o todo, con avance, "Cancelar" y lo que sumó. */
 export function HistorySection({ settings, job, run }: { settings: Settings; job: Job | null; run: RunJob }) {
   const [progress, setProgress] = useState<Progress | null>(null);
-  const [result, setResult] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useSessionState<string | null>('partidas.historial.resultado', null);
+  const [error, setError] = useSessionState<string | null>('partidas.historial.error', null);
   const [cancelling, setCancelling] = useState(false);
   const abort = useRef<AbortController | null>(null);
+  // Suelta una carga que todavía espera el candado; devuelve false si ya empezó (ver `load`).
+  const abandon = useRef<(() => boolean) | null>(null);
   // Salir de la pantalla corta la carga. Lo leído queda guardado y la próxima sigue desde ahí; así nunca corren dos
   // cargas a la vez pidiendo los mismos meses.
   useEffect(() => () => abort.current?.abort(), []);
@@ -38,11 +38,19 @@ export function HistorySection({ settings, job, run }: { settings: Settings; job
       // Si la actualización automática (u otra carga) está corriendo, esta espera su turno: se dice así.
       setProgress({ text: isBusy() ? WAITING : 'Buscando archivos…', value: null });
       let monthsToRead = 0;
+      let started = false;
+      let abandoned = false;
       try {
-        const r = await loadOlderGames({
+        // En cola detrás de otra tarea, "Cancelar" no espera a que termine: la llamada encolada vuelve cancelada
+        // cuando le toca el candado (sin pedir nada) y su resultado se ignora.
+        const queued = loadOlderGames({
           months,
           signal: controller.signal,
+          onStart: () => {
+            started = true;
+          },
           onProgress: (msg, done, total) => {
+            if (abandoned) return;
             monthsToRead = total;
             if (total === 0) setProgress({ text: msg, value: null });
             else if (done < total) {
@@ -50,6 +58,20 @@ export function HistorySection({ settings, job, run }: { settings: Settings; job
             }
           },
         });
+        const r = await new Promise<Awaited<typeof queued> | null>((resolve, reject) => {
+          queued.then(resolve, reject);
+          abandon.current = () => {
+            if (started) return false;
+            abandoned = true;
+            queued.catch(() => undefined);
+            resolve(null);
+            return true;
+          };
+        });
+        if (!r) {
+          setResult('Cancelaste la carga antes de que empezara.');
+          return;
+        }
         const imported = `Sumaste ${plural(r.imported, 'partida', 'partidas')}.`;
         const left = r.remaining ? ` Quedan ${plural(r.remaining, 'mes más viejo', 'meses más viejos')}.` : '';
         setResult(
@@ -66,6 +88,7 @@ export function HistorySection({ settings, job, run }: { settings: Settings; job
         setError(sentence((e as Error).message));
       } finally {
         abort.current = null;
+        abandon.current = null;
         setProgress(null);
       }
     });
@@ -81,8 +104,9 @@ export function HistorySection({ settings, job, run }: { settings: Settings; job
           progress={progress}
           cancelling={cancelling}
           onCancel={() => {
-            setCancelling(true);
             abort.current?.abort();
+            // Si todavía no empezó, se suelta ya; si empezó, corta en el próximo paso ("Cancelando…").
+            if (!abandon.current?.()) setCancelling(true);
           }}
         >
           <p className="pb-1 text-sm text-muted">Si salís de Partidas, la carga se corta; lo leído queda guardado.</p>

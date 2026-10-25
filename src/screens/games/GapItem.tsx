@@ -6,6 +6,7 @@ import type { Gap } from '../../types';
 import { arrow, Board } from '../../ui/Board';
 import { Button, MoveLine, sideLabel } from '../../ui/kit';
 import { navigate } from '../../ui/router';
+import { gapRepertoirePath } from './format';
 
 /** Un hueco: la posición con la jugada del rival, cuántas veces salió y cómo prepararle una respuesta. */
 export function GapItem({ gap, graphs }: { gap: Gap; graphs: Graphs }) {
@@ -34,9 +35,7 @@ export function GapItem({ gap, graphs }: { gap: Gap; graphs: Graphs }) {
         ) : (
           <Button
             className="mt-2"
-            onClick={() =>
-              navigate(`/repertoire/${gap.side}?node=${encodeURIComponent(id)}&gap=${encodeURIComponent(gap.san)}`)
-            }
+            onClick={() => navigate(gapRepertoirePath(gap.side, gap.epd, gap.san))}
           >
             Preparar respuesta a {figurine(gap.san)}
           </Button>

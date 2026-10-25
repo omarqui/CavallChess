@@ -7,6 +7,7 @@ import { syncChesscom } from '../games/sync';
 import { Banner, Button, Screen, Section } from '../ui/kit';
 import { Tip } from '../ui/Tip';
 import { navigate } from '../ui/router';
+import { useSessionState } from '../ui/sessionState';
 import { Feedback } from './games/Feedback';
 import { plural, sentence, WAITING } from './games/format';
 import { GameList } from './games/GameList';
@@ -27,10 +28,13 @@ export function GamesScreen() {
   const gaps = useGaps();
   const graphs = useGraphs();
   const total = useLiveQuery(() => db.games.count());
-  const [status, setStatus] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  // Los mensajes también quedan al volver de una partida: si desaparecieran, la lista subiría y el scroll no
+  // caería en la misma fila.
+  const [status, setStatus] = useSessionState<string | null>('partidas.estado', null);
+  const [error, setError] = useSessionState<string | null>('partidas.error', null);
   const [job, setJob] = useState<Job | null>(null);
-  const [allGaps, setAllGaps] = useState(false);
+  // Como el filtro de la lista: al volver de una partida siguen abiertos.
+  const [allGaps, setAllGaps] = useSessionState('partidas.todosLosHuecos', false);
   const running = useRef(false);
   if (!settings || !gaps || total === undefined || !graphs) return null;
 

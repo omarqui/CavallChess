@@ -74,7 +74,11 @@ export function ImportPreview({
       <p className="font-book text-[19px] leading-snug">
         {newEdges.length
           ? `Se agregan ${newMine} ${newMine === 1 ? 'jugada tuya' : 'jugadas tuyas'} y ${newEdges.length - newMine} del rival a tu repertorio con ${side === 'white' ? 'blancas' : 'negras'}.`
-          : 'Todo esto ya está en tu repertorio.'}
+          : plan.conflicts.length === 1
+            ? 'Tu repertorio ya tiene otra jugada en esa posición: elegí abajo.'
+            : plan.conflicts.length > 1
+              ? 'Tu repertorio ya tiene otras jugadas en esas posiciones: elegí abajo.'
+              : 'Todo esto ya está en tu repertorio.'}
       </p>
       {children}
       {plan.ignoredOwnVariations > 0 && (

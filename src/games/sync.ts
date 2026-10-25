@@ -172,12 +172,15 @@ export interface LoadOlderOptions {
   months: number | 'all';
   signal?: AbortSignal;
   onProgress?: (msg: string, done: number, total: number) => void;
+  /** Se llama apenas la carga toma el candado (antes de eso, la UI puede soltarla sin esperar). */
+  onStart?: () => void;
 }
 
 export type LoadOlderResult = SyncResult & { remaining: number; cancelled: boolean };
 
 async function loadOlder(opts: LoadOlderOptions, d: CavallDB): Promise<LoadOlderResult> {
   const { signal } = opts;
+  opts.onStart?.();
   const result: SyncResult = { imported: 0, deviations: 0, gaps: 0 };
   // Cancelada mientras esperaba el candado: no se pide nada (ni falla sin conexión). Sin archivos no se sabe
   // cuántos meses quedan; la UI no lo muestra al cancelar.

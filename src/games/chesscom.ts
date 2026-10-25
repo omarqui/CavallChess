@@ -47,7 +47,7 @@ export const archiveMonth = (url: string) => url.split('/games/')[1]?.replace('/
  * Meses ya leídos de `user` (ordenados), según el registro de archivos. Las claves de otra cuenta no cuentan:
  * si cambiaste de usuario a mitad de una carga, lo que quedó de la anterior no se confunde con la nueva.
  */
-function loadedMonths(seen: Record<string, string> | undefined, user: string): string[] {
+export function loadedMonths(seen: Record<string, string> | undefined, user: string): string[] {
   const path = `/${user.toLowerCase()}/games/`;
   return Object.keys(seen ?? {})
     .filter((k) => k.toLowerCase().includes(path))

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { displaySquares, figurine } from '../chess/position';
 import { saveNote, noteId } from '../db/repo';
 import { useGraphs, useNotes } from '../db/hooks';
@@ -7,7 +7,7 @@ import { fichaProgress, lineStatus, orphanNotes, type LineStatus } from '../libr
 import type { Ficha, FichaLine } from '../library/types';
 import type { Note } from '../types';
 import { Board } from '../ui/Board';
-import { BackLink, Icon, ICONS, MoveLine, Screen, Segmented } from '../ui/kit';
+import { ActionBar, ActionButton, BackLink, Icon, ICONS, MoveLine, Screen, Segmented } from '../ui/kit';
 import { LibraryError } from '../ui/LibraryError';
 import { Tip } from '../ui/Tip';
 import { RichInline, RichText } from '../ui/RichText';
@@ -93,40 +93,6 @@ export function LinePreview({ f, line }: { f: Ficha; line: FichaLine }) {
     </span>
   );
 }
-
-/** Acción principal fija abajo, justo sobre la barra de pestañas. */
-export function ActionBar({ children }: { children: ReactNode }) {
-  return (
-    <div
-      className="pointer-events-none fixed inset-x-0 z-10 bg-linear-to-t from-paper from-55% to-transparent"
-      style={{ bottom: 'var(--tabbar-h)' }}
-    >
-      <div className="pointer-events-auto mx-auto max-w-xl px-4 pb-3 pt-7">{children}</div>
-    </div>
-  );
-}
-
-export function ActionButton({
-  done = false,
-  icon,
-  children,
-  ...rest
-}: { done?: boolean; icon?: ReactNode; children: ReactNode } & ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      {...rest}
-      className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-base font-semibold transition active:scale-[0.98] ${
-        done
-          ? 'bg-good-soft text-ink ring-1 ring-good/30'
-          : 'bg-ink text-paper shadow-[0_8px_24px_-12px_rgb(0_0_0/0.5)] hover:opacity-90 disabled:opacity-40'
-      }`}
-    >
-      {icon && <Icon d={icon} className="size-5" />}
-      {children}
-    </button>
-  );
-}
-
 
 // ─── Notas ───────────────────────────────────────────────────────────────────
 

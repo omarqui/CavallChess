@@ -9,6 +9,7 @@ import { FichaScreen, parseFichaTab } from './screens/Ficha';
 import { FichaAddScreen } from './screens/FichaAdd';
 import { GameAddScreen } from './screens/GameAdd';
 import { GamesScreen } from './screens/Games';
+import { returnPath } from './screens/games/format';
 import { GameViewerScreen } from './screens/GameViewer';
 import { HomeScreen } from './screens/Home';
 import { ImportScreen } from './screens/Import';
@@ -86,17 +87,27 @@ export default function App() {
     }
     lastScroll.current = target;
     el.scrollTop = target;
-    // El contenido puede cargar después (catálogo, grafos): reintenta unos cuadros hasta alcanzar la posición.
-    let tries = 0;
+    // El contenido puede cargar después (catálogo, grafos, una lista filtrada de partidas): reintenta cuadro a cuadro
+    // hasta alcanzar la posición, por hasta 2 s. Si tocás o deslizás antes, deja de insistir.
     let raf = 0;
+    const until = performance.now() + 2000;
+    const stop = () => cancelAnimationFrame(raf);
     const settle = () => {
-      if (target && Math.abs(el.scrollTop - target) > 1 && tries++ < 20) {
+      if (Math.abs(el.scrollTop - target) > 1 && performance.now() < until) {
         el.scrollTop = target;
         raf = requestAnimationFrame(settle);
       }
     };
-    if (target) raf = requestAnimationFrame(settle);
-    return () => cancelAnimationFrame(raf);
+    if (!target) return;
+    raf = requestAnimationFrame(settle);
+    const opts = { passive: true, once: true } as const;
+    el.addEventListener('touchstart', stop, opts);
+    el.addEventListener('wheel', stop, opts);
+    return () => {
+      stop();
+      el.removeEventListener('touchstart', stop);
+      el.removeEventListener('wheel', stop);
+    };
   }, [pathKey, ready]);
 
   useEffect(() => {
@@ -135,6 +146,7 @@ export default function App() {
           side={(route.params.get('side') as Side | null) ?? undefined}
           root={route.params.get('root') ?? undefined}
           card={route.params.get('card') ?? undefined}
+          volver={returnPath(route.params.get('volver'))}
         />
       );
       break;

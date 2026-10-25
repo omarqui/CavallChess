@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { isBusy } from '../../games/lock';
 import { recalcGames } from '../../games/store';
 import { Section } from '../../ui/kit';
+import { useSessionState } from '../../ui/sessionState';
 import { navigate } from '../../ui/router';
 import { ActionList, ActionRow } from './ActionList';
 import { Feedback } from './Feedback';
@@ -12,8 +13,8 @@ import { ProgressBox, type Progress } from './ProgressBox';
 /** "Con tu repertorio": armar desde muchas partidas y recalcular contra el repertorio actual. */
 export function ToolsSection({ job, run }: { job: Job | null; run: RunJob }) {
   const [progress, setProgress] = useState<Progress | null>(null);
-  const [result, setResult] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useSessionState<string | null>('partidas.herramientas.resultado', null);
+  const [error, setError] = useSessionState<string | null>('partidas.herramientas.error', null);
 
   const recalc = () =>
     run('recalc', async () => {

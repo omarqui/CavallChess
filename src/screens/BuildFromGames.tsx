@@ -4,10 +4,9 @@ import { useGraphs } from '../db/hooks';
 import { buildFromGames } from '../games/aggregate';
 import type { Side } from '../types';
 import { ImportPreview } from '../ui/ImportPreview';
-import { BackLink, Banner, Segmented } from '../ui/kit';
+import { ActionBar, ActionButton, BackLink, Banner, Segmented } from '../ui/kit';
 import { navigate } from '../ui/router';
 import { showToast } from '../ui/toast';
-import { ActionBar, ActionButton } from './Ficha';
 import { plural, savedMessage, sentence } from './games/format';
 
 const DAY = 86_400_000;

@@ -213,6 +213,23 @@ describe('de a una', () => {
     expect(calls.map((c) => c.url.split('/games/')[1])).toEqual(['archives', '2026/08', '2026/09', '2026/10', 'archives', '2026/07']);
   });
 
+  it('onStart avisa recién cuando la carga encolada toma el candado', async () => {
+    const now = Date.now();
+    const log: string[] = [];
+    mockApi({
+      '2026-08': async () => (log.push('lee 08'), lento([game('a', now)])()),
+      '2026-09': async () => (log.push('lee 09'), lento([game('s', now)])()),
+      '2026-10': async () => (log.push('lee 10'), lento([game('o', now)])()),
+    });
+    const ctl = new AbortController();
+    const sync = syncChesscom(undefined, d);
+    const carga = loadOlderGames({ months: 1, signal: ctl.signal, onStart: () => log.push('empieza') }, d);
+    ctl.abort(); // cancelada mientras espera: la UI ya la soltó; al tomar el candado vuelve sin pedir nada
+    await sync;
+    expect(await carga).toMatchObject({ cancelled: true, imported: 0 });
+    expect(log).toEqual(['lee 08', 'lee 09', 'lee 10', 'empieza']);
+  });
+
   it('el recálculo espera a que termine la sincronización', async () => {
     const now = Date.now();
     const log: string[] = [];
