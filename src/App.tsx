@@ -30,7 +30,7 @@ function useAppearance() {
     const apply = () => {
       const dark = s.colorScheme === 'dark' || (s.colorScheme === 'system' && mq.matches);
       document.documentElement.dataset.scheme = dark ? 'dark' : 'light';
-      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#141a17' : '#eef1ec');
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#302e2b' : '#f1f1f1');
     };
     apply();
     mq.addEventListener('change', apply);
@@ -268,7 +268,7 @@ function TabBar({ active }: { active: string }) {
   return (
     <nav
       aria-label="Secciones"
-      className="safe-bottom fixed inset-x-0 bottom-0 z-20 border-t border-line bg-paper/90 backdrop-blur-md"
+      className="safe-bottom fixed inset-x-0 bottom-0 z-20 border-t border-line bg-surface/90 backdrop-blur-md"
     >
       <ul className="mx-auto flex max-w-xl justify-around px-2 pt-1.5">
         {TABS.map((t) => (

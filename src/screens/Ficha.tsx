@@ -144,7 +144,7 @@ export function ActionButton({
       className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-base font-semibold transition active:scale-[0.98] ${
         done
           ? 'bg-good-soft text-ink ring-1 ring-good/30'
-          : 'bg-ink text-paper shadow-[0_8px_24px_-12px_rgb(0_0_0/0.5)] hover:opacity-90 disabled:opacity-40'
+          : 'btn-cta disabled:opacity-40'
       }`}
     >
       {icon && <Icon d={icon} className="size-5" />}

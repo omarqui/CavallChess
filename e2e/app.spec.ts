@@ -204,16 +204,29 @@ test('los sets de piezas cambian las imágenes', async ({ page }) => {
   await page.goto('/#/settings');
   const knight = page.locator('piece.knight.white').first();
   const image = () => knight.evaluate((el) => getComputedStyle(el).backgroundImage);
+  // Por defecto, Papercut gris; la miniatura del selector carga (respeta el base path).
+  await expect(page.locator('body')).toHaveClass(/pieces-papercut-gris/);
+  const gris = page.getByRole('radio', { name: 'Papercut gris' });
+  await expect(gris).toHaveAttribute('aria-checked', 'true');
+  await expect
+    .poll(() => gris.locator('img').first().evaluate((el) => (el as HTMLImageElement).naturalWidth))
+    .toBeGreaterThan(0);
+  const papercutGris = await image();
+  await page.getByRole('radio', { name: 'Clásicas' }).click();
   await expect(page.locator('body')).toHaveClass(/pieces-cburnett/);
   const classic = await image();
+  expect(classic).not.toBe(papercutGris);
   await page.getByRole('radio', { name: 'Mérida' }).click();
   await expect(page.locator('body')).toHaveClass(/pieces-merida/);
   const merida = await image();
   expect(merida).not.toBe(classic);
-  await page.getByRole('radio', { name: 'Chessnut' }).click();
+  // Con el teclado: la flecha elige el set siguiente (Chessnut) y vuelve.
+  await page.getByRole('radio', { name: 'Mérida' }).press('ArrowRight');
   await expect(page.locator('body')).toHaveClass(/pieces-chessnut/);
+  await expect(page.getByRole('radio', { name: 'Chessnut' })).toBeFocused();
   expect(await image()).not.toBe(merida);
-  await page.getByRole('radio', { name: 'Mérida' }).click();
+  await page.getByRole('radio', { name: 'Chessnut' }).press('ArrowLeft');
+  await expect(page.locator('body')).toHaveClass(/pieces-merida/);
   await page.getByRole('radio', { name: 'Azul' }).click();
   await expect(page.locator('body')).toHaveClass(/board-blue/);
   await page.locator('piece.knight.white').first().scrollIntoViewIfNeeded();

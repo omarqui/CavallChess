@@ -6,36 +6,43 @@
 
 @custom-variant dark (&:where([data-scheme='dark'], [data-scheme='dark'] *));
 
-/* Salvia y latón: papel verde grisáceo, tinta verde profunda, latón como acento. */
+/*
+ * Paleta de Chess.com (modo claro y oscuro). Los nombres de los tokens son históricos: `brass` es el acento (el
+ * verde de Chess.com) y `font-book` ya no es una serif. Se conservan para no romper ramas que los usan.
+ */
 :root {
-  --paper: #eef1ec;
-  --surface: #f8faf7;
+  --paper: #f1f1f1;
+  --surface: #ffffff;
   --raised: #ffffff;
-  --ink: #18201c;
-  --muted: #5e6b64;
-  --line: #d3dad4;
-  --brass: #8a6420;
-  --brass-soft: #f1e6cf;
-  --good: #2f7d5b;
-  --good-soft: #dcefe4;
-  --bad: #b4413c;
-  --bad-soft: #f6dedc;
+  --ink: #312e2b;
+  --muted: #666564;
+  --line: #dad8d6;
+  --brass: #5d9948;
+  --brass-soft: #e8f3dc;
+  --good: #5d9948;
+  --good-soft: #e8f3dc;
+  --bad: #e02828;
+  --bad-soft: #fbe1dc;
+  --cta: #81b64c;
+  --cta-deep: #5d9948;
+  --cta-hi: #b2e068;
+  --cta-edge: #45753c;
   color-scheme: light;
 }
 
 [data-scheme='dark'] {
-  --paper: #141a17;
-  --surface: #1b231f;
-  --raised: #222c27;
-  --ink: #e4e9e4;
-  --muted: #95a39b;
-  --line: #2d3832;
-  --brass: #d2a44e;
-  --brass-soft: #3a3020;
-  --good: #5dbb8f;
-  --good-soft: #1d3a2c;
-  --bad: #e07069;
-  --bad-soft: #43221f;
+  --paper: #302e2b;
+  --surface: #262421;
+  --raised: #3c3a37;
+  --ink: #e8e6e3;
+  --muted: #9b9997;
+  --line: #45423e;
+  --brass: #81b64c;
+  --brass-soft: #3e4a2f;
+  --good: #81b64c;
+  --good-soft: #3e4a2f;
+  --bad: #fa412d;
+  --bad-soft: #5a2c26;
   color-scheme: dark;
 }
 
@@ -52,8 +59,9 @@
   --color-good-soft: var(--good-soft);
   --color-bad: var(--bad);
   --color-bad-soft: var(--bad-soft);
+  --color-cta: var(--cta);
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-book: 'Spectral', Georgia, 'Times New Roman', serif;
+  --font-book: var(--font-sans);
 }
 
 html,
@@ -76,10 +84,46 @@ body {
   outline-offset: 2px;
 }
 
-/* Notación de libro: números tabulares, figurines como texto. */
+/* Notación: números tabulares y figurines como texto, en seminegrita como la lista de jugadas de Chess.com. */
 .notation {
   font-family: var(--font-book);
-  font-variant-numeric: tabular-nums oldstyle-nums;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* Botones como los de Chess.com: el principal, verde en degradé con relieve; el secundario, gris con sombra. */
+@layer components {
+  .btn-cta {
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.18);
+    background: linear-gradient(180deg, var(--cta) 0%, var(--cta-deep) 100%);
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--cta-hi) 40%, transparent),
+      inset 0 -1px 0 var(--cta-edge),
+      inset 0 2px 4px color-mix(in srgb, var(--cta-hi) 50%, transparent),
+      inset 0 -2px 4px color-mix(in srgb, var(--cta-edge) 50%, transparent),
+      0 1px 2px rgb(0 0 0 / 0.14),
+      0 2px 4px rgb(0 0 0 / 0.1);
+  }
+  .btn-soft {
+    color: var(--ink);
+    background: var(--raised);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.08),
+      0 1px 2px rgb(0 0 0 / 0.14),
+      0 2px 4px rgb(0 0 0 / 0.1);
+  }
+  @media (hover: hover) {
+    .btn-cta:hover:not(:disabled) {
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--cta-hi) 50%, transparent) 0%, transparent 100%),
+        linear-gradient(180deg, var(--cta) 0%, var(--cta-deep) 100%);
+    }
+    .btn-soft:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--raised) 92%, var(--ink));
+    }
+  }
 }
 
 /* Tablero */
@@ -87,9 +131,9 @@ body {
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 6px;
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 1px 0 var(--line), 0 10px 30px -18px rgb(0 0 0 / 0.45);
+  box-shadow: 0 2px 6px -2px rgb(0 0 0 / 0.35);
 }
 .board-frame > .cg-wrap {
   width: 100%;
@@ -98,6 +142,22 @@ body {
 .cg-wrap coords {
   font-family: var(--font-sans);
   font-weight: 600;
+}
+
+/* Marcas del tablero como en Chess.com: amarillo en la última jugada y en la pieza elegida, puntos y anillos grises. */
+cg-board square.last-move,
+cg-board square.selected {
+  background-color: rgb(255 255 51 / 0.5);
+}
+cg-board square.move-dest {
+  background: radial-gradient(circle closest-side, rgb(0 0 0 / 0.14) 33%, transparent 34%);
+}
+cg-board square.oc.move-dest {
+  background: radial-gradient(circle closest-side, transparent 79%, rgb(0 0 0 / 0.14) 80% 99%, transparent 100%);
+}
+cg-board square.move-dest:hover {
+  background: rgb(0 0 0 / 0);
+  box-shadow: inset 0 0 0 3px rgb(255 255 255 / 0.65);
 }
 
 /* Feedback: la casilla de destino destella; el tablero se sacude al fallar. */
@@ -152,7 +212,7 @@ cg-board square.flash-bad {
 /* Coordenadas dentro del tablero, con el color de la casilla opuesta (como en Lichess). */
 .board-brown { --sq-light: #f0d9b5; --sq-dark: #b58863; }
 .board-blue { --sq-light: #dee3e6; --sq-dark: #8ca2ad; }
-.board-green { --sq-light: #ffffdd; --sq-dark: #86a666; }
+.board-green { --sq-light: #ebecd0; --sq-dark: #739552; }
 .board-slate { --sq-light: #dfe3dc; --sq-dark: #7f8f86; }
 .cg-wrap coords {
   opacity: 1;

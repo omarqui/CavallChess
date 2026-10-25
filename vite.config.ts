@@ -23,8 +23,8 @@ export default defineConfig({
         scope: '.',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#eef1ec',
-        theme_color: '#eef1ec',
+        background_color: '#302e2b',
+        theme_color: '#302e2b',
         icons: [
           { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
@@ -40,5 +40,7 @@ export default defineConfig({
       },
     }),
   ],
+  // Las piezas van como archivos, no incrustadas en el CSS: así solo se descarga el set elegido.
+  build: { assetsInlineLimit: (file) => (/[\\/]assets[\\/]pieces[\\/]/.test(file) ? false : undefined) },
   worker: { format: 'es' },
 });

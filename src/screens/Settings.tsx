@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useRef, useState, type KeyboardEvent } from 'react';
 import { exportBackup, importBackup, setSettings, wipeAll, type Backup } from '../db/repo';
 import { useSettings } from '../db/hooks';
 import type { Settings } from '../types';
@@ -6,6 +6,9 @@ import { Banner, Button, Screen, Section, Segmented, Toggle } from '../ui/kit';
 import { Board } from '../ui/Board';
 import { INITIAL_EPD } from '../chess/position';
 import { navigate } from '../ui/router';
+import { PIECE_SETS, pieceUrl, type PieceSetId } from '../ui/pieceSets';
+
+const CREDITS_URL = 'https://github.com/omarqui/CavallChess/blob/main/src/assets/pieces/CREDITOS.md';
 
 export function SettingsScreen() {
   const s = useSettings();
@@ -98,18 +101,7 @@ export function SettingsScreen() {
               ]}
             />
           </Row>
-          <Row label="Piezas">
-            <Segmented
-              label="Piezas"
-              value={s.pieceSet}
-              onChange={(v) => set({ pieceSet: v })}
-              options={[
-                { value: 'cburnett', label: 'Clásicas' },
-                { value: 'merida', label: 'Mérida' },
-                { value: 'chessnut', label: 'Chessnut' },
-              ]}
-            />
-          </Row>
+          <PieceSetPicker value={s.pieceSet} onChange={(v) => set({ pieceSet: v })} />
           <div className="mx-auto w-40 pt-1">
             <Board epd={INITIAL_EPD} orientation="white" coordinates={false} />
           </div>
@@ -266,7 +258,79 @@ export function SettingsScreen() {
       <p className="mt-10 text-center text-xs text-muted">
         CavallChess es software libre (GPL-3.0). Usa chessground, chessops y Stockfish.
       </p>
+      <p className="mt-2 text-center text-xs text-muted">
+        Piezas: {PIECE_SETS.map((p) => `${p.label} (${p.author})`).join(', ')}.{' '}
+        <a className="underline underline-offset-2" href={CREDITS_URL} target="_blank" rel="noreferrer">
+          Créditos y licencias
+        </a>
+        .
+      </p>
     </Screen>
+  );
+}
+
+const ARROW_STEP: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+
+/**
+ * Selector de sets de piezas en grilla: un radiogroup con foco itinerante (las flechas, Inicio y Fin cambian
+ * la elección, como en un grupo de radios nativo). Cada opción muestra los dos caballos sobre las casillas del
+ * tablero elegido.
+ */
+function PieceSetPicker({ value, onChange }: { value: PieceSetId; onChange: (v: PieceSetId) => void }) {
+  const labelId = useId();
+  const refs = useRef<(HTMLButtonElement | null)[]>([]);
+  const current = PIECE_SETS.findIndex((p) => p.id === value);
+  const onKeyDown = (e: KeyboardEvent) => {
+    const last = PIECE_SETS.length - 1;
+    const step = ARROW_STEP[e.key];
+    const next =
+      step !== undefined
+        ? (Math.max(current, 0) + step + PIECE_SETS.length) % PIECE_SETS.length
+        : e.key === 'Home'
+          ? 0
+          : e.key === 'End'
+            ? last
+            : undefined;
+    if (next === undefined) return;
+    e.preventDefault();
+    onChange(PIECE_SETS[next].id);
+    refs.current[next]?.focus();
+  };
+  return (
+    <div className="space-y-2">
+      <span id={labelId}>Piezas</span>
+      <div role="radiogroup" aria-labelledby={labelId} onKeyDown={onKeyDown} className="grid grid-cols-4 gap-2">
+        {PIECE_SETS.map((p, i) => {
+          const checked = p.id === value;
+          return (
+            <button
+              key={p.id}
+              ref={(el) => {
+                refs.current[i] = el;
+              }}
+              type="button"
+              role="radio"
+              aria-checked={checked}
+              tabIndex={checked || (current === -1 && i === 0) ? 0 : -1}
+              onClick={() => onChange(p.id)}
+              className={`flex min-h-11 flex-col items-center gap-1.5 rounded-xl bg-surface p-1.5 text-xs leading-tight transition ${
+                checked ? 'font-medium text-ink ring-2 ring-brass' : 'text-muted ring-1 ring-line hover:bg-raised'
+              }`}
+            >
+              <span aria-hidden className="flex w-full overflow-hidden rounded-md">
+                <span className="aspect-square flex-1 bg-(--sq-light)">
+                  <img src={pieceUrl(p.id, 'wN')} alt="" draggable={false} className="size-full" />
+                </span>
+                <span className="aspect-square flex-1 bg-(--sq-dark)">
+                  <img src={pieceUrl(p.id, 'bN')} alt="" draggable={false} className="size-full" />
+                </span>
+              </span>
+              <span>{p.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

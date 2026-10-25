@@ -1,11 +1,17 @@
-/* Generado: tableros y sets de piezas (merida GPLv2+, chessnut Apache-2.0). */
+/*
+ * Tableros y reglas de los sets de piezas (generado una vez; se edita a mano). Las piezas cburnett las pone
+ * chessground; los ids y créditos están en src/ui/pieceSets.ts y src/assets/pieces/CREDITOS.md.
+ * Licencias: papercut y papercut-gris (Nikolay Anzarov; en papercut-gris, negras recoloreadas) y firi
+ * (James Faure) CC BY 4.0; mpchess (Maxime Chupin) GPLv3+; merida (Armando Hernandez Marroquin) GPLv2+;
+ * chessnut (Alexis Luengas) Apache-2.0; pirouetti AGPLv3+; rhosgfx CC0 1.0; fantasy (Maurizio Monge) MIT.
+ */
 .board-blue cg-board {
   background-color: #dee3e6;
   background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'><defs><pattern id='p' width='2' height='2' patternUnits='userSpaceOnUse'><rect x='1' width='1' height='1' fill='%238ca2ad'/><rect y='1' width='1' height='1' fill='%238ca2ad'/></pattern></defs><rect width='8' height='8' fill='%23dee3e6'/><rect width='8' height='8' fill='url(%23p)'/></svg>");
 }
 .board-green cg-board {
-  background-color: #ffffdd;
-  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'><defs><pattern id='p' width='2' height='2' patternUnits='userSpaceOnUse'><rect x='1' width='1' height='1' fill='%2386a666'/><rect y='1' width='1' height='1' fill='%2386a666'/></pattern></defs><rect width='8' height='8' fill='%23ffffdd'/><rect width='8' height='8' fill='url(%23p)'/></svg>");
+  background-color: #ebecd0;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'><defs><pattern id='p' width='2' height='2' patternUnits='userSpaceOnUse'><rect x='1' width='1' height='1' fill='%23739552'/><rect y='1' width='1' height='1' fill='%23739552'/></pattern></defs><rect width='8' height='8' fill='%23ebecd0'/><rect width='8' height='8' fill='url(%23p)'/></svg>");
 }
 .board-slate cg-board {
   background-color: #dfe3dc;
@@ -35,3 +41,87 @@
 .pieces-chessnut .cg-wrap piece.bishop.black { background-image: url("./assets/pieces/chessnut/bB.svg"); }
 .pieces-chessnut .cg-wrap piece.knight.black { background-image: url("./assets/pieces/chessnut/bN.svg"); }
 .pieces-chessnut .cg-wrap piece.pawn.black { background-image: url("./assets/pieces/chessnut/bP.svg"); }
+.pieces-papercut-gris .cg-wrap piece.king.white { background-image: url("./assets/pieces/papercut-gris/wK.svg"); }
+.pieces-papercut-gris .cg-wrap piece.queen.white { background-image: url("./assets/pieces/papercut-gris/wQ.svg"); }
+.pieces-papercut-gris .cg-wrap piece.rook.white { background-image: url("./assets/pieces/papercut-gris/wR.svg"); }
+.pieces-papercut-gris .cg-wrap piece.bishop.white { background-image: url("./assets/pieces/papercut-gris/wB.svg"); }
+.pieces-papercut-gris .cg-wrap piece.knight.white { background-image: url("./assets/pieces/papercut-gris/wN.svg"); }
+.pieces-papercut-gris .cg-wrap piece.pawn.white { background-image: url("./assets/pieces/papercut-gris/wP.svg"); }
+.pieces-papercut-gris .cg-wrap piece.king.black { background-image: url("./assets/pieces/papercut-gris/bK.svg"); }
+.pieces-papercut-gris .cg-wrap piece.queen.black { background-image: url("./assets/pieces/papercut-gris/bQ.svg"); }
+.pieces-papercut-gris .cg-wrap piece.rook.black { background-image: url("./assets/pieces/papercut-gris/bR.svg"); }
+.pieces-papercut-gris .cg-wrap piece.bishop.black { background-image: url("./assets/pieces/papercut-gris/bB.svg"); }
+.pieces-papercut-gris .cg-wrap piece.knight.black { background-image: url("./assets/pieces/papercut-gris/bN.svg"); }
+.pieces-papercut-gris .cg-wrap piece.pawn.black { background-image: url("./assets/pieces/papercut-gris/bP.svg"); }
+.pieces-papercut .cg-wrap piece.king.white { background-image: url("./assets/pieces/papercut/wK.svg"); }
+.pieces-papercut .cg-wrap piece.queen.white { background-image: url("./assets/pieces/papercut/wQ.svg"); }
+.pieces-papercut .cg-wrap piece.rook.white { background-image: url("./assets/pieces/papercut/wR.svg"); }
+.pieces-papercut .cg-wrap piece.bishop.white { background-image: url("./assets/pieces/papercut/wB.svg"); }
+.pieces-papercut .cg-wrap piece.knight.white { background-image: url("./assets/pieces/papercut/wN.svg"); }
+.pieces-papercut .cg-wrap piece.pawn.white { background-image: url("./assets/pieces/papercut/wP.svg"); }
+.pieces-papercut .cg-wrap piece.king.black { background-image: url("./assets/pieces/papercut/bK.svg"); }
+.pieces-papercut .cg-wrap piece.queen.black { background-image: url("./assets/pieces/papercut/bQ.svg"); }
+.pieces-papercut .cg-wrap piece.rook.black { background-image: url("./assets/pieces/papercut/bR.svg"); }
+.pieces-papercut .cg-wrap piece.bishop.black { background-image: url("./assets/pieces/papercut/bB.svg"); }
+.pieces-papercut .cg-wrap piece.knight.black { background-image: url("./assets/pieces/papercut/bN.svg"); }
+.pieces-papercut .cg-wrap piece.pawn.black { background-image: url("./assets/pieces/papercut/bP.svg"); }
+.pieces-mpchess .cg-wrap piece.king.white { background-image: url("./assets/pieces/mpchess/wK.svg"); }
+.pieces-mpchess .cg-wrap piece.queen.white { background-image: url("./assets/pieces/mpchess/wQ.svg"); }
+.pieces-mpchess .cg-wrap piece.rook.white { background-image: url("./assets/pieces/mpchess/wR.svg"); }
+.pieces-mpchess .cg-wrap piece.bishop.white { background-image: url("./assets/pieces/mpchess/wB.svg"); }
+.pieces-mpchess .cg-wrap piece.knight.white { background-image: url("./assets/pieces/mpchess/wN.svg"); }
+.pieces-mpchess .cg-wrap piece.pawn.white { background-image: url("./assets/pieces/mpchess/wP.svg"); }
+.pieces-mpchess .cg-wrap piece.king.black { background-image: url("./assets/pieces/mpchess/bK.svg"); }
+.pieces-mpchess .cg-wrap piece.queen.black { background-image: url("./assets/pieces/mpchess/bQ.svg"); }
+.pieces-mpchess .cg-wrap piece.rook.black { background-image: url("./assets/pieces/mpchess/bR.svg"); }
+.pieces-mpchess .cg-wrap piece.bishop.black { background-image: url("./assets/pieces/mpchess/bB.svg"); }
+.pieces-mpchess .cg-wrap piece.knight.black { background-image: url("./assets/pieces/mpchess/bN.svg"); }
+.pieces-mpchess .cg-wrap piece.pawn.black { background-image: url("./assets/pieces/mpchess/bP.svg"); }
+.pieces-pirouetti .cg-wrap piece.king.white { background-image: url("./assets/pieces/pirouetti/wK.svg"); }
+.pieces-pirouetti .cg-wrap piece.queen.white { background-image: url("./assets/pieces/pirouetti/wQ.svg"); }
+.pieces-pirouetti .cg-wrap piece.rook.white { background-image: url("./assets/pieces/pirouetti/wR.svg"); }
+.pieces-pirouetti .cg-wrap piece.bishop.white { background-image: url("./assets/pieces/pirouetti/wB.svg"); }
+.pieces-pirouetti .cg-wrap piece.knight.white { background-image: url("./assets/pieces/pirouetti/wN.svg"); }
+.pieces-pirouetti .cg-wrap piece.pawn.white { background-image: url("./assets/pieces/pirouetti/wP.svg"); }
+.pieces-pirouetti .cg-wrap piece.king.black { background-image: url("./assets/pieces/pirouetti/bK.svg"); }
+.pieces-pirouetti .cg-wrap piece.queen.black { background-image: url("./assets/pieces/pirouetti/bQ.svg"); }
+.pieces-pirouetti .cg-wrap piece.rook.black { background-image: url("./assets/pieces/pirouetti/bR.svg"); }
+.pieces-pirouetti .cg-wrap piece.bishop.black { background-image: url("./assets/pieces/pirouetti/bB.svg"); }
+.pieces-pirouetti .cg-wrap piece.knight.black { background-image: url("./assets/pieces/pirouetti/bN.svg"); }
+.pieces-pirouetti .cg-wrap piece.pawn.black { background-image: url("./assets/pieces/pirouetti/bP.svg"); }
+.pieces-rhosgfx .cg-wrap piece.king.white { background-image: url("./assets/pieces/rhosgfx/wK.svg"); }
+.pieces-rhosgfx .cg-wrap piece.queen.white { background-image: url("./assets/pieces/rhosgfx/wQ.svg"); }
+.pieces-rhosgfx .cg-wrap piece.rook.white { background-image: url("./assets/pieces/rhosgfx/wR.svg"); }
+.pieces-rhosgfx .cg-wrap piece.bishop.white { background-image: url("./assets/pieces/rhosgfx/wB.svg"); }
+.pieces-rhosgfx .cg-wrap piece.knight.white { background-image: url("./assets/pieces/rhosgfx/wN.svg"); }
+.pieces-rhosgfx .cg-wrap piece.pawn.white { background-image: url("./assets/pieces/rhosgfx/wP.svg"); }
+.pieces-rhosgfx .cg-wrap piece.king.black { background-image: url("./assets/pieces/rhosgfx/bK.svg"); }
+.pieces-rhosgfx .cg-wrap piece.queen.black { background-image: url("./assets/pieces/rhosgfx/bQ.svg"); }
+.pieces-rhosgfx .cg-wrap piece.rook.black { background-image: url("./assets/pieces/rhosgfx/bR.svg"); }
+.pieces-rhosgfx .cg-wrap piece.bishop.black { background-image: url("./assets/pieces/rhosgfx/bB.svg"); }
+.pieces-rhosgfx .cg-wrap piece.knight.black { background-image: url("./assets/pieces/rhosgfx/bN.svg"); }
+.pieces-rhosgfx .cg-wrap piece.pawn.black { background-image: url("./assets/pieces/rhosgfx/bP.svg"); }
+.pieces-firi .cg-wrap piece.king.white { background-image: url("./assets/pieces/firi/wK.svg"); }
+.pieces-firi .cg-wrap piece.queen.white { background-image: url("./assets/pieces/firi/wQ.svg"); }
+.pieces-firi .cg-wrap piece.rook.white { background-image: url("./assets/pieces/firi/wR.svg"); }
+.pieces-firi .cg-wrap piece.bishop.white { background-image: url("./assets/pieces/firi/wB.svg"); }
+.pieces-firi .cg-wrap piece.knight.white { background-image: url("./assets/pieces/firi/wN.svg"); }
+.pieces-firi .cg-wrap piece.pawn.white { background-image: url("./assets/pieces/firi/wP.svg"); }
+.pieces-firi .cg-wrap piece.king.black { background-image: url("./assets/pieces/firi/bK.svg"); }
+.pieces-firi .cg-wrap piece.queen.black { background-image: url("./assets/pieces/firi/bQ.svg"); }
+.pieces-firi .cg-wrap piece.rook.black { background-image: url("./assets/pieces/firi/bR.svg"); }
+.pieces-firi .cg-wrap piece.bishop.black { background-image: url("./assets/pieces/firi/bB.svg"); }
+.pieces-firi .cg-wrap piece.knight.black { background-image: url("./assets/pieces/firi/bN.svg"); }
+.pieces-firi .cg-wrap piece.pawn.black { background-image: url("./assets/pieces/firi/bP.svg"); }
+.pieces-fantasy .cg-wrap piece.king.white { background-image: url("./assets/pieces/fantasy/wK.svg"); }
+.pieces-fantasy .cg-wrap piece.queen.white { background-image: url("./assets/pieces/fantasy/wQ.svg"); }
+.pieces-fantasy .cg-wrap piece.rook.white { background-image: url("./assets/pieces/fantasy/wR.svg"); }
+.pieces-fantasy .cg-wrap piece.bishop.white { background-image: url("./assets/pieces/fantasy/wB.svg"); }
+.pieces-fantasy .cg-wrap piece.knight.white { background-image: url("./assets/pieces/fantasy/wN.svg"); }
+.pieces-fantasy .cg-wrap piece.pawn.white { background-image: url("./assets/pieces/fantasy/wP.svg"); }
+.pieces-fantasy .cg-wrap piece.king.black { background-image: url("./assets/pieces/fantasy/bK.svg"); }
+.pieces-fantasy .cg-wrap piece.queen.black { background-image: url("./assets/pieces/fantasy/bQ.svg"); }
+.pieces-fantasy .cg-wrap piece.rook.black { background-image: url("./assets/pieces/fantasy/bR.svg"); }
+.pieces-fantasy .cg-wrap piece.bishop.black { background-image: url("./assets/pieces/fantasy/bB.svg"); }
+.pieces-fantasy .cg-wrap piece.knight.black { background-image: url("./assets/pieces/fantasy/bN.svg"); }
+.pieces-fantasy .cg-wrap piece.pawn.black { background-image: url("./assets/pieces/fantasy/bP.svg"); }

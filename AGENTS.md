@@ -76,7 +76,8 @@ La cola diaria (`buildDailyQueue`, `src/srs/queue.ts`) pone primero las vencidas
 - `src/db/hooks.ts`: consultas en vivo **separadas** (grafos, tarjetas, eventos, ajustes) para que calificar no reconstruya los grafos.
 - Router por hash (`src/ui/router.ts`) porque GitHub Pages no reescribe rutas.
 - `Board` (`src/ui/Board.tsx`) envuelve chessground de forma imperativa. Para devolver el tablero a `epd` cuando la prop no cambió (después de una jugada incorrecta), incrementá `syncKey`.
-- Estilos: tokens en `src/index.css` (`@theme` de Tailwind 4 sobre variables CSS; el modo oscuro va con `html[data-scheme]`). `src/themes.css` (tableros y sets de piezas) se generó una vez y se edita a mano.
+- Estilos: tokens en `src/index.css` (`@theme` de Tailwind 4 sobre variables CSS; el modo oscuro va con `html[data-scheme]`). La paleta imita a Chess.com en los dos modos; los nombres de tokens son históricos (`brass` es el acento verde, `font-book` ya es la sans) y se conservan para no romper ramas abiertas. El botón principal es `.btn-cta` (verde con relieve) y el secundario `.btn-soft`, en `@layer components` para que las utilidades de Tailwind les ganen. Las marcas del tablero (última jugada en amarillo, puntos grises) pisan las de chessground en el mismo archivo. `src/themes.css` (tableros y reglas de piezas) se edita a mano.
+- Sets de piezas: `src/ui/pieceSets.ts` es la lista única (id, nombre, autor, licencia); los SVG van en `src/assets/pieces/<id>/` con sus reglas `.pieces-<id>` en `themes.css` (`pieceSets.test.ts` exige ambas cosas) y créditos en `src/assets/pieces/CREDITOS.md`. `vite.config.ts` no incrusta esos SVG en el CSS, así que la página solo pide el set elegido (el service worker precachea todos, unos 250 KB, para cambiar de set sin conexión). Por defecto: Papercut gris y tablero Verde (los colores de Chess.com).
 
 ### Integraciones
 
@@ -88,5 +89,5 @@ La cola diaria (`buildDailyQueue`, `src/srs/queue.ts`) pone primero las vencidas
 ## Publicación y licencias
 
 - **Cada push a `main` publica**: `.github/workflows/deploy.yml` corre `npm test`, compila con `BASE_PATH=/<repo>/` y despliega en https://omarqui.github.io/CavallChess/. Las rutas tienen que respetar el base path (`import.meta.env.BASE_URL`, rutas relativas en el manifest).
-- La app es **GPL-3.0** (chessground, chessops y Stockfish). Solo se agregan assets compatibles: piezas cburnett y Mérida (GPLv2+) y Chessnut (Apache-2.0). Muchos sets de Lichess son CC BY-NC-SA: no se agregan.
+- La app es **GPL-3.0** (chessground, chessops y Stockfish). Solo se agregan assets compatibles: GPL, AGPLv3, Apache-2.0, MIT, CC0, CC BY y CC BY-SA 4.0 (la lista de sets con su licencia está en `src/assets/pieces/CREDITOS.md`). Muchos sets de Lichess son CC BY-NC-SA: no se agregan. Las piezas Neo y los demás assets de Chess.com son propietarios: no se copian ni se cargan desde sus servidores.
 - El token de Lichess nunca entra en los respaldos (`exportBackup` lo excluye).

@@ -10,8 +10,8 @@ export function Button({
   ...rest
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
   const styles: Record<Variant, string> = {
-    primary: 'bg-ink text-paper hover:opacity-90 disabled:opacity-40 shadow-sm',
-    secondary: 'bg-surface text-ink ring-1 ring-line hover:bg-raised disabled:opacity-40',
+    primary: 'btn-cta disabled:opacity-40',
+    secondary: 'btn-soft disabled:opacity-40',
     ghost: 'text-ink hover:bg-surface disabled:opacity-40',
     danger: 'text-bad ring-1 ring-bad/40 hover:bg-bad-soft disabled:opacity-40',
   };
@@ -35,7 +35,7 @@ export function Segmented<T extends string>({
   label: string;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex rounded-xl bg-surface p-1 ring-1 ring-line">
+    <div role="radiogroup" aria-label={label} className="inline-flex rounded-xl bg-paper p-1 ring-1 ring-line">
       {options.map((o) => (
         <button
           key={o.value}

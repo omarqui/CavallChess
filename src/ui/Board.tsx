@@ -33,7 +33,8 @@ interface BoardProps {
 export const toShapes = (shapes: Shape[] | undefined): DrawShape[] =>
   (shapes ?? []).map((s) => ({ orig: s.orig as Key, dest: s.dest as Key | undefined, brush: s.brush }));
 
-export function arrow(from: string, to: string, brush = 'green'): DrawShape {
+/** Flecha; la de la jugada a hacer va en naranja, como las flechas de Chess.com, que se ven sobre el tablero verde. */
+export function arrow(from: string, to: string, brush = 'yellow'): DrawShape {
   return { orig: from as Key, dest: to as Key, brush };
 }
 
