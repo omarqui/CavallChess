@@ -29,6 +29,9 @@ export function analyzeGame(pgn: string, graph: RepertoireGraph): GameAnalysis {
   const pos = start.value;
   if (epdOf(pos) !== INITIAL_EPD) return { outcome: { kind: 'noBook' } };
 
+  /** Salirse en la posición inicial es no tener repertorio de ese color: queda fuera, no "terminó tu preparación". */
+  const fin = (ply: number): GameAnalysis => ({ outcome: ply === 0 ? { kind: 'noBook' } : { kind: 'endOfBook', ply } });
+
   const side = graph.side;
   let ply = 0;
   let node = game.moves;
@@ -36,8 +39,7 @@ export function analyzeGame(pgn: string, graph: RepertoireGraph): GameAnalysis {
     const child = node.children[0];
     const epd = epdOf(pos);
     const id = nodeId(side, epd);
-    if (!graph.trainable.has(id)) return { outcome: ply === 0 ? { kind: 'noBook' } : { kind: 'endOfBook', ply } };
-    if (graph.node(id)?.cutHere) return { outcome: { kind: 'endOfBook', ply } };
+    if (!graph.trainable.has(id) || graph.node(id)?.cutHere) return fin(ply);
     const move = parseSan(pos, child.data.san);
     if (!move) break;
     const uci = makeUci(move);
@@ -45,7 +47,7 @@ export function analyzeGame(pgn: string, graph: RepertoireGraph): GameAnalysis {
     const myTurn = pos.turn === side;
     if (myTurn) {
       const mine = graph.mineEdge(id);
-      if (!mine) return { outcome: { kind: 'endOfBook', ply } };
+      if (!mine) return fin(ply);
       if (mine.uci !== uci) {
         return {
           outcome: { kind: 'myDeviation', ply, playedSan: san, expectedSan: mine.san, cardId: mine.id },
@@ -53,7 +55,7 @@ export function analyzeGame(pgn: string, graph: RepertoireGraph): GameAnalysis {
       }
     } else {
       const options = graph.children(id);
-      if (!options.length) return { outcome: { kind: 'endOfBook', ply } };
+      if (!options.length) return fin(ply);
       if (!options.some((e) => e.uci === uci)) {
         const gid = edgeId(side, epd, uci);
         return { outcome: { kind: 'gap', ply, playedSan: san, gapId: gid }, gap: { id: gid, epd, uci, san } };

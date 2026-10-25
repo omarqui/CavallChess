@@ -4,9 +4,9 @@ import { useFicha } from '../library/catalog';
 import type { Ficha, FichaLine, LibMove } from '../library/types';
 import { toShapes, Board } from '../ui/Board';
 import { EnginePanel } from '../ui/EnginePanel';
-import { MoveLine, Segmented, Toggle } from '../ui/kit';
+import { BackLink, ICONS, MoveLine, NavButton, Segmented, Toggle } from '../ui/kit';
 import { figurineText, RichText } from '../ui/RichText';
-import { Chip, BackLink, Icon, ICONS, LibraryLoadFailed } from './Ficha';
+import { Chip, LibraryLoadFailed } from './Ficha';
 
 type Mode = 'correcta' | 'cae';
 
@@ -155,32 +155,9 @@ function Viewer({ ficha, line }: { ficha: Ficha; line: FichaLine }) {
         {analyze && <EnginePanel epd={epd} />}
         <div className="flex gap-3 pt-2">
           <NavButton label="Anterior" disabled={at <= 0} onClick={() => go(at - 1)} icon={ICONS.back} />
-          <NavButton label="Siguiente" disabled={atEnd} onClick={() => go(at + 1)} icon={<path d="M9.5 6l6 6-6 6" />} />
+          <NavButton label="Siguiente" disabled={atEnd} onClick={() => go(at + 1)} icon={ICONS.forward} />
         </div>
       </div>
     </div>
-  );
-}
-
-export function NavButton({
-  label,
-  icon,
-  disabled,
-  onClick,
-}: {
-  label: string;
-  icon: React.ReactNode;
-  disabled: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      aria-label={label}
-      disabled={disabled}
-      onClick={onClick}
-      className="flex h-14 flex-1 items-center justify-center rounded-2xl bg-ink text-paper shadow-sm transition active:scale-[0.97] disabled:bg-surface disabled:text-muted disabled:shadow-none disabled:ring-1 disabled:ring-line"
-    >
-      <Icon d={icon} className="size-7" />
-    </button>
   );
 }

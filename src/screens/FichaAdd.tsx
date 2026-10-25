@@ -7,15 +7,13 @@ import { fichaNames, fichaPgn } from '../library/pgn';
 import { lineStatus } from '../library/status';
 import type { Ficha, FichaLine } from '../library/types';
 import { ImportPreview } from '../ui/ImportPreview';
+import { BackLink, Icon, ICONS } from '../ui/kit';
 import { navigate } from '../ui/router';
 import { showToast } from '../ui/toast';
 import {
   ActionBar,
   ActionButton,
-  BackLink,
   FichaNotFound,
-  ICONS,
-  Icon,
   LibraryLoadFailed,
   LineChips,
   LinePreview,

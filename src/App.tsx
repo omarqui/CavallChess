@@ -181,7 +181,7 @@ export default function App() {
         // Visor a pantalla completa: sin barra de pestañas.
         tab = null;
         screen = <GameViewerScreen key={id} id={decodeSegment(id)} />;
-      } else if (sub === 'agregar') {
+      } else if (sub === 'agregar' && route.path.length === 3) {
         screen = <GameAddScreen key={id} id={decodeSegment(id)} plies={Number(route.params.get('hasta'))} />;
       } else screen = <GamesScreen />;
       break;

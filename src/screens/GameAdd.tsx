@@ -2,13 +2,11 @@ import { useMemo } from 'react';
 import { useGame, useGraphs } from '../db/hooks';
 import { gamePgnUntil } from '../games/gamePgn';
 import { ImportPreview } from '../ui/ImportPreview';
-import { Screen } from '../ui/kit';
+import { BackLink, Screen } from '../ui/kit';
 import { navigate } from '../ui/router';
 import { showToast } from '../ui/toast';
-import { BackLink } from './Ficha';
-import { GameNotFound, gamePath } from './GameViewer';
-
-const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+import { gamePath, savedMessage } from './games/format';
+import { GameNotFound } from './GameViewer';
 
 /** Las primeras `plies` jugadas de una partida, al repertorio del color con el que la jugaste (con vista previa). */
 export function GameAddScreen({ id, plies }: { id: string; plies: number }) {
@@ -37,11 +35,8 @@ export function GameAddScreen({ id, plies }: { id: string; plies: number }) {
       title="Agregar desde la partida"
       // Sin propuesta de nombre: la raíz de la partida no tiene por qué llamarse como el rival.
       proposeNames={() => []}
-      onSaved={({ mine, rival }) => {
-        const total = mine + rival;
-        showToast(
-          total ? `Sumaste ${plural(total, 'jugada', 'jugadas')}, ${mine} para aprender.` : 'Ya tenías todo eso en tu repertorio.',
-        );
+      onSaved={(saved) => {
+        showToast(savedMessage(saved));
         back();
       }}
       onBack={back}

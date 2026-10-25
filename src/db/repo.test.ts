@@ -151,6 +151,26 @@ describe('repositorio', () => {
     expect((await d.gaps.get('g1'))!.count).toBe(2);
   });
 
+  it('el hueco apunta a la partida más reciente aunque llegue antes que una más vieja', async () => {
+    const gap = { id: 'g1', side: 'white' as const, epd: INITIAL_EPD, uci: 'e7e5', san: 'e5' };
+    const game = (id: string, endTime: number) => ({
+      id,
+      endTime,
+      myColor: 'white' as const,
+      opponent: 'x',
+      timeClass: 'blitz',
+      result: 'win',
+      outcome: { kind: 'gap' as const, ply: 1, playedSan: 'e5', gapId: 'g1' },
+      pgn: '',
+    });
+    // La carga hacia atrás inserta partidas más viejas después de las nuevas.
+    await recordGame(game('nueva', 2000), gap, d);
+    await recordGame(game('vieja', 1000), gap, d);
+    expect(await d.gaps.get('g1')).toMatchObject({ count: 2, lastSeen: 2000, lastGameUrl: 'nueva' });
+    await recordGame(game('empate', 2000), gap, d);
+    expect((await d.gaps.get('g1'))!.lastGameUrl).toBe('empate');
+  });
+
   it('respaldo: exportar e importar reconstruye las tarjetas desde el log y no exporta el token', async () => {
     await importPgn('1. e4 e5 2. Nf3 *');
     await setSettings({ lichessToken: 'secreto', newPerDay: 7 }, d);
