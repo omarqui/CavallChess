@@ -31,10 +31,13 @@ function outcomeNote(o: Exclude<GameOutcome, Exit>): string {
   return 'Esta partida no pasó por tu repertorio.';
 }
 
-/** Dónde abre el visor: antes de la jugada de salida, al final de tu preparación o en la posición inicial. */
-function openingPly(o: GameOutcome): number {
-  if (o.kind === 'myDeviation' || o.kind === 'gap' || o.kind === 'endOfBook') return o.ply;
-  return 0;
+/**
+ * Dónde abre el visor: antes de la salida del repertorio o al final de tu preparación; si la partida no tuvo nada de
+ * eso, en la jugada con la que salió de la biblioteca (`libExit`); si tampoco, en la posición inicial.
+ */
+function openingPly(o: GameOutcome, libExit: number | undefined): number | undefined {
+  if (o.kind === 'myDeviation' || o.kind === 'gap' || (o.kind === 'endOfBook' && o.ply > 0)) return o.ply;
+  return libExit === undefined ? undefined : libExit + 1;
 }
 
 export function GameNotFound() {
@@ -122,11 +125,6 @@ function Player({
 }) {
   const o = analysis.outcome;
   const exit = exitOf(o);
-  const [ply, setPly] = useState(() => Math.min(openingPly(o), moves.length));
-  const [analyze, setAnalyze] = useState(false);
-  const [reviewing, setReviewing] = useState(false);
-  const reviewBusy = useRef(false);
-  const strip = useRef<HTMLDivElement>(null);
   const fichas = useLibrary().fichas;
   const eco = useEco();
   const token = useSettings()?.lichessToken;
@@ -135,12 +133,29 @@ function Player({
     () => openingInsight(moves, game.myColor, graph, fichas ?? [], eco),
     [moves, game.myColor, graph, fichas, eco],
   );
+  const startPly = openingPly(o, insight.exit?.ply);
+  const [ply, setPly] = useState(() => Math.min(startPly ?? 0, moves.length));
+  const [analyze, setAnalyze] = useState(false);
+  const [reviewing, setReviewing] = useState(false);
+  const reviewBusy = useRef(false);
+  const strip = useRef<HTMLDivElement>(null);
+  /** Si ya te moviste por la partida: entonces la biblioteca que termina de cargar no te cambia de jugada. */
+  const moved = useRef(false);
 
-  const go = (n: number) => setPly(Math.max(0, Math.min(moves.length, n)));
+  const go = (n: number) => {
+    moved.current = true;
+    setPly(Math.max(0, Math.min(moves.length, n)));
+  };
+
+  // Si la biblioteca cargó después de abrir, recién ahora se sabe dónde salió la partida de la teoría.
+  useEffect(() => {
+    if (startPly !== undefined && !moved.current) setPly(Math.min(startPly, moves.length));
+  }, [startPly, moves.length]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+      moved.current = true;
       if (e.key === 'ArrowLeft') setPly((p) => Math.max(0, p - 1));
       else if (e.key === 'ArrowRight') setPly((p) => Math.min(moves.length, p + 1));
     };
@@ -192,9 +207,9 @@ function Player({
   };
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-xl flex-col">
+    <div className="game-viewer mx-auto h-full w-full">
       {/* El aviso va arriba del tablero: así se ve con su acción principal aunque "Analizar" ocupe lugar abajo. */}
-      <div className="safe-top shrink-0 px-4 pb-2">
+      <div className="gv-info safe-top shrink-0 px-4 pb-2">
         <GameHeader game={game} aside={<Toggle label="Analizar" checked={analyze} onChange={setAnalyze} />} />
         <OpeningSummary insight={insight} moves={moves} judgements={judgements} onGo={go} />
         {o.kind === 'myDeviation' || o.kind === 'gap' ? (
@@ -210,8 +225,9 @@ function Player({
             onReview={(id) => void review(id)}
             onAddReply={() => agregar(o.ply + 2)}
           />
-        ) : (
-          <p className="text-[15px] text-muted">{outcomeNote(o)}</p>
+        ) : o.kind === 'noBook' && insight.theory > 0 ? null : (
+          // Si la partida no tocó tu repertorio pero sí la biblioteca, el resumen ya dice lo importante.
+          <p className="text-sm text-muted">{outcomeNote(o)}</p>
         )}
       </div>
 
@@ -219,7 +235,7 @@ function Player({
         El tablero ocupa lo que queda: mide como mucho el ancho, y si falta alto (aviso con dos filas de botones,
         "Analizar" prendido, pantalla baja) se achica antes que tapar el aviso o la navegación.
       */}
-      <div className="min-h-0 shrink px-4" style={{ height: 'calc(min(100vw, 36rem) - 2rem)' }}>
+      <div className="gv-board min-h-0 shrink px-4">
         <div className="h-full" style={{ containerType: 'size' }}>
           <div className="mx-auto" style={{ width: 'min(100cqw, 100cqh)' }}>
             <Board
@@ -234,7 +250,7 @@ function Player({
       </div>
 
       {/* Una sola línea que se desliza: la lista entera no entra junto al aviso a 390 px. */}
-      <div ref={strip} className="relative shrink-0 overflow-x-auto whitespace-nowrap px-4 pt-1 text-[17px] [scrollbar-width:none]">
+      <div ref={strip} className="gv-strip relative shrink-0 overflow-x-auto whitespace-nowrap px-4 pt-1 text-[17px] [scrollbar-width:none]">
         <MoveLine
           moves={moves.map((m, i) => ({ san: m.san, id: `${i}-${m.uci}` }))}
           active={ply - 1}
@@ -244,7 +260,7 @@ function Player({
       </div>
 
       {/* Lo que sabe CavallChess de la jugada que se ve: ocupa el alto que sobra y se desliza si no entra. */}
-      <div className="min-h-24 flex-1 overflow-y-auto px-4 pb-2">
+      <div className="gv-panel min-h-24 flex-1 overflow-y-auto px-4 pb-2">
         <PlyDetail
           insight={insight}
           moves={moves}
@@ -257,7 +273,7 @@ function Player({
         />
       </div>
 
-      <div className="safe-bottom shrink-0 border-t border-line bg-paper px-4 pt-2">
+      <div className="gv-bottom safe-bottom shrink-0 border-t border-line bg-paper px-4 pt-2">
         {analyze && <EnginePanel epd={epd} />}
         <div className="flex gap-2 pt-2">
           <div className="flex w-16 shrink-0">
