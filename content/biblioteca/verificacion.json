@@ -161,6 +161,18 @@
       "contra-2-e5": 0.11
     }
   },
+  "escocesa": {
+    "hash": "840dbc685fd8498af4b0c3ecc01faec6631dc6b0adf4129023aac5e45e473122",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "clasica-dxc6": -0.01,
+      "clasica-bxc6": 0.3,
+      "mieses": -0.2,
+      "mate-en-f2": -1000,
+      "caballo-en-f4": 6.35
+    }
+  },
   "eslava": {
     "hash": "ee7755e9fbbba039150af16f572b886787ba1114e8d37bb07fe12b2cdb6b9d80",
     "profundidad": 18,
@@ -172,6 +184,20 @@
       "chebanenko": -0.38,
       "cambio": -0.02,
       "sacrificio-en-h2": 1000
+    }
+  },
+  "espanola": {
+    "hash": "f6534e8dd0cea0db82d5a6f32ff194bcf246a33f309b122162d8b9598d59b9fa",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "cerrada": 0.47,
+      "berlinesa": 0.22,
+      "schliemann": 0.58,
+      "bird": 0.63,
+      "arca-de-noe": -4.69,
+      "tarrasch": 6.05,
+      "mortimer": -3.58
     }
   },
   "francesa": {
@@ -212,6 +238,34 @@
       "tres-caballos": -0.12,
       "elefante": 5.3,
       "trampa-cambridge-springs": 6.83
+    }
+  },
+  "gambito-de-rey": {
+    "hash": "110c99b395e3a4083175058b9c06fec44d5c05756ce9d1fda0a77181cd2b88b5",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "moderna": -0.09,
+      "kieseritzky": -0.33,
+      "schallopp": -0.18,
+      "rehusado-bc5": 0.81,
+      "falkbeer": 0.47,
+      "jaque-en-h4": -4.57,
+      "falkbeer-f2": 4.34,
+      "clavada-e4": 5.77
+    }
+  },
+  "gambito-evans": {
+    "hash": "bc9218a89241a427e66ad560f79a0ad16fde58d0f1dd5fbe3f5ec97f34a29f2d",
+    "profundidad": 18,
+    "fecha": "2026-10-25",
+    "evals": {
+      "aceptado-nge7": -0.04,
+      "aceptado-nf6": -0.27,
+      "comprometida": 0.9,
+      "aceptado-be7": 1.23,
+      "rehusado": 0.25,
+      "doble-ataque-d5": 5
     }
   },
   "grand-prix": {
@@ -376,6 +430,20 @@
       "avance-e5": 8,
       "caballo-de-d5": 5.63,
       "trampa-siberiana": -1000
+    }
+  },
+  "vienesa": {
+    "hash": "105edc8539a0a507bb3f5ef56ae5c7ce0696bc2d6342c10361a54150a0047c6c",
+    "profundidad": 18,
+    "fecha": "2026-10-25",
+    "evals": {
+      "gambito-d5": 0.07,
+      "gambito-aceptado": 0.51,
+      "bc4-bc5": 0.01,
+      "bc4-na5": 0,
+      "recaptura-d4": -7.07,
+      "caballo-en-h5": 5.81,
+      "caballo-en-g4": 7.15
     }
   }
 }
