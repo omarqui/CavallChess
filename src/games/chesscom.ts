@@ -30,14 +30,30 @@ export function archivesToFetch(archives: string[], seen: Record<string, string>
   return archives.filter((u) => archiveMonth(u) >= lastSeen);
 }
 
-export async function fetchMonth(
-  url: string,
-  etag?: string,
-): Promise<{ games: ChesscomGame[]; etag?: string; notModified: boolean }> {
-  const res = await fetch(url, { headers: etag ? { 'If-None-Match': etag } : {} });
-  if (res.status === 304) return { games: [], etag, notModified: true };
-  if (res.status === 429) throw new Error('Chess.com pidió esperar un poco.');
+/**
+ * Meses de archivo anteriores al más viejo ya cargado, del más nuevo al más viejo, hasta `count`.
+ * Sin meses cargados devuelve los últimos `count`. `archives` viene ascendente.
+ */
+export function olderArchives(archives: string[], loadedMonths: string[], count: number | 'all'): string[] {
+  const oldest = loadedMonths.map((m) => (m.includes('/') ? archiveMonth(m) : m)).sort()[0];
+  const older = archives.filter((u) => !oldest || archiveMonth(u) < oldest).reverse();
+  return count === 'all' ? older : older.slice(0, count);
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Un mes de partidas. Es un `fetch(url)` a secas: el preflight de CORS de Chess.com solo admite `Origin`,
+ * así que no se puede mandar ningún encabezado (nada de `If-None-Match`). Ante un 429 espera y reintenta una vez.
+ */
+export async function fetchMonth(url: string, opts: { retryDelayMs?: number } = {}): Promise<ChesscomGame[]> {
+  let res = await fetch(url);
+  if (res.status === 429) {
+    await sleep(opts.retryDelayMs ?? 5000);
+    res = await fetch(url);
+    if (res.status === 429) throw new Error('Chess.com pidió esperar un poco.');
+  }
   if (!res.ok) throw new Error(`Chess.com respondió ${res.status} para ${archiveMonth(url)}.`);
   const json = (await res.json()) as { games: ChesscomGame[] };
-  return { games: json.games ?? [], etag: res.headers.get('ETag') ?? undefined, notModified: false };
+  return json.games ?? [];
 }
