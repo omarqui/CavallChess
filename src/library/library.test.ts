@@ -8,7 +8,7 @@ import { edgeAt, emptyRepo, graphOf, importInto, repoFrom } from '../test/helper
 import type { Note } from '../types';
 import { figurineText, parseRich } from '../ui/RichText';
 import { addFicha } from './add';
-import { checkLine, entradaVigente, MIN_PREVIA_FAVOR, VERSION_VERIFICACION } from './thresholds';
+import { checkLine, entradaVigente, MIN_PREVIA_FAVOR, MIN_TRAS_ERROR_FAVOR, MAX_CONTRA_CAIDA_1, VERSION_VERIFICACION } from './thresholds';
 import { groupFichas, parseLibrary, searchFichas } from './catalog';
 import { FICHA_PRUEBA } from './fixture';
 import { parseFicha } from './parse';
@@ -237,17 +237,31 @@ describe('figurineText', () => {
 
 describe('umbrales del motor (checkLine, sin motor)', () => {
   it('favor: la posición previa a −0,6 falla aunque el final sea bueno', () => {
-    const fallas = checkLine('favor', false, { previa: -0.6, final: 2.1 });
+    const fallas = checkLine('favor', false, { previa: -0.6, trasError: 2, final: 2.1 });
     expect(fallas).toHaveLength(1);
     expect(fallas[0]).toContain('posición previa');
     expect(fallas[0]).toContain('-0.60');
     expect(fallas[0]).toContain(`>= ${MIN_PREVIA_FAVOR}`);
   });
-  it('favor: previa −0,4 y final +2,1 pasa', () => {
-    expect(checkLine('favor', false, { previa: -0.4, final: 2.1 })).toEqual([]);
+  it('favor: previa −0,4, tras el error +1,2 y final +2,1 pasa', () => {
+    expect(checkLine('favor', false, { previa: -0.4, trasError: 1.2, final: 2.1 })).toEqual([]);
+  });
+  it('favor: tras el error por debajo de +1,0 falla (el error no era tal)', () => {
+    const fallas = checkLine('favor', false, { previa: 0, trasError: 0.9, final: 3 });
+    expect(fallas).toHaveLength(1);
+    expect(fallas[0]).toContain('tras el error del rival');
+    expect(fallas[0]).toContain('0.90');
+    expect(fallas[0]).toContain(`>= ${MIN_TRAS_ERROR_FAVOR}`);
+  });
+  it('contra: tras la primera jugada de la caída tiene que ser <= −1,0', () => {
+    expect(checkLine('contra', false, { correcta: 0, caida1: -1, caida: -2.5 })).toEqual([]);
+    const fallas = checkLine('contra', false, { correcta: 0, caida1: -0.9, caida: -2.5 });
+    expect(fallas).toHaveLength(1);
+    expect(fallas[0]).toContain('primera jugada de la caída');
+    expect(fallas[0]).toContain(`<= ${MAX_CONTRA_CAIDA_1}`);
   });
   it('favor: final por debajo de +2 falla', () => {
-    expect(checkLine('favor', false, { previa: 0, final: 1.5 })).toHaveLength(1);
+    expect(checkLine('favor', false, { previa: 0, trasError: 2, final: 1.5 })).toHaveLength(1);
   });
   it('variante: -0,7 normal y -1,5 con gambito', () => {
     expect(checkLine('variante', false, { final: -0.7 })).toEqual([]);
@@ -256,9 +270,9 @@ describe('umbrales del motor (checkLine, sin motor)', () => {
     expect(checkLine('variante', true, { final: -1.6 })).toHaveLength(1);
   });
   it('contra: correcta >= −0,5 y caída <= −2', () => {
-    expect(checkLine('contra', false, { correcta: -0.5, caida: -2 })).toEqual([]);
-    expect(checkLine('contra', false, { correcta: -0.6, caida: -2.5 })).toHaveLength(1);
-    expect(checkLine('contra', false, { correcta: 0, caida: -1.9 })).toHaveLength(1);
+    expect(checkLine('contra', false, { correcta: -0.5, caida1: -1.5, caida: -2 })).toEqual([]);
+    expect(checkLine('contra', false, { correcta: -0.6, caida1: -1.5, caida: -2.5 })).toHaveLength(1);
+    expect(checkLine('contra', false, { correcta: 0, caida1: -1.5, caida: -1.9 })).toHaveLength(1);
   });
   it('una entrada es vigente solo con la versión actual y el mismo hash', () => {
     expect(entradaVigente({ version: VERSION_VERIFICACION, hash: 'a' }, 'a')).toBe(true);

@@ -45,13 +45,17 @@ describe.skipIf(!process.env.MOTOR)('verificación con Stockfish', () => {
           e.final = await peones(f, l.moves[l.moves.length - 1].epd);
           // La posición que deja tu última jugada propia, justo antes del error del rival.
           e.previa = await peones(f, l.moves[l.trapPly!].fromEpd);
+          e.trasError = await peones(f, l.moves[l.trapPly!].epd);
           evals[l.id] = e.final;
           evals[`${l.id}:previa`] = e.previa;
+          evals[`${l.id}:tras-error`] = e.trasError;
         } else {
           e.correcta = await peones(f, l.moves[l.trapPly!].epd);
           e.caida = await peones(f, l.fall![l.fall!.length - 1].epd);
           // En la entrada queda la caída: es lo que la trampa promete.
+          e.caida1 = await peones(f, l.fall![0].epd);
           evals[l.id] = e.caida;
+          evals[`${l.id}:caida-1`] = e.caida1;
         }
         for (const falla of checkLine(l.kind, l.gambit, e)) fallas.push(`${f.id} / ${l.id}: ${falla}`);
       };
