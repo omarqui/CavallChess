@@ -3,7 +3,7 @@ import { RepertoireGraph } from '../chess/graph';
 import type { ImportPlan, Resolutions } from '../chess/pgnImport';
 import { edgeId, epdFromNodeId, INITIAL_EPD, nodeId, playUci, turnOf, type Side } from '../chess/position';
 import { studyDay } from '../srs/day';
-import { applyEvent, newCard, replay, type Grade } from '../srs/scheduler';
+import { applyEvent, isDue, newCard, replay, State, type Grade } from '../srs/scheduler';
 import {
   DEFAULT_SETTINGS,
   type CardRow,
@@ -161,6 +161,17 @@ export const rate = (cardId: string, rating: Grade, source: ReviewSource = 'sess
 
 export const forceDue = (cardId: string, source: ReviewSource, d: CavallDB = db) =>
   appendEvent(cardId, { at: new Date(), kind: 'forceDue', source }, d);
+
+/**
+ * Deja la tarjeta vencida para repasarla ahora. Una tarjeta nueva no cambia con `forceDue` (se aprende,
+ * no se repasa) y una ya vencida no necesita el evento: en ambos casos no escribe nada y devuelve `false`.
+ */
+export async function ensureDue(cardId: string, d: CavallDB = db): Promise<boolean> {
+  const row = await d.cards.get(cardId);
+  if (!row || row.card.state === State.New || isDue(row.card, new Date())) return false;
+  await forceDue(cardId, 'game', d);
+  return true;
+}
 
 export async function markDayComplete(now = new Date(), d: CavallDB = db) {
   const day = studyDay(now);
