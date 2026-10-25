@@ -11,6 +11,7 @@ import type { CardRow, MoveEdge, ReviewEvent } from '../types';
 import { arrow, Board, toShapes, type Flash } from '../ui/Board';
 import { playCorrect, playMoveSound, playWrong } from '../ui/feedback';
 import { Banner, Button, MoveLine } from '../ui/kit';
+import { figurineText } from '../ui/RichText';
 import { Tip } from '../ui/Tip';
 import { openingName, useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
@@ -302,7 +303,7 @@ function Prompt({
     return (
       <div className="mt-1">
         <p className="font-book text-xl font-semibold">Posición nueva: jugá {figurine(t.san)}</p>
-        {t.explanation && <p className="mt-2 font-book text-[17px] leading-relaxed">{t.explanation}</p>}
+        {t.explanation && <p className="mt-2 font-book text-[17px] leading-relaxed">{figurineText(t.explanation)}</p>}
         {t.hint && <p className="mt-2 text-[15px] text-muted">Idea: {t.hint}</p>}
       </div>
     );
@@ -312,7 +313,7 @@ function Prompt({
       <div className="mt-1">
         <p className="font-book text-xl font-semibold text-bad">No es esa. Tu jugada es {figurine(t.san)}.</p>
         <p className="mt-1 text-[15px] text-muted">Jugala para seguir.</p>
-        {t.explanation && <p className="mt-3 font-book text-[17px] leading-relaxed">{t.explanation}</p>}
+        {t.explanation && <p className="mt-3 font-book text-[17px] leading-relaxed">{figurineText(t.explanation)}</p>}
         <Button variant="ghost" className="mt-3 -ml-3 text-muted" onClick={onUndo}>
           Fue un error de dedo
         </Button>
@@ -348,7 +349,7 @@ function Note({ feedback }: { feedback: Feedback }) {
       {hasText && (
         <div className={`${trap ? 'mt-3 ' : ''}border-l-2 border-good pl-3`}>
           <p className="text-sm text-muted">{figurine(edge.san)}</p>
-          <p className="font-book text-[17px] leading-relaxed">{edge.explanation ?? edge.hint}</p>
+          <p className="font-book text-[17px] leading-relaxed">{figurineText((edge.explanation ?? edge.hint)!)}</p>
         </div>
       )}
     </div>
