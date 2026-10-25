@@ -61,7 +61,7 @@ Con `4.Bxc6` las blancas te dan los dos alfiles a cambio de doblarte los peones.
 13. a4 O-O-O { [%hint Poné el rey a salvo y, de paso, una torre en la columna abierta.] }
 ```
 
-Final parejo: tu rey está cerca del centro, como conviene en los finales, y tus alfiles tienen espacio. Si las blancas empujan `a5`, cambiar en `b3` y seguir con `...b5` es una buena respuesta; después llevás el caballo a `e7` y buscás actividad en la columna `d`.
+Final parejo: tu rey está cerca del centro, como conviene en los finales, y tus alfiles tienen espacio. Si las blancas empujan `a5`, `14...Kb7` cuida el flanco de dama sin entregar la pareja de alfiles; después llevás el caballo a `e7` y buscás actividad en la columna `d`.
 
 ## Variante: Sistema con d3 {#con-d3} [club]
 Muchos jugadores de club esquivan la teoría con `6.d3`: protegen `e4` y maniobran despacio. Vos usás las mismas ideas de la Cerrada.

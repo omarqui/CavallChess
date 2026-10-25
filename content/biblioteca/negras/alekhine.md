@@ -39,7 +39,7 @@ La respuesta más popular: las blancas desarrollan con `4.Nf3` y mantienen el pe
 4. Nf3 Bg4 { [%hint Clavá a la pieza que defiende e5 y d4.] }
 5. Be2 e6 6. O-O Be7 7. h3 Bh5 8. c4 Nb6 { [%hint Retirá el caballo a una casilla desde donde siga mirando el centro.] }
 9. Nc3 O-O 10. Be3 d5 { [%hint Cerrá el centro y fijá los peones blancos.] }
-11. c5 Bxf3 { [%hint Antes de mover el caballo atacado, cambiá: así el alfil blanco deja de vigilar la casilla que querés.] }
+11. c5 Bxf3 { [%hint Antes de mover el caballo atacado, sacale una pieza al centro blanco: si recapturan con el alfil, la casilla c4 queda libre.] Si recapturan con el peón (12.gxf3), el alfil de e2 sigue cuidando c4: el caballo vuelve con 12...Nc8 y sale por e7 hacia f5; las blancas quedan algo mejor, pero tu posición no tiene debilidades. }
 12. Bxf3 Nc4 { [%hint Ocupá la casilla que dejó libre el avance del peón.] }
 13. b3 Nxe3 14. fxe3 b6 { [%hint Atacá el peón de avanzada del flanco de dama.] }
 ```
@@ -84,7 +84,7 @@ En el Cambio, después de `...e5`, la casilla `d5` atrae a los caballos blancos.
 5. exd6 cxd6 { [%hint Recapturá hacia el centro y quedate con dos peones centrales.] }
 6. Nc3 g6 7. Be3 Bg7 8. Rc1 O-O 9. b3 e5 { [%hint Golpeá el centro con tu peón de rey.] }
 10. Nd5? { El caballo llega a una gran casilla, pero deja de vigilar el centro. }
-Nxd5 11. cxd5 exd4 { [%hint Abrí el centro: tu alfil de g7 está esperando.] }
+Nxd5 11. cxd5 exd4 { [%hint Abrí el centro: tu alfil de g7 está esperando.] Recuperar con el alfil es lo mejor que tienen las blancas; con 12.Bf4 o 12.Bd2 llega 12...Re8+ y quedan todavía peor. }
 12. Bxd4 Qa5+ { [%hint Dale jaque al rey sin enrocar y obligá a las blancas a descuidar a su alfil.] }
 13. Qd2 { Tapar con la dama parece lo más simple. Con 13.Rc3 aguantaban más, aunque igual quedaban en problemas. }
 Qxd2+ { [%hint Cambiá damas: así el alfil de d4 se queda sin defensa.] }

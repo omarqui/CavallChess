@@ -11,15 +11,15 @@
     }
   },
   "contra-escocesa-y-vienesa": {
-    "hash": "2dc0ef29662e7fc9a1da50c544030cd6aac615f5ab0cebcafaa2747d5d6bb627",
+    "hash": "b3b68717edc09a3f4f9b81112d768b7a76433e1650ae947c829f23da82ec0350",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "escocesa-nxc6": 0.01,
       "escocesa-be3": -0.27,
       "gambito-vienes": -0.1,
       "vienesa-bc4": -0.38,
-      "jaque-en-d4": 7.07
+      "jaque-en-d4": 6.43
     }
   },
   "contra-gambito-de-rey": {
@@ -46,15 +46,15 @@
     }
   },
   "petrov": {
-    "hash": "55e9875ebdac2a9cef7c08dd168600fc5cd0169d28b2f3ee6293925dd20645ca",
+    "hash": "1378fadd8cfae18f0184426da129a0d4b19abd4f75d32ed18996f0f71736b8e7",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "clasica": -0.15,
       "nimzowitsch": -0.24,
       "steinitz": -0.25,
-      "damiano": -8.62,
-      "clavada-en-e": -4.68
+      "clavada-en-e": -4.68,
+      "defender-con-la-dama": -5.4
     }
   },
   "pirc": {

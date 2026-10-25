@@ -44,7 +44,7 @@ La respuesta más ambiciosa: las blancas preparan `d4` para echar a tu alfil y q
 11. Qe2 Nxe3 12. Qxe3 Bg4 { [%hint Atacá al caballo que defiende d4.] }
 ```
 
-Las blancas no pueden sostener `d4` para siempre: con `...Bxf3` y `...Bxd4` ganás un peón y quedás mejor. Ojo con un detalle de la jugada 9: si las blancas enrocan en vez de jugar `Be3`, `9...Nxd4` gana un peón, porque `10.Nxd4` permite el jaque `10...Bxd4+`.
+Presionás `d4` con todas tus piezas y quedás algo mejor: si las blancas no lo cuidan, `...Bxf3` y `...Bxd4` se lo comen. Ojo con un detalle de la jugada 9: si las blancas enrocan en vez de jugar `Be3`, `9...Nxd4` gana un peón, porque `10.Nxd4` permite el jaque `10...Bxd4+`.
 
 ## Variante: Toma en e5 {#toma-en-e5} [club]
 Con `5.fxe5` las blancas abren la columna `f`. Si el caballo se come el peón, lo recuperás enseguida.
@@ -80,7 +80,7 @@ Es la razón por la que `2...Bc5` funciona: si las blancas toman en `e5` sin pen
 ```pgn
 1. e4 e5 2. f4 Bc5 { [%hint Desarrollá el alfil a la diagonal que apunta a la casilla del enroque blanco.] }
 3. fxe5?? { Parece ganar un peón gratis. }
-Qh4+ { [%hint Dale jaque al rey por la diagonal que abrió el peón de f.] }
+Qh4+ { [%hint El peón de f se fue: ¿qué diagonal quedó abierta hacia el rey blanco?] }
 4. g3 { Si 4.Ke2, Qxe4 es mate. }
 Qxe4+ { [%hint Atacá al mismo tiempo al rey y a la torre del rincón.] }
 5. Qe2 Qxh1

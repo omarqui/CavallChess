@@ -29,7 +29,7 @@ Después de `1.e4 e5` hay dos aperturas blancas que se salen del camino de siemp
 - Contra `5.Nxc6`, recapturá con el peón de `d`: tus alfiles quedan libres.
 - Contra `5.Nb3` en la Escocesa, retirá el alfil a `b6`: sigue mirando `f2`.
 - En el Gambito Vienés, no tomes en `f4`: el centro es más importante que el peón.
-- Si un alfil blanco se queda sin defensa en `e4` y el rey está en `g1`, buscá un jaque de tu dama en `d4` que lo ataque al mismo tiempo.
+- En el Gambito Vienés, con la columna `f` abierta y las torres frente a frente, contá los jaques en la diagonal de `g1`: la torre blanca de `f1` puede quedar sin defensa.
 
 ## Variante: Escocesa con 5.Nxc6 {#escocesa-nxc6} [básica]
 Las blancas cambian caballos enseguida. Con `...Qf6` amenazás mate en `f2` y las blancas tienen que defenderse antes de seguir.
@@ -43,7 +43,7 @@ Las blancas cambian caballos enseguida. Con `...Qf6` amenazás mate en `f2` y la
 9. Bd3 Qd4 { [%hint Centralizá la dama atacando al caballo del borde.] }
 10. Nc3 O-O-O { [%hint Enrocá hacia el lado donde ya tenés la columna abierta.] }
 11. Qe3 Qxe3+ 12. Bxe3 Nf6 13. h3 Nd7 { Desde d7 el caballo puede ir a c5 o a e5. }
-14. f4 f6 { [%hint Quitale al peón de f la casilla e5.] }
+14. f4 f6 { [%hint Controlá e5 con un peón para frenar el avance de su peón de e.] }
 ```
 
 Final parejo y cómodo: tus piezas están desarrolladas y la columna `d` es tuya. Seguí con `...Rhe8` o `...h5`, sin apurarte.
@@ -69,16 +69,18 @@ Con `3.f4` las blancas juegan una especie de Gambito de Rey con el caballo ya en
 ```pgn
 1. e4 e5 2. Nc3 Nf6 { [%hint Desarrollá atacando el peón central.] }
 3. f4 d5 { [%hint Contragolpeá en el centro en vez de tomar el peón.] }
-4. fxe5 Nxe4 { [%hint Instalá el caballo en el centro tomando un peón.] }
+4. fxe5 Nxe4 { [%hint Ocupá con el caballo la casilla central que sostiene tu peón de d5.] }
 5. Nf3 Be7 6. d4 O-O { [%hint Poné el rey a salvo antes de abrir el juego.] }
 7. Bd3 f5 { [%hint Sostené a tu caballo con un peón.] }
 8. exf6 Bxf6 { Recapturás con el alfil, que ahora presiona d4. }
 9. O-O Nc6 { [%hint Sumá otra pieza contra d4.] }
-10. Nxe4 dxe4 11. Bxe4 Nxd4 { [%hint Recuperá el peón: si te toman el caballo, tu dama da jaque y ataca al alfil.] }
+10. Nxe4 dxe4 11. Bxe4 Nxd4 { [%hint Recuperá el peón: si te toman el caballo, el jaque en d4 y tu torre de f8 ganan material.] }
 12. c3 Nxf3+ 13. Bxf3 Qxd1 14. Rxd1 c6
 ```
 
 Final parejo: el material está igualado y tus alfiles tienen buenas diagonales. Seguí con `...Bf5` y las torres a las columnas abiertas.
+
+Después de `11...Nxd4` hay dos golpes blancos que conviene conocer. Si `12.Ng5`, jugá `12...Bf5` (no `12...Bxg5?`, por `13.Rxf8+ Qxf8 14.Bxg5`). Si `12.Bxh7+?`, tomá: después de `12...Kxh7 13.Ng5+ Bxg5`, las blancas no tienen nada por la pieza.
 
 ## Variante: Vienesa con 3.Bc4 {#vienesa-bc4} [club]
 Con `3.Bc4` las blancas apuntan a `f7` y suelen seguir con `d3` y `f4`. Desarrollás igual que contra el Gambito de Rey con el alfil en `c4`: llegás incluso a la misma posición.
@@ -96,19 +98,21 @@ c6 { [%hint Prepará la expansión del flanco de dama y quitale al rival la casi
 Tu caballo de `d4` es muy fuerte y el rey blanco se quedó en el centro. Plan: `...b5` para echar al alfil de `c4` y `...Nh5` para molestar a la dama de `g3`.
 
 ## Trampa a favor: El jaque en d4 {#jaque-en-d4} [club]
-En el Gambito Vienés, cuando las blancas recuperan el peón con el alfil en `e4`, tu caballo toma en `d4`. Si te lo comen, la dama entra con jaque y gana el alfil.
+En el Gambito Vienés, cuando las blancas recuperan el peón con el alfil en `e4`, tu caballo toma en `d4`. Comérselo parece natural, pero los jaques en la diagonal de `g1` y tu torre de `f8`, frente a la torre blanca de `f1`, ganan material.
 
 ```pgn
 1. e4 e5 2. Nc3 Nf6 { [%hint Desarrollá atacando el peón central.] }
 3. f4 d5 { [%hint Contragolpeá en el centro en vez de tomar el peón.] }
-4. fxe5 Nxe4 { [%hint Instalá el caballo en el centro tomando un peón.] }
+4. fxe5 Nxe4 { [%hint Ocupá con el caballo la casilla central que sostiene tu peón de d5.] }
 5. Nf3 Be7 6. d4 O-O { [%hint Poné el rey a salvo antes de abrir el juego.] }
 7. Bd3 f5 { [%hint Sostené a tu caballo con un peón.] }
 8. exf6 Bxf6 9. O-O Nc6 { [%hint Sumá otra pieza contra d4.] }
-10. Nxe4 dxe4 11. Bxe4 Nxd4 { [%hint Recuperá el peón: si te toman el caballo, tu dama da jaque y ataca al alfil.] }
+10. Nxe4 dxe4 11. Bxe4 Nxd4 { [%hint Recuperá el peón: si te toman el caballo, el jaque en d4 y tu torre de f8 ganan material.] }
 12. Nxd4?? { Parece ganar una pieza. }
-Qxd4+ { [%hint Recapturá con jaque y atacá al mismo tiempo la pieza suelta.] }
-13. Kh1 Qxe4
+Qxd4+ { [%hint Recapturá con jaque: la diagonal de g1 y la columna f trabajan juntas.] Si 13.Kh1, Qxe4 y ganás el alfil. }
+13. Qxd4 { Cambiar las damas parece salvar todo. }
+Bxd4+ { Otra vez jaque, y la torre de f1 quedó sin defensa: si 14.Kh1, Rxf1 es mate. }
+14. Be3 Bxe3+
 ```
 
-Ganaste una pieza. El patrón: un alfil blanco sin defensa en `e4` y el rey en `g1`, sobre la diagonal en la que tu dama puede dar jaque desde `d4`.
+Ganaste una pieza. El patrón: con la columna `f` abierta y las torres enfrentadas, un jaque en la diagonal de `g1` deja a la torre blanca sin defensa en la primera fila.

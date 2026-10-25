@@ -43,7 +43,7 @@ Contra el desarrollo tranquilo de las blancas, presionás `d4` con tus piezas y 
 11. Ne1 c6 { [%hint Atacá la punta de la cadena de peones blanca.] }
 ```
 
-Si las blancas cambian en `c6` y se comen tu peón de `d6`, no te asustes: atacás la torre con `...Nc8` y recuperás el peón en `e4`. Si no cambian, seguí con `...cxd5` y buscá presión en la columna `c`.
+Si las blancas cambian en `c6`, recapturá con el alfil (`12...Bxc6`): si después se comen tu peón de `d6`, no te asustes, porque atacás la torre con `...Nc8` y recuperás el peón en `e4`. Si no cambian, seguí con `...cxd5` y buscá presión en la columna `c`.
 
 ## Variante: Ataque Austríaco {#austriaco} [club]
 El intento más agresivo: con `4.f4` las blancas construyen un centro de tres peones. Vos enrocás primero y lo atacás desde el costado.
