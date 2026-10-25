@@ -18,14 +18,17 @@
     }
   },
   "alekhine": {
+    "version": 2,
     "hash": "2ef09f26971dc94d96963847d921747734fc40b117a2bd7116637a1bebcea77b",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "moderna": -0.41,
       "cambio": -0.29,
       "cuatro-peones": -0.18,
-      "jaque-en-a5": 7.07
+      "jaque-en-a5": 7.07,
+      "jaque-en-a5:previa": -0.44,
+      "jaque-en-a5:tras-error": 2.68
     }
   },
   "anti-sicilianas": {
@@ -157,6 +160,7 @@
     }
   },
   "contra-escocesa-y-vienesa": {
+    "version": 2,
     "hash": "b3b68717edc09a3f4f9b81112d768b7a76433e1650ae947c829f23da82ec0350",
     "profundidad": 18,
     "fecha": "2026-10-25",
@@ -165,19 +169,26 @@
       "escocesa-be3": -0.27,
       "gambito-vienes": -0.1,
       "vienesa-bc4": -0.38,
-      "jaque-en-d4": 6.43
+      "jaque-en-d4": 6.43,
+      "jaque-en-d4:previa": -0.09,
+      "jaque-en-d4:tras-error": 6.94
     }
   },
   "contra-gambito-de-rey": {
+    "version": 2,
     "hash": "c9f9680697134705ab79dca32e51a1c7a2020554899cb64699db4214b1cfda9f",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "cuatro-c3": 0.31,
       "toma-en-e5": -0.25,
       "alfil-c4": -0.38,
       "jaque-en-h4": 4.57,
-      "dama-en-d4": 5.55
+      "jaque-en-h4:previa": -0.03,
+      "jaque-en-h4:tras-error": 5.07,
+      "dama-en-d4": 5.55,
+      "dama-en-d4:previa": 0.03,
+      "dama-en-d4:tras-error": 6.03
     }
   },
   "contra-holandesa": {
@@ -362,14 +373,17 @@
     }
   },
   "espanola-negras": {
+    "version": 2,
     "hash": "60d55aa80b9f0ee8db41d1e441f50a04d9eb4d57ee64e14445abe2f46ac0f406",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "chigorin": -0.34,
       "cambio": -0.04,
       "con-d3": -0.26,
-      "arca-de-noe": 5.45
+      "arca-de-noe": 5.45,
+      "arca-de-noe:previa": 0.53,
+      "arca-de-noe:tras-error": 5.09
     }
   },
   "francesa": {
@@ -596,6 +610,7 @@
     }
   },
   "petrov": {
+    "version": 2,
     "hash": "1378fadd8cfae18f0184426da129a0d4b19abd4f75d32ed18996f0f71736b8e7",
     "profundidad": 18,
     "fecha": "2026-10-25",
@@ -604,18 +619,22 @@
       "nimzowitsch": -0.24,
       "steinitz": -0.25,
       "clavada-en-e": -4.68,
-      "defender-con-la-dama": -5.4
+      "clavada-en-e:caida-1": -4.52,
+      "defender-con-la-dama": -5.4,
+      "defender-con-la-dama:caida-1": -5.49
     }
   },
   "pirc": {
+    "version": 2,
     "hash": "843451e0655825125c66fcd93375798a4fc91a26eb12d1bdda19afd1cd39c09b",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "clasica": -0.47,
       "austriaco": 0.07,
       "ataque-150": 0.47,
-      "caballo-en-a5": -6.45
+      "caballo-en-a5": -6.45,
+      "caballo-en-a5:caida-1": -5.36
     }
   },
   "siciliana-dragon": {

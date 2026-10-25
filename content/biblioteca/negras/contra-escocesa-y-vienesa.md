@@ -9,6 +9,7 @@ eco: C25-C29, C45
 nivel: principiante, club
 jugadas: 1. e4 e5
 resumen: Dos planes claros: contra la Escocesa, el alfil a c5 y la dama a f6; contra la Vienesa, el caballo a f6 y el contragolpe ...d5.
+nombrar-raiz: no
 ---
 ## Para empezar
 Después de `1.e4 e5` hay dos aperturas blancas que se salen del camino de siempre. En las dos, tu respuesta es activa:
