@@ -1,12 +1,13 @@
 {
   "italiana": {
-    "hash": "40125b03d57282847252da747c75cc60a592968ee4a352b2a224f5a89928010a",
+    "hash": "f15948967306b9a8204381460aa6a0fbd6e58fc7b5544b6e06dbe121ea82e24d",
     "profundidad": 18,
     "fecha": "2026-10-24",
     "evals": {
       "giuoco-piano": 0.27,
       "piano-nxe4": 0.21,
       "retirada-b6": 3.03,
+      "piano-bb6": 1.46,
       "pianissimo": 0.09,
       "dos-caballos-be7": 0.19,
       "mate-de-legal": 1000,
@@ -14,16 +15,16 @@
     }
   },
   "sistema-londres": {
-    "hash": "74a4feae2d564577c9e6bbd5a3c3e94422b6332689eabf8ea82dedf9840ea5a8",
+    "hash": "db2828ed202f571544fee2b44ac079a5d7f001e1026585200835b8ba4791fb28",
     "profundidad": 18,
     "fecha": "2026-10-24",
     "evals": {
       "clasica": 0.3,
-      "c5-nc6": 0.14,
+      "c5-nc6": 0.46,
       "c5-qb6": 0.84,
       "peon-envenenado": 6.77,
       "india-de-rey": 0.23,
-      "nf6-c5": 0.31
+      "nf6-c5": 0.3
     }
   }
 }
