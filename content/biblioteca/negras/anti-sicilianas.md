@@ -9,6 +9,7 @@ eco: B21-B23
 nivel: principiante, club
 jugadas: 1. e4 c5
 resumen: Un plan claro contra 2.c3, el Gambito Smith-Morra y el Ataque Grand Prix, para que tu Siciliana no te tome por sorpresa.
+nombrar-raiz: no
 ---
 ## Para empezar
 Muchos rivales que juegan `1.e4` no quieren entrar en la Siciliana abierta (`2.Nf3` y `3.d4`) y eligen otro camino. Los más comunes son tres: `2.c3` (Alapin), que prepara d4 para quedarse con dos peones en el centro; `2.d4 cxd4 3.c3` (Gambito Smith-Morra), que entrega un peón a cambio de desarrollo; y `2.Nc3` con f4 (Ataque Grand Prix), que busca un ataque directo contra tu enroque.

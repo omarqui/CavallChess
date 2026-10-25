@@ -9,6 +9,7 @@ eco: A57-A79
 nivel: club
 jugadas: 1. d4 Nf6
 resumen: Contra 2.c4 entregás un peón con el Gambito Benko para abrir las columnas a y b; si las blancas evitan c4 con 2.Nf3, vas a la Benoni Moderna.
+nombrar-raiz: no
 ---
 ## Para empezar
 Después de `1.d4 Nf6 2.c4 c5 3.d5` las blancas ganan espacio en el centro. Con `3...b5` ofrecés un peón: si lo aceptan, tus torres se quedan con las columnas a y b, y tu alfil de g7 apunta por la diagonal larga al flanco de dama blanco. Es un gambito de **presión a largo plazo**: no buscás un mate rápido, sino que las blancas sufran para defender a2 y b2.

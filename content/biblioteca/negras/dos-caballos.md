@@ -9,6 +9,7 @@ eco: C55-C59
 nivel: principiante, club
 jugadas: 1. e4 e5 2. Nf3 Nc6
 resumen: 1...e5 con juego activo: contra la Italiana sacás el otro caballo y atacás e4; trae también qué hacer contra la Española y la Escocesa.
+nombrar-raiz: no
 ---
 ## Para empezar
 Contestás `1.e4` con `1...e5` y defendés el peón con `2...Nc6`. Si las blancas apuntan a f7 con `3.Bc4`, sacás el otro caballo: `3...Nf6` ataca el peón de e4 y te pone a jugar desde el principio.

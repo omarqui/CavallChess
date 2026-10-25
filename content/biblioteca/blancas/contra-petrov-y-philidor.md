@@ -9,6 +9,7 @@ eco: C41-C43
 nivel: principiante, club
 jugadas: 1. e4 e5 2. Nf3
 resumen: Qué hacer cuando el negro no defiende e5 con 2...Nc6: la Petrov, el Gambito Stafford y la Philidor.
+nombrar-raiz: no
 ---
 ## Para empezar
 Después de `2.Nf3` atacás el peón de e5. Lo más común es que el negro lo defienda con `2...Nc6`, pero a veces elige otro camino:

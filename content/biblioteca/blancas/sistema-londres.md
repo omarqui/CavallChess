@@ -9,6 +9,7 @@ eco: A45-A48, D00-D02
 nivel: principiante, club
 jugadas: 1. d4
 resumen: Un esquema que armás casi igual contra todo: el alfil a f4, los peones en c3, d4 y e3, y un desarrollo tranquilo y sólido.
+nombrar-raiz: no
 ---
 ## Para empezar
 Abrís con `1.d4` y, contra casi cualquier respuesta, sacás el alfil de casillas oscuras a f4 en la segunda jugada. Lo hacés antes de mover el peón de e, porque después de `e3` ese alfil quedaría encerrado detrás de tus propios peones.

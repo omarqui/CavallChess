@@ -9,6 +9,7 @@ eco: B06-B09
 nivel: principiante, club
 jugadas: 1. e4
 resumen: Contra la Pirc y la Moderna levantás un centro de tres peones (e4, d4 y f4) y usás ese espacio para atacar.
+nombrar-raiz: no
 ---
 ## Para empezar
 La Pirc (`1...d6` y `2...Nf6`) y la Moderna (`1...g6`) te regalan el centro a propósito: las negras fianchetan el alfil en g7 y esperan el momento de golpear con `...c5` o `...e5`. El Ataque Austríaco acepta el regalo y va por todo: además de e4 y d4, empujás el peón de f hasta f4.
