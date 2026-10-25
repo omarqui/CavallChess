@@ -304,7 +304,7 @@ function Prompt({
       <div className="mt-1">
         <p className="font-book text-xl font-semibold">Posición nueva: jugá {figurine(t.san)}</p>
         {t.explanation && <p className="mt-2 font-book text-[17px] leading-relaxed">{figurineText(t.explanation)}</p>}
-        {t.hint && <p className="mt-2 text-[15px] text-muted">Idea: {t.hint}</p>}
+        {t.hint && <p className="mt-2 text-[15px] text-muted">Idea: {figurineText(t.hint)}</p>}
       </div>
     );
   }
@@ -325,7 +325,7 @@ function Prompt({
       <p className="font-book text-xl font-semibold">¿Qué jugás acá?</p>
       {t.hint &&
         (step.hintUsed ? (
-          <p className="mt-2 rounded-xl bg-brass-soft px-3 py-2 font-book text-[17px]">{t.hint}</p>
+          <p className="mt-2 rounded-xl bg-brass-soft px-3 py-2 font-book text-[17px]">{figurineText(t.hint)}</p>
         ) : (
           <Button variant="ghost" className="mt-2 -ml-3 text-brass" onClick={onHint}>
             ¿Por qué? Ver la idea
@@ -335,19 +335,32 @@ function Prompt({
   );
 }
 
+/** Aviso de trampa según el tipo y si la respuesta fue un fallo (en ese caso la correcta ya se mostró). */
+function trapNotice({ kind, trap }: Feedback): { text: string; tone: 'good' | 'brass' | 'bad' } | null {
+  if (!trap) return null;
+  const wrong = kind === 'wrong';
+  if (trap.kind === 'favor') {
+    return wrong
+      ? { text: `Trampa: ${trap.name}. El rival cayó, pero no encontraste el castigo a la primera.`, tone: 'brass' }
+      : { text: `Trampa: ${trap.name}. El rival cayó.`, tone: 'good' };
+  }
+  return wrong
+    ? { text: `Caíste en la trampa: ${trap.name}. Ya viste la correcta.`, tone: 'bad' }
+    : { text: `Evitaste la trampa: ${trap.name}.`, tone: 'good' };
+}
+
 function Note({ feedback }: { feedback: Feedback }) {
-  const { edge, trap } = feedback;
+  const { edge } = feedback;
+  const notice = trapNotice(feedback);
   const hasText = !!(edge.explanation || edge.hint);
-  if (!hasText && !trap) return null;
+  if (!hasText && !notice) return null;
   return (
     // La jugada respondida encabeza la nota: el aviso de trampa y el texto son sobre esa jugada, no sobre la pregunta nueva.
     <div className="mt-4 border-l-2 border-good pl-3">
       <p className="text-sm text-muted">{figurine(edge.san)}</p>
-      {trap && (
+      {notice && (
         <div className="mt-1.5">
-          <Banner tone="good">
-            {trap.kind === 'favor' ? `Trampa: ${trap.name}. El rival cayó.` : `Evitaste la trampa: ${trap.name}.`}
-          </Banner>
+          <Banner tone={notice.tone}>{notice.text}</Banner>
         </div>
       )}
       {hasText && (

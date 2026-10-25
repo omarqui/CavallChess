@@ -153,6 +153,50 @@ test('repertorio con negras: el tablero se invierte y la línea se reproduce', a
   await shot(page, '13-negras');
 });
 
+test('entrenamiento: el aviso de una trampa a favor, con un fallo y a la primera', async ({ page }) => {
+  await page.goto('/');
+  await skipIntro(page);
+  await page.goto('/#/import');
+  await page.getByRole('radio', { name: 'Pegar PGN' }).click();
+  await page.getByRole('radio', { name: 'Blancas' }).click();
+  await page
+    .locator('textarea')
+    .fill('1. e4 e5 2. Nf3 d6 3. Bc4 Bg4 4. Nc3 g6 { [%trap favor t/legal Mate de Legal] } 5. Nxe5 *');
+  await page.getByRole('button', { name: 'Leer y revisar' }).click();
+  await expect(page.getByText(/Se agregan 5 jugadas tuyas y 4 del rival/)).toBeVisible();
+  await page.getByRole('button', { name: 'Guardar en el repertorio' }).click();
+  await expect(page.getByRole('heading', { name: 'Repertorio' })).toBeVisible();
+  await page.getByRole('link', { name: 'Hoy' }).click();
+  await page.getByRole('button', { name: 'Estudiar' }).click();
+
+  // Cada jugada nueva se muestra y después se pide; hasta 4.♘c3 sin errores.
+  for (const uci of ['e2e4', 'g1f3', 'f1c4', 'b1c3', 'f3e5']) {
+    await expect(page.getByText(/Posición nueva: jugá/)).toBeVisible({ timeout: 6000 });
+    await move(page, uci);
+    await expect(page.getByText('¿Qué jugás acá?')).toBeVisible();
+    if (uci === 'f3e5') break;
+    await move(page, uci);
+  }
+
+  // Tras 4...g6, el castigo es 5.♘xe5: primero un fallo a propósito.
+  await move(page, 'h2h3');
+  await expect(page.getByText(/No es esa/)).toBeVisible();
+  await move(page, 'f3e5');
+  await expect(
+    page.getByText('Trampa: Mate de Legal. El rival cayó, pero no encontraste el castigo a la primera.'),
+  ).toBeVisible({ timeout: 6000 });
+  await page.waitForTimeout(400);
+  await shot(page, '15-trampa-fallo');
+
+  // La fallada vuelve al final de la sesión: ahora sale a la primera.
+  await expect(page.getByText('¿Qué jugás acá?')).toBeVisible({ timeout: 6000 });
+  await move(page, 'f3e5');
+  await expect(page.getByText('Sesión terminada.')).toBeVisible({ timeout: 6000 });
+  await expect(page.getByText('Trampa: Mate de Legal. El rival cayó.', { exact: true })).toBeVisible();
+  await expect(page.getByText(/no encontraste el castigo/)).toBeHidden();
+  await shot(page, '16-trampa-fin');
+});
+
 test('los sets de piezas cambian las imágenes', async ({ page }) => {
   await page.goto('/');
   await skipIntro(page);
