@@ -101,6 +101,34 @@
       "horquilla-c7": 9.64
     }
   },
+  "italiana": {
+    "hash": "f15948967306b9a8204381460aa6a0fbd6e58fc7b5544b6e06dbe121ea82e24d",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "giuoco-piano": 0.27,
+      "piano-nxe4": 0.21,
+      "retirada-b6": 3.03,
+      "piano-bb6": 1.46,
+      "pianissimo": 0.09,
+      "dos-caballos-be7": 0.19,
+      "mate-de-legal": 1000,
+      "blackburne-shilling": -1000
+    }
+  },
+  "sistema-londres": {
+    "hash": "3319a767c7f05ec3c86dd45377998d4da32fb30d50cfa1eec72ae7afd48696a4",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "clasica": 0.3,
+      "c5-nc6": 0.46,
+      "c5-qb6": 0.84,
+      "peon-envenenado": 6.77,
+      "india-de-rey": 0.23,
+      "nf6-c5": -0.03
+    }
+  },
   "smith-morra": {
     "hash": "5f93fa297969aded6796aa7e7b83682b34c7888f6faf0b77f8066e25394c852a",
     "profundidad": 18,
