@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { displaySquares, figurine } from '../chess/position';
 import { saveNote, noteId } from '../db/repo';
 import { useGraphs, useNotes } from '../db/hooks';
@@ -196,6 +196,7 @@ function NoteField({
 }) {
   const [text, setText] = useState(note?.text ?? '');
   const [saved, setSaved] = useState(false);
+  const [failed, setFailed] = useState(false);
   const area = useRef<HTMLTextAreaElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latest = useRef(text);
@@ -214,10 +215,14 @@ function NoteField({
     if (!final && props.current.emptyDeletesOnBlur && !latest.current.trim()) return;
     dirty.current = false;
     void saveNote(props.current.id, latest.current).then(
-      () => setSaved(true),
+      () => {
+        setFailed(false);
+        setSaved(true);
+      },
       () => {
         dirty.current = true;
         setSaved(false);
+        setFailed(true);
       },
     );
   });
@@ -261,6 +266,7 @@ function NoteField({
     setText(v);
     latest.current = v;
     setSaved(false);
+    setFailed(false);
     dirty.current = true;
     if (timer.current !== null) clearTimeout(timer.current);
     timer.current = setTimeout(() => save(false), SAVE_DELAY);
@@ -286,6 +292,7 @@ function NoteField({
             Guardado
           </>
         )}
+        {failed && <span className="text-bad">No se pudo guardar. Probá de nuevo en un rato.</span>}
       </p>
     </div>
   );
@@ -569,11 +576,15 @@ export function FichaScreen({ id, tab }: { id: string; tab: FichaTab }) {
     main.scrollTop = el.getBoundingClientRect().top - main.getBoundingClientRect().top + main.scrollTop;
   }, [tab]);
 
+  const graph = f ? graphs?.[f.side] : undefined;
+  const statuses = useMemo(
+    () => (f && graph ? new Map(f.lines.map((l) => [l.id, lineStatus(l, f.side, graph)])) : undefined),
+    [f, graph],
+  );
+
   if (f === null) return null;
   if (!f) return <FichaNotFound />;
 
-  const graph = graphs?.[f.side];
-  const statuses = graph && new Map(f.lines.map((l) => [l.id, lineStatus(l, f.side, graph)]));
   const progress = graph && fichaProgress(f, graph);
   const traps = f.lines.filter((l) => l.kind !== 'variante').length;
   const last = f.start.at(-1);
