@@ -11,6 +11,7 @@ import type { CardRow, MoveEdge, ReviewEvent } from '../types';
 import { arrow, Board, toShapes, type Flash } from '../ui/Board';
 import { playCorrect, playMoveSound, playWrong } from '../ui/feedback';
 import { Banner, Button, MoveLine } from '../ui/kit';
+import { figurineText } from '../ui/RichText';
 import { Tip } from '../ui/Tip';
 import { openingName, useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
@@ -302,7 +303,7 @@ function Prompt({
     return (
       <div className="mt-1">
         <p className="font-book text-xl font-semibold">Posición nueva: jugá {figurine(t.san)}</p>
-        {t.explanation && <p className="mt-2 font-book text-[17px] leading-relaxed">{t.explanation}</p>}
+        {t.explanation && <p className="mt-2 font-book text-[17px] leading-relaxed">{figurineText(t.explanation)}</p>}
         {t.hint && <p className="mt-2 text-[15px] text-muted">Idea: {t.hint}</p>}
       </div>
     );
@@ -312,7 +313,7 @@ function Prompt({
       <div className="mt-1">
         <p className="font-book text-xl font-semibold text-bad">No es esa. Tu jugada es {figurine(t.san)}.</p>
         <p className="mt-1 text-[15px] text-muted">Jugala para seguir.</p>
-        {t.explanation && <p className="mt-3 font-book text-[17px] leading-relaxed">{t.explanation}</p>}
+        {t.explanation && <p className="mt-3 font-book text-[17px] leading-relaxed">{figurineText(t.explanation)}</p>}
         <Button variant="ghost" className="mt-3 -ml-3 text-muted" onClick={onUndo}>
           Fue un error de dedo
         </Button>
@@ -339,17 +340,18 @@ function Note({ feedback }: { feedback: Feedback }) {
   const hasText = !!(edge.explanation || edge.hint);
   if (!hasText && !trap) return null;
   return (
-    <div className="mt-4">
+    // La jugada respondida encabeza la nota: el aviso de trampa y el texto son sobre esa jugada, no sobre la pregunta nueva.
+    <div className="mt-4 border-l-2 border-good pl-3">
+      <p className="text-sm text-muted">{figurine(edge.san)}</p>
       {trap && (
-        <Banner tone="good">
-          {trap.kind === 'favor' ? `Trampa: ${trap.name}. El rival cayó.` : `Evitaste la trampa: ${trap.name}.`}
-        </Banner>
+        <div className="mt-1.5">
+          <Banner tone="good">
+            {trap.kind === 'favor' ? `Trampa: ${trap.name}. El rival cayó.` : `Evitaste la trampa: ${trap.name}.`}
+          </Banner>
+        </div>
       )}
       {hasText && (
-        <div className={`${trap ? 'mt-3 ' : ''}border-l-2 border-good pl-3`}>
-          <p className="text-sm text-muted">{figurine(edge.san)}</p>
-          <p className="font-book text-[17px] leading-relaxed">{edge.explanation ?? edge.hint}</p>
-        </div>
+        <p className="mt-1.5 font-book text-[17px] leading-relaxed">{figurineText((edge.explanation ?? edge.hint)!)}</p>
       )}
     </div>
   );

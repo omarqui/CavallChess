@@ -13,7 +13,8 @@ export function SettingsScreen() {
   const [confirmWipe, setConfirmWipe] = useState(false);
   const [restore, setRestore] = useState<Backup | null>(null);
   if (!s) return null;
-  const set = (patch: Partial<Settings>) => void setSettings(patch);
+  const fail = (e: unknown) => setMsg({ text: `No se pudo guardar el ajuste: ${(e as Error).message}`, tone: 'bad' });
+  const set = (patch: Partial<Settings>) => void setSettings(patch).catch(fail);
 
   const backup = async () => {
     const data = await exportBackup();
@@ -217,8 +218,12 @@ export function SettingsScreen() {
         <div className="mt-3 flex flex-col">
           <Button
             onClick={async () => {
-              await setSettings({ introSeenAt: undefined, tipsSeen: [] });
-              navigate('/intro');
+              try {
+                await setSettings({ introSeenAt: undefined, tipsSeen: [] });
+                navigate('/intro');
+              } catch (e) {
+                fail(e);
+              }
             }}
           >
             Ver la introducción

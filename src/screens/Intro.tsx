@@ -13,6 +13,7 @@ import { playCorrect, playWrong } from '../ui/feedback';
 import { Banner, Button, MoveLine } from '../ui/kit';
 import { MiniBoard } from '../ui/MiniBoard';
 import { navigate } from '../ui/router';
+import { showToast } from '../ui/toast';
 import { Icon } from './Ficha';
 import { INTRO_CHOICES, type IntroChoice } from './intro/choices';
 import { needsInstallStep } from './intro/gate';
@@ -25,7 +26,12 @@ const isStandalone = () =>
 
 /** Marca la bienvenida como vista y sale (sin dejarla en el historial). */
 async function leave(to: string) {
-  await setSettings({ introSeenAt: Date.now() });
+  try {
+    await setSettings({ introSeenAt: Date.now() });
+  } catch (e) {
+    // Se sale igual para no dejarte atrapado en la bienvenida; si no se guardó, va a volver a aparecer.
+    showToast(`No se pudo guardar que ya viste la bienvenida: ${(e as Error).message}`);
+  }
   navigate(to, true);
 }
 
@@ -416,13 +422,18 @@ function Choose({ onDone }: { onDone: (added: Ficha[]) => void }) {
   const add = async () => {
     if (!chosen.length) return onDone([]);
     setError(null);
+    const added: string[] = [];
     for (const [i, f] of chosen.entries()) {
       setWorking({ i: i + 1, n: chosen.length });
       try {
         await addFicha(f);
+        added.push(f.name);
       } catch (e) {
         setWorking(null);
-        setError(`No se pudo agregar ${f.name}: ${(e as Error).message}`);
+        setError(
+          `No se pudo agregar ${f.name}: ${(e as Error).message}` +
+            (added.length ? ` Ya quedaron agregadas: ${added.join(', ')}.` : ''),
+        );
         return;
       }
     }

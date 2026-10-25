@@ -127,7 +127,7 @@ describe('validateFicha', () => {
   it('nombrar-raiz con otro valor es un error', () => {
     const r = parseFicha(FICHA_PRUEBA.replace('resumen: Ficha de prueba.', 'resumen: Ficha de prueba.\nnombrar-raiz: quizás'));
     expect(r.ficha).toBeUndefined();
-    expect(r.errors.join('\n')).toMatch(/nombrar-raiz/);
+    expect(r.errors.join('\n')).toMatch(/tiene que ser si o no/);
   });
 
   it('rechaza un grupo que no es del lado', () => {

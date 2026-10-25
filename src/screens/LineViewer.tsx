@@ -67,9 +67,12 @@ function Viewer({ ficha, line }: { ficha: Ficha; line: FichaLine }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [seq.length]);
 
-  // El comentario nuevo arranca desde arriba.
+  // El comentario nuevo arranca desde arriba y la jugada activa se mantiene a la vista.
   useEffect(() => {
-    if (scroller.current) scroller.current.scrollTop = 0;
+    const box = scroller.current;
+    if (!box) return;
+    box.scrollTop = 0;
+    box.querySelector('[aria-current="true"]')?.scrollIntoView({ block: 'nearest' });
   }, [at, mode]);
 
   const trapMove = line.kind === 'favor' && line.trapPly !== undefined && mode === 'correcta' && at - 1 === line.trapPly;
@@ -114,7 +117,7 @@ function Viewer({ ficha, line }: { ficha: Ficha; line: FichaLine }) {
         {canFall && (
           <Segmented label="Qué ver" value={mode} onChange={pickMode} options={MODES} />
         )}
-        {showIntro && <RichText text={line.intro} className="text-[16px] leading-relaxed text-muted" />}
+        {showIntro && <RichText text={figurineText(line.intro ?? '')} className="text-[16px] leading-relaxed text-muted" />}
         {current?.comment && (
           <div
             className={`rounded-xl px-3.5 py-3 text-[16px] leading-relaxed ring-1 ${
@@ -124,7 +127,7 @@ function Viewer({ ficha, line }: { ficha: Ficha; line: FichaLine }) {
             <RichText text={figurineText(current.comment)} />
           </div>
         )}
-        {showOutro && atEnd && <RichText text={line.outro} className="text-[16px] leading-relaxed" />}
+        {showOutro && atEnd && <RichText text={figurineText(line.outro ?? '')} className="text-[16px] leading-relaxed" />}
 
         <div className="text-[17px]">
           <MoveLine
@@ -174,7 +177,7 @@ function NavButton({
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex h-14 flex-1 items-center justify-center rounded-2xl bg-ink text-paper shadow-sm transition active:scale-[0.97] disabled:bg-surface disabled:text-muted disabled:opacity-60 disabled:shadow-none"
+      className="flex h-14 flex-1 items-center justify-center rounded-2xl bg-ink text-paper shadow-sm transition active:scale-[0.97] disabled:bg-surface disabled:text-muted disabled:shadow-none disabled:ring-1 disabled:ring-line"
     >
       <Icon d={icon} className="size-7" />
     </button>

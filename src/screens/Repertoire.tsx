@@ -441,9 +441,10 @@ function Tree({ graph, current, onPick }: { graph: RepertoireGraph; current: str
           {e.trap && (
             <span
               title={e.trap.name}
-              className={`rounded-full px-1.5 text-xs ${e.trap.kind === 'favor' ? 'bg-good-soft text-good' : 'bg-bad-soft text-bad'}`}
+              className={`shrink-0 whitespace-nowrap rounded-full px-1.5 text-xs ${e.trap.kind === 'favor' ? 'bg-good-soft text-good' : 'bg-bad-soft text-bad'}`}
             >
               {e.trap.kind === 'favor' ? 'trampa' : 'ojo'}
+              <span className="sr-only">{`: ${e.trap.name}`}</span>
             </span>
           )}
           {transposes && <span className="text-sm text-muted">↪ transpone</span>}

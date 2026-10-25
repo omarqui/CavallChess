@@ -69,11 +69,13 @@ const plain = (s: string) =>
     .toLowerCase()
     .trim();
 
-/** ¿`code` (p. ej. B12) cae en el código o rango ECO (p. ej. B10-B19)? */
+/** ¿`code` (p. ej. B12) cae en algún código o rango de `eco` (p. ej. "B10-B19" o "A45-A48, D00-D02")? */
 function ecoCovers(eco: string, code: string): boolean {
-  const [a, b = a] = eco.toUpperCase().split(/\s*-\s*/);
   const c = code.toUpperCase();
-  return a <= c && c <= b;
+  return eco.split(',').some((part) => {
+    const [a, b = a] = part.trim().toUpperCase().split(/\s*-\s*/);
+    return !!a && a <= c && c <= b;
+  });
 }
 
 /** Busca sin distinguir mayúsculas ni tildes, por nombre, alias y ECO. */

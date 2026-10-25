@@ -255,7 +255,7 @@ export async function exportBackup(d: CavallDB = db): Promise<Backup> {
 
 /** Restaura un respaldo reemplazando todo. Las tarjetas se recalculan desde el log. */
 export async function importBackup(b: Backup, d: CavallDB = db) {
-  if (b.app !== 'cavallchess' || b.version !== 1 && b.version !== 2) throw new Error('El archivo no es un respaldo de CavallChess.');
+  if (b.app !== 'cavallchess' || ![1, 2].includes(b.version)) throw new Error('El archivo no es un respaldo de CavallChess.');
   const events = b.events.map((e) => ({ ...e, at: new Date(e.at) }));
   const byCard = new Map<string, ReviewEvent[]>();
   for (const e of events) {

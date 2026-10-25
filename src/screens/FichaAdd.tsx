@@ -171,6 +171,8 @@ export function FichaAddScreen({ id }: { id: string }) {
       const ids = f.lines.filter((l) => chosen.has(l.id)).map((l) => l.id);
       setPicked(chosen);
       setReview({ pgn: fichaPgn(f, ids), ids, graph: await loadGraph(f.side) });
+    } catch (e) {
+      showToast(`No se pudo preparar la vista previa: ${e instanceof Error ? e.message : 'error desconocido'}.`);
     } finally {
       setBusy(false);
     }
