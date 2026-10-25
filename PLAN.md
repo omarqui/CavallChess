@@ -93,8 +93,17 @@ interface Gap { id: string; side: Side; epd: string; uci: string; san: string; c
 ### Partidas (Chess.com)
 - Usuario en ajustes. Primera importación: últimos 3 meses. Luego, al abrir la app (si pasaron > 12 h) y con botón: solo lo nuevo, pedidos secuenciales. Cuentan **todos los ritmos**; se excluyen variantes (`rules !== 'chess'`).
 - Se recorre cada partida por el grafo del color con el que jugaste hasta la primera salida:
-  - **Desvío tuyo** (otra jugada donde tenías una propia) → `forceDue` de esa tarjeta.
+  - **Desvío tuyo** (otra jugada donde tenías una propia) → `forceDue` de esa tarjeta, **solo si la partida terminó hace 30 días o menos** (vale también para la sincronización normal: cargar meses viejos no llena el repaso de vencidas).
   - **Novedad del rival** (jugada no cubierta) → lista de **huecos**, ordenada por frecuencia.
+- **Historial completo:** "Cargar partidas anteriores (6 meses)" o "Cargar todo el historial", hacia atrás desde el mes más viejo ya cargado. Muestra el progreso, se puede cancelar y retomar sin repetir ni saltear meses; si Chess.com pide esperar o se corta la red, se detiene con un mensaje y conserva lo leído.
+- **Lista de partidas:** paginada (50 por vez, "Ver más") con contador y filtros por color y por resultado (desvíos, novedades del rival, dentro del repertorio, fuera del repertorio). Cada fila abre el visor.
+- **Visor de partida** dentro de la app: tablero, jugadas y análisis con el motor. Abre en la posición anterior a la salida del repertorio, con aviso y la jugada resaltada:
+  - **Desvío:** "Acá jugaste X; en tu repertorio va Y" y "Repasar ahora" (repasa solo esa tarjeta; si no estaba vencida, la deja vencida).
+  - **Novedad:** "Preparar respuesta" (al editor) y "Agregar la novedad y tu respuesta".
+  - "Agregar al repertorio hasta acá" suma las jugadas hasta la posición mostrada. Las partidas que no arrancan de la posición inicial solo se pueden ver en Chess.com.
+- **Recalcular contra el repertorio actual:** vuelve a cruzar todas las partidas y reconstruye los huecos. Nunca hace vencer tarjetas.
+- **Armar repertorio desde tus partidas:** a partir de muchas partidas de un color, con profundidad (4 a 15 jugadas propias, 8 por defecto), mínimo de partidas para una respuesta del rival (1 a 10, 2 por defecto) y período (3 meses, 12 meses o todo lo cargado). Se elige tu jugada más jugada en cada posición (desempata por resultado) y las respuestas del rival que se repiten. Copia lo que jugaste, errores incluidos: avisa que se revise con el motor.
+- Todo lo que se agrega desde partidas pasa por la vista previa de la importación: no pisa jugadas, nombres ni textos, y no propone nombrar la raíz con el rival.
 
 ### Progreso
 - **Dominio** por raíz nombrada = % de tarjetas entrenables del subárbol con estabilidad FSRS ≥ 21 días (las nuevas cuentan en el total).
@@ -129,9 +138,9 @@ Los tres hitos están implementados, más la biblioteca de aperturas, la bienven
 
 ### Pruebas
 
-- `npm test`: 152 tests unitarios (más 3 que se saltan: motor y APIs reales) en 10 archivos: posiciones y transposiciones, importación PGN, grafo y archivado, FSRS y reproducción del log, cola diaria con alternancia de colores, sesión de entrenamiento y trampas, análisis de partidas, repositorio Dexie y respaldo v2, la biblioteca (parser, validación y contenido de las 46 fichas, estado en el repertorio con alcanzabilidad y marcas de trampa, carga con error y reintento, notas) y la bienvenida (puerta y demo).
+- `npm test`: 172 tests unitarios (más 3 que se saltan: motor y APIs reales) en 12 archivos: posiciones y transposiciones, importación PGN, grafo y archivado, FSRS y reproducción del log, cola diaria con alternancia de colores, sesión de entrenamiento y trampas, análisis de partidas, sincronización con historial y consultas paginadas de partidas (con recálculo), repositorio Dexie y respaldo v2, la biblioteca (parser, validación y contenido de las 46 fichas, estado en el repertorio con alcanzabilidad y marcas de trampa, carga con error y reintento, notas) y la bienvenida (puerta y demo).
 - `MOTOR=1 npm run biblioteca:motor`: verificación de las fichas con Stockfish, fuera de CI.
-- `npm run e2e`: 16 flujos en viewport de iPhone: 5 del entrenamiento y la app (importar → aprender → repasar → fallar → progreso → editor → ajustes → respaldo; repertorio con negras; motor; sets de piezas; aviso de una trampa a favor, con un fallo y a la primera), 4 de la bienvenida y los tips, y 7 de la biblioteca (catálogo y buscador, error de carga y reintento, ficha y agregar, notas, visor). `E2E_PORT` cambia el puerto del `vite preview` (4173 por defecto).
+- `npm run e2e`: 19 flujos en viewport de iPhone, los de partidas con la API de Chess.com simulada (`page.route`): 5 del entrenamiento y la app (importar → aprender → repasar → fallar → progreso → editor → ajustes → respaldo; repertorio con negras; motor; sets de piezas; aviso de una trampa a favor, con un fallo y a la primera), 4 de la bienvenida y los tips, 7 de la biblioteca (catálogo y buscador, error de carga y reintento, ficha y agregar, notas, visor) y 3 de partidas (lista, abrir una partida y agregarla, historial con filtros y armar desde muchas). `E2E_PORT` cambia el puerto del `vite preview` (4173 por defecto).
 - `LIVE=1 npm run test:live`: estudio público real de Lichess y partidas reales de Chess.com.
 
 ## Instalación
