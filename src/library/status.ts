@@ -14,6 +14,10 @@ export type LineStatus =
  * `added` y `conflict` miran todas; `partial` solo cuenta las de la parte propia de la línea
  * (variante: desde la primera jugada tras el tronco compartido, `rootPly - 1`; trampas: desde la jugada de la trampa),
  * para que compartir el tronco con otra línea ya agregada no la vuelva parcial.
+ *
+ * Una jugada propia cuenta como presente solo si sale de una posición alcanzable: `mineEdge` también devuelve las
+ * archivadas. El choque sí mira las archivadas, porque la importación también choca con ellas. En las trampas,
+ * `added` exige además la marca en `moves[trapPly]`; sin ella la línea es parcial (agregarla completa la marca).
  */
 export function lineStatus(line: FichaLine, side: Side, graph: RepertoireGraph): LineStatus {
   const from = line.kind === 'variante' ? (line.rootPly ?? line.moves.length) - 1 : (line.trapPly ?? 0);
@@ -22,13 +26,21 @@ export function lineStatus(line: FichaLine, side: Side, graph: RepertoireGraph):
   for (let ply = 0; ply < line.moves.length; ply++) {
     const m = line.moves[ply];
     if (turnOf(m.fromEpd) !== side) continue;
-    const have = graph.mineEdge(nodeId(side, m.fromEpd));
-    if (!have) missing++;
-    else if (have.uci !== m.uci) return { kind: 'conflict', ply, existingSan: have.san };
+    const id = nodeId(side, m.fromEpd);
+    const have = graph.mineEdge(id);
+    if (have && have.uci !== m.uci) return { kind: 'conflict', ply, existingSan: have.san };
+    if (!have || graph.isArchived(id)) missing++;
     else if (ply >= from) present++;
   }
-  if (!missing) return { kind: 'added' };
+  if (!missing) return line.kind === 'variante' || hasTrapMark(line, side, graph) ? { kind: 'added' } : { kind: 'partial' };
   return present ? { kind: 'partial' } : { kind: 'new' };
+}
+
+/** ¿La jugada de la trampa (`moves[trapPly]`: el error del rival o tu jugada correcta) ya lleva su marca? */
+function hasTrapMark(line: FichaLine, side: Side, graph: RepertoireGraph): boolean {
+  const m = line.trapPly === undefined ? undefined : line.moves[line.trapPly];
+  if (!m) return true;
+  return !!graph.children(nodeId(side, m.fromEpd)).find((e) => e.uci === m.uci)?.trap;
 }
 
 /** Cuántas líneas de la ficha ya están completas en el repertorio. */

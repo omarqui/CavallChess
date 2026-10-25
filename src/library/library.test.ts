@@ -110,6 +110,39 @@ describe('biblioteca: carga, estado y agregado', () => {
     expect(lineStatus(line('avance'), 'black', graph)).toEqual({ kind: 'partial' });
   });
 
+  it('las jugadas propias archivadas no cuentan como agregadas', () => {
+    const repo = emptyRepo('black');
+    importInto(repo, fichaPgn(f, ['avance']), 'black');
+    expect(lineStatus(line('avance'), 'black', graphOf(repo, 'black'))).toEqual({ kind: 'added' });
+    // Borrar 3.e5 deja 3...Bf5 y 4...e6 sin camino desde el inicio: siguen en la base, pero archivadas.
+    repo.edges.delete(edgeAt(graphOf(repo, 'black'), ['e4', 'c6', 'd4', 'd5', 'e5']).id);
+    const g = graphOf(repo, 'black');
+    expect(g.mineEdge(nodeId('black', epdAfter(['e4', 'c6', 'd4', 'd5', 'e5'])))?.san).toBe('Bf5');
+    expect(lineStatus(line('avance'), 'black', g)).toEqual({ kind: 'new' });
+    expect(fichaProgress(f, g).added).toBe(0);
+    // Agregar la ficha de nuevo vuelve a enlazar la línea.
+    importInto(repo, fichaPgn(f, ['avance']), 'black');
+    expect(lineStatus(line('avance'), 'black', graphOf(repo, 'black'))).toEqual({ kind: 'added' });
+  });
+
+  it('una trampa con las jugadas pero sin la marca es parcial, y agregar la ficha la marca', () => {
+    const repo = emptyRepo('black');
+    importInto(repo, '1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Bd3 Bxd3 6. Qxd3', 'black');
+    importInto(repo, '1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nd7 5. Qe2 Ndf6 6. Nxf6+ Nxf6', 'black');
+    let g = graphOf(repo, 'black');
+    expect(lineStatus(line('cambio'), 'black', g)).toEqual({ kind: 'partial' });
+    expect(lineStatus(line('mate'), 'black', g)).toEqual({ kind: 'partial' });
+    // Solo la variante del Avance, que va entera dentro de la trampa a favor.
+    expect(fichaProgress(f, g)).toEqual({ added: 1, total: 4 });
+
+    importInto(repo, fichaPgn(f, ['cambio', 'mate']), 'black');
+    g = graphOf(repo, 'black');
+    expect(edgeAt(g, ['e4', 'c6', 'd4', 'd5', 'e5', 'Bf5', 'Nf3', 'e6', 'Bd3']).trap?.kind).toBe('favor');
+    expect(lineStatus(line('cambio'), 'black', g)).toEqual({ kind: 'added' });
+    expect(lineStatus(line('mate'), 'black', g)).toEqual({ kind: 'added' });
+    expect(fichaProgress(f, g)).toEqual({ added: 3, total: 4 });
+  });
+
   it('agregar una ficha que choca conserva tu jugada', async () => {
     const g0 = await loadGraph('black', d);
     const caro = nodeId('black', epdAfter(['e4', 'c6']));
