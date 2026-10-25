@@ -24,7 +24,29 @@ function Chip({ children, tone = 'plain' }: { children: string; tone?: 'plain' |
   );
 }
 
-function FichaRow({ ficha, progress }: { ficha: Ficha; progress?: { added: number; total: number } }) {
+/** Color de la ficha, con un punto del color de las piezas (fijo: no cambia con el modo oscuro). */
+function SideChip({ side }: { side: Side }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-raised px-2 py-0.5 text-xs font-medium text-ink ring-1 ring-line">
+      <span
+        aria-hidden="true"
+        className={`size-2 rounded-full ring-1 ring-black/40 ${side === 'white' ? 'bg-[#f4f1e8]' : 'bg-[#2a2622]'}`}
+      />
+      {side === 'white' ? 'Con blancas' : 'Con negras'}
+    </span>
+  );
+}
+
+function FichaRow({
+  ficha,
+  progress,
+  showSide = false,
+}: {
+  ficha: Ficha;
+  progress?: { added: number; total: number };
+  /** En la búsqueda se mezclan los colores: cada fila dice el suyo. */
+  showSide?: boolean;
+}) {
   const traps = ficha.lines.filter((l) => l.kind !== 'variante').length;
   const epd = ficha.start.at(-1)?.epd ?? ficha.start[0]?.fromEpd ?? 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -';
   return (
@@ -39,6 +61,7 @@ function FichaRow({ ficha, progress }: { ficha: Ficha; progress?: { added: numbe
         <h3 className="font-book text-[17px] font-semibold leading-snug">{ficha.name}</h3>
         <p className="mt-0.5 truncate text-sm text-muted">{ficha.summary}</p>
         <div className="mt-2 flex flex-wrap gap-1.5">
+          {showSide && <SideChip side={ficha.side} />}
           {ficha.levels.map((l) => (
             <Chip key={l}>{LEVEL[l] ?? l}</Chip>
           ))}
@@ -67,7 +90,9 @@ export function LibraryScreen() {
   const groups = useMemo(() => (fichas ? groupFichas(fichas, side) : []), [fichas, side]);
   const found = useMemo(() => (fichas && searching ? searchFichas(fichas, query) : []), [fichas, query, searching]);
 
-  const row = (f: Ficha) => <FichaRow key={f.id} ficha={f} progress={graphs ? fichaProgress(f, graphs[f.side]) : undefined} />;
+  const row = (f: Ficha) => (
+    <FichaRow key={f.id} ficha={f} showSide={searching} progress={graphs ? fichaProgress(f, graphs[f.side]) : undefined} />
+  );
 
   return (
     <Screen title="Biblioteca">
@@ -113,18 +138,6 @@ export function LibraryScreen() {
       ) : (
         <p className="mt-10 text-center text-muted">Todavía no hay aperturas para este color.</p>
       )}
-    </Screen>
-  );
-}
-
-/** Provisorio hasta las Tareas 13 y 14. */
-export function LibraryComingSoon() {
-  return (
-    <Screen title="Próximamente">
-      <p className="text-muted">Esta parte de la biblioteca todavía está en camino.</p>
-      <a href={href('/biblioteca')} className="mt-4 inline-flex min-h-11 items-center font-medium underline underline-offset-2">
-        Volver a la biblioteca
-      </a>
     </Screen>
   );
 }

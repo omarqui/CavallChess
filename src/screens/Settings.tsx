@@ -162,7 +162,7 @@ export function SettingsScreen() {
           {s.lastBackupAt
             ? `Último respaldo: ${new Date(s.lastBackupAt).toLocaleDateString('es', { dateStyle: 'medium' })}.`
             : 'Todavía no hiciste ningún respaldo.'}{' '}
-          Incluye tu repertorio y todo el historial de repasos.
+          Incluye tu repertorio, todo el historial de repasos y tus apuntes.
         </p>
         <div className="mt-3 flex flex-col gap-3">
           <Button variant="primary" onClick={() => void backup()}>
@@ -186,6 +186,11 @@ export function SettingsScreen() {
                 {new Date(restore.exportedAt).toLocaleDateString('es', { dateStyle: 'medium' })} ({restore.edges.length}{' '}
                 jugadas, {restore.events.length} repasos).
               </p>
+              {restore.version === 1 && (
+                <p className="mt-2">
+                  Es un respaldo de una versión anterior y no trae apuntes: se borran los que tenés en este dispositivo.
+                </p>
+              )}
               <div className="mt-3 flex gap-2">
                 <Button
                   variant="primary"
@@ -238,7 +243,7 @@ export function SettingsScreen() {
           </Button>
         ) : (
           <Banner tone="bad">
-            <p>Se borran el repertorio, el historial y los ajustes de este dispositivo. No se puede deshacer.</p>
+            <p>Se borran el repertorio, el historial, tus apuntes y los ajustes de este dispositivo. No se puede deshacer.</p>
             <div className="mt-3 flex gap-2">
               <Button
                 variant="primary"

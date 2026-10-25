@@ -111,7 +111,8 @@ export function MoveLine({
               <button
                 onClick={() => onPick(i)}
                 aria-current={active === i ? 'true' : undefined}
-                className={`rounded px-0.5 hover:bg-surface ${active === i ? 'bg-brass-soft text-ink' : ''}`}
+                // Toque de 44 px de alto; sigue siendo inline-block, así que la lista fluye en líneas.
+                className={`min-h-11 rounded px-0.5 align-middle hover:bg-surface ${active === i ? 'bg-brass-soft text-ink' : ''}`}
               >
                 {label}
               </button>

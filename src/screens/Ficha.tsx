@@ -621,7 +621,7 @@ export function FichaScreen({ id, tab }: { id: string; tab: FichaTab }) {
           Las trampas se entrenan como cualquier línea: cuando el rival cae, te toca castigarlo. Tus apuntes son tuyos y no se pisan.
         </Tip>
         <h1 className="mt-0.5 font-book text-[30px] font-semibold leading-[1.1] tracking-tight">{f.name}</h1>
-        <p className="mt-1.5 text-sm text-muted">ECO {f.eco.replace(/\s*-\s*/, '–')}</p>
+        <p className="mt-1.5 text-sm text-muted">ECO {f.eco.replace(/\s*-\s*/g, '–')}</p>
 
         <div className="mt-4 flex items-start gap-4">
           <figure className="w-[44%] max-w-60 shrink-0">
