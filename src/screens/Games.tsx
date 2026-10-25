@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { figurine, nodeId, playUci } from '../chess/position';
 import { useGames, useGaps, useGraphs, useSettings } from '../db/hooks';
+import { useLibrary } from '../library/catalog';
+import { findFichasForMove } from '../library/status';
 import { syncChesscom } from '../games/sync';
 import type { GameRow, Gap } from '../types';
 import { arrow, Board } from '../ui/Board';
@@ -100,6 +102,8 @@ function GapItem({ gap, graphs }: { gap: Gap; graphs: NonNullable<ReturnType<typ
   const covered = g.edges.has(`${id}|${gap.uci}`);
   const [from, to] = [gap.uci.slice(0, 2), gap.uci.slice(2, 4)];
   const played = playUci(gap.epd, gap.uci);
+  const lib = useLibrary();
+  const ficha = lib ? findFichasForMove(lib, gap.side, gap.epd, gap.uci)[0] : undefined;
   return (
     <li className="flex gap-3 rounded-xl p-3 ring-1 ring-line">
       <div className="w-24 shrink-0">
@@ -122,6 +126,11 @@ function GapItem({ gap, graphs }: { gap: Gap; graphs: NonNullable<ReturnType<typ
             }
           >
             Preparar respuesta a {figurine(gap.san)}
+          </Button>
+        )}
+        {ficha && (
+          <Button className="mt-2" onClick={() => navigate(`/biblioteca/${ficha.id}`)}>
+            Mirá la ficha: {ficha.name}
           </Button>
         )}
       </div>

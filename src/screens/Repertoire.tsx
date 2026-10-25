@@ -449,6 +449,14 @@ function Tree({ graph, current, onPick }: { graph: RepertoireGraph; current: str
             <span className="text-muted">{moveNumberLabel(ply)}</span>
             {figurine(e.san)}
           </button>
+          {e.trap && (
+            <span
+              title={e.trap.name}
+              className={`rounded-full px-1.5 text-xs ${e.trap.kind === 'favor' ? 'bg-good-soft text-good' : 'bg-bad-soft text-bad'}`}
+            >
+              {e.trap.kind === 'favor' ? 'trampa' : 'ojo'}
+            </span>
+          )}
           {transposes && <span className="text-sm text-muted">↪ transpone</span>}
           {graph.node(e.toId)?.name && !transposes && (
             <span className="ml-1 truncate text-sm text-brass">{graph.node(e.toId)!.name}</span>

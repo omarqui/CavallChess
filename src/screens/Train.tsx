@@ -6,11 +6,11 @@ import { useCards, useEvents, useGraphs, useSettings, type Graphs } from '../db/
 import { buildDailyQueue } from '../srs/queue';
 import { State } from '../srs/scheduler';
 import { weakSpots } from '../srs/stats';
-import { TrainingSession, type Step } from '../trainer/session';
+import { TrainingSession, type Feedback, type Step } from '../trainer/session';
 import type { CardRow, MoveEdge, ReviewEvent } from '../types';
 import { arrow, Board, toShapes, type Flash } from '../ui/Board';
 import { playCorrect, playMoveSound, playWrong } from '../ui/feedback';
-import { Button, MoveLine } from '../ui/kit';
+import { Banner, Button, MoveLine } from '../ui/kit';
 import { openingName, useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
 
@@ -93,7 +93,7 @@ function TrainView({
   const [syncKey, setSyncKey] = useState(0);
   const [flash, setFlash] = useState<Flash>();
   const [shake, setShake] = useState(0);
-  const [note, setNote] = useState<MoveEdge | undefined>();
+  const [note, setNote] = useState<Feedback | undefined>();
   const timers = useRef<number[]>([]);
   const skipRef = useRef<(() => void) | null>(null);
 
@@ -178,7 +178,7 @@ function TrainView({
       setFlash({ square: dest, kind: 'good', key: Date.now() });
       if (good) playCorrect();
       else playMoveSound(false);
-      setNote(next.feedback.edge);
+      setNote(next.feedback);
       present(next, next.replay ? 900 : 0);
       return;
     }
@@ -253,7 +253,11 @@ function TrainView({
 
       <div className="flex-1 overflow-y-auto px-4 pb-6 pt-4 safe-bottom">
         {step.phase === 'done' ? (
-          <Summary step={step} mode={mode} />
+          <>
+            {/* La última tarjeta suele ser la trampa: el aviso no se puede perder al cerrar la sesión. */}
+            {note?.trap && <Note feedback={note} />}
+            <Summary step={step} mode={mode} />
+          </>
         ) : (
           <>
             <div className="min-h-6 text-sm text-muted">
@@ -265,7 +269,7 @@ function TrainView({
               onHint={() => setStep(session.useHint())}
               onUndo={() => setStep(session.undoMisclick())}
             />
-            {note && step.phase !== 'fail' && <Note edge={note} />}
+            {note && step.phase !== 'fail' && <Note feedback={note} />}
             <div className="mt-4 text-[15px]">
               <MoveLine moves={step.line} />
             </div>
@@ -325,12 +329,23 @@ function Prompt({
   );
 }
 
-function Note({ edge }: { edge: MoveEdge }) {
-  if (!edge.explanation && !edge.hint) return null;
+function Note({ feedback }: { feedback: Feedback }) {
+  const { edge, trap } = feedback;
+  const hasText = !!(edge.explanation || edge.hint);
+  if (!hasText && !trap) return null;
   return (
-    <div className="mt-4 border-l-2 border-good pl-3">
-      <p className="text-sm text-muted">{figurine(edge.san)}</p>
-      <p className="font-book text-[17px] leading-relaxed">{edge.explanation ?? edge.hint}</p>
+    <div className="mt-4">
+      {trap && (
+        <Banner tone="good">
+          {trap.kind === 'favor' ? `Trampa: ${trap.name}. El rival cayó.` : `Evitaste la trampa: ${trap.name}.`}
+        </Banner>
+      )}
+      {hasText && (
+        <div className={`${trap ? 'mt-3 ' : ''}border-l-2 border-good pl-3`}>
+          <p className="text-sm text-muted">{figurine(edge.san)}</p>
+          <p className="font-book text-[17px] leading-relaxed">{edge.explanation ?? edge.hint}</p>
+        </div>
+      )}
     </div>
   );
 }
