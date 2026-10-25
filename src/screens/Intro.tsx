@@ -167,7 +167,7 @@ function Primary({ children, ...rest }: React.ButtonHTMLAttributes<HTMLButtonEle
   return (
     <button
       {...rest}
-      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-ink px-4 text-base font-semibold text-paper shadow-[0_8px_24px_-12px_rgb(0_0_0/0.5)] transition hover:opacity-90 active:scale-[0.98] disabled:opacity-60"
+      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl btn-cta px-4 text-base transition active:scale-[0.98] disabled:opacity-60"
     >
       {children}
     </button>

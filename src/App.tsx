@@ -22,6 +22,7 @@ import { RepertoireScreen } from './screens/Repertoire';
 import { SettingsScreen } from './screens/Settings';
 import { TrainScreen } from './screens/Train';
 import type { Side } from './types';
+import { appearanceMigration } from './ui/appearance';
 import { configureFeedback } from './ui/feedback';
 import { href, navigate, useRoute } from './ui/router';
 import { showToast, useToast } from './ui/toast';
@@ -34,7 +35,7 @@ function useAppearance() {
     const apply = () => {
       const dark = s.colorScheme === 'dark' || (s.colorScheme === 'system' && mq.matches);
       document.documentElement.dataset.scheme = dark ? 'dark' : 'light';
-      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#141a17' : '#eef1ec');
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#302e2b' : '#f1f1f1');
     };
     apply();
     mq.addEventListener('change', apply);
@@ -54,6 +55,12 @@ async function introGate() {
   if (shouldMarkIntroSeen(s, totalCards)) await setSettings({ introSeenAt: Date.now() });
   const first = window.location.hash.slice(1).split('?')[0].split('/').filter(Boolean)[0];
   if (shouldShowIntro(s, totalCards) && first !== 'intro') navigate('/intro', true);
+}
+
+/** Al abrir la app, pasa una sola vez al tablero y las piezas del tema estilo Chess.com (ver `appearanceMigration`). */
+async function migrateAppearance() {
+  const patch = appearanceMigration(await getSettings());
+  if (patch) await setSettings(patch);
 }
 
 export default function App() {
@@ -112,6 +119,7 @@ export default function App() {
 
   useEffect(() => {
     void ensureRoots()
+      .then(() => migrateAppearance().catch(() => undefined))
       .then(() => introGate().catch(() => undefined))
       .then(() => setReady(true));
     void navigator.storage?.persist?.().catch(() => undefined);
@@ -303,7 +311,7 @@ function TabBar({ active }: { active: string }) {
   return (
     <nav
       aria-label="Secciones"
-      className="safe-bottom fixed inset-x-0 bottom-0 z-20 border-t border-line bg-paper/90 backdrop-blur-md"
+      className="safe-bottom fixed inset-x-0 bottom-0 z-20 border-t border-line bg-surface/90 backdrop-blur-md"
     >
       <ul className="mx-auto flex max-w-xl justify-around px-2 pt-1.5">
         {TABS.map((t) => (

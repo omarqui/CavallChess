@@ -11,8 +11,8 @@ export function Button({
   ...rest
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
   const styles: Record<Variant, string> = {
-    primary: 'bg-ink text-paper hover:opacity-90 disabled:opacity-40 shadow-sm',
-    secondary: 'bg-surface text-ink ring-1 ring-line hover:bg-raised disabled:opacity-40',
+    primary: 'btn-cta disabled:opacity-40',
+    secondary: 'btn-soft disabled:opacity-40',
     ghost: 'text-ink hover:bg-surface disabled:opacity-40',
     danger: 'text-bad ring-1 ring-bad/40 hover:bg-bad-soft disabled:opacity-40',
   };
@@ -36,7 +36,7 @@ export function Segmented<T extends string>({
   label: string;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex rounded-xl bg-surface p-1 ring-1 ring-line">
+    <div role="radiogroup" aria-label={label} className="inline-flex rounded-xl bg-paper p-1 ring-1 ring-line">
       {options.map((o) => (
         <button
           key={o.value}
@@ -248,7 +248,7 @@ export function NavButton({
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex h-14 flex-1 items-center justify-center rounded-2xl bg-ink text-paper shadow-sm transition active:scale-[0.97] disabled:bg-surface disabled:text-muted disabled:shadow-none disabled:ring-1 disabled:ring-line"
+      className="flex h-14 flex-1 items-center justify-center rounded-2xl btn-soft transition active:scale-[0.97] disabled:bg-surface disabled:text-muted disabled:shadow-none disabled:ring-1 disabled:ring-line"
     >
       <Icon d={icon} className="size-7" />
     </button>
@@ -279,7 +279,7 @@ export function ActionButton({
       className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-base font-semibold transition active:scale-[0.98] ${
         done
           ? 'bg-good-soft text-ink ring-1 ring-good/30'
-          : 'bg-ink text-paper shadow-[0_8px_24px_-12px_rgb(0_0_0/0.5)] hover:opacity-90 disabled:opacity-40'
+          : 'btn-cta disabled:opacity-40'
       }`}
     >
       {icon && <Icon d={icon} className="size-5" />}

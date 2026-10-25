@@ -1,5 +1,6 @@
 import type { Card, Rating } from 'ts-fsrs';
 import type { Side } from './chess/position';
+import type { PieceSetId } from './ui/pieceSets';
 
 export type { Side };
 
@@ -103,10 +104,11 @@ export interface StudyDay {
 export interface Settings {
   newPerDay: number;
   boardTheme: 'brown' | 'blue' | 'green' | 'slate';
-  pieceSet: 'cburnett' | 'merida' | 'chessnut';
+  pieceSet: PieceSetId; // registrados en src/ui/pieceSets.ts
   colorScheme: 'system' | 'light' | 'dark';
   sound: boolean;
   haptics: boolean;
+  appearanceVersion?: number; // migraciones de apariencia ya hechas (src/ui/appearance.ts)
   lichessToken?: string;
   chesscomUser?: string;
   lastBackupAt?: number;
@@ -118,8 +120,8 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = {
   newPerDay: 10,
-  boardTheme: 'brown',
-  pieceSet: 'cburnett',
+  boardTheme: 'green',
+  pieceSet: 'papercut-gris',
   colorScheme: 'system',
   sound: true,
   haptics: true,

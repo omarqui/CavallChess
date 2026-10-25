@@ -118,7 +118,7 @@ export function RepertoireScreen({ side, nodeParam, gapSan }: { side: Side; node
         onMove={(u) => void onMove(u)}
         syncKey={syncKey}
         lastMove={lastEdge ? displaySquares(epdFromNodeId(lastEdge.fromId), lastEdge.uci) : undefined}
-        shapes={mine ? [arrow(...displaySquares(epd, mine.uci), 'green')] : []}
+        shapes={mine ? [arrow(...displaySquares(epd, mine.uci))] : []}
       />
 
       <div className="mt-3 flex items-start gap-2">

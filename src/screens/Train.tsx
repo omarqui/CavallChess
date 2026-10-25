@@ -224,8 +224,8 @@ function TrainView({
   const shapes = useMemo<DrawShape[]>(() => {
     if (!target || animating) return [];
     const [from, to] = displaySquares(epdFromNodeId(target.fromId), target.uci);
-    if (step.phase === 'show') return [arrow(from, to, 'green'), ...toShapes(target.shapes)];
-    if (step.phase === 'fail') return [arrow(from, to, 'green')];
+    if (step.phase === 'show') return [arrow(from, to), ...toShapes(target.shapes)];
+    if (step.phase === 'fail') return [arrow(from, to)];
     return [];
   }, [target?.id, step.phase, animating]);
   const pct = step.progress.total ? Math.round((step.progress.done / step.progress.total) * 100) : 100;

@@ -53,5 +53,5 @@ GPL-3.0-or-later (ver [LICENSE](LICENSE)).
 - [chessground](https://github.com/lichess-org/chessground) y [chessops](https://github.com/niklasf/chessops) (GPL-3.0), de Lichess.
 - [Stockfish](https://stockfishchess.org/) vía [stockfish.js](https://github.com/nmrugg/stockfish.js) (GPL-3.0).
 - [ts-fsrs](https://github.com/open-spaced-repetition/ts-fsrs) (MIT), [Dexie](https://dexie.org/) (Apache-2.0).
-- Piezas: cburnett (GPLv2+), Mérida (GPLv2+), Chessnut (Apache-2.0). Nombres de aperturas: [lichess-org/chess-openings](https://github.com/lichess-org/chess-openings) (CC0).
+- Piezas: Papercut y Papercut gris (con las negras recoloreadas) de Nikolay Anzarov y Firi de James Faure (CC BY 4.0), MPChess (GPLv3+), cburnett y Mérida (GPLv2+), Chessnut (Apache-2.0), Pirouetti (AGPLv3+), RhosGFX (CC0) y Fantasy (MIT); autores, origen y licencias en [CREDITOS.md](src/assets/pieces/CREDITOS.md). Nombres de aperturas: [lichess-org/chess-openings](https://github.com/lichess-org/chess-openings) (CC0).
 - Tipografía Spectral (OFL).

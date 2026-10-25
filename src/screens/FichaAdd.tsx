@@ -45,7 +45,7 @@ function LineRow({
         />
         <span
           aria-hidden="true"
-          className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-md bg-raised text-paper ring-1 ring-line transition peer-checked:bg-good peer-checked:ring-good peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brass [&>svg]:opacity-0 peer-checked:[&>svg]:opacity-100"
+          className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-md bg-raised text-white ring-1 ring-line transition peer-checked:bg-good peer-checked:ring-good peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brass [&>svg]:opacity-0 peer-checked:[&>svg]:opacity-100"
         >
           <Icon d={ICONS.check} className="size-4 transition-opacity [stroke-width:2.6]" />
         </span>
