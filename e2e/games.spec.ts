@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { mockChesscom, type MockGame } from './chesscomMock';
-import { shot, skipIntro } from './helpers';
+import { move, shot, skipIntro } from './helpers';
 
 /** Configura el usuario de Chess.com desde Ajustes (se guarda al salir del campo) y espera a verlo en Partidas. */
 async function setChesscomUser(page: Page, user: string) {
@@ -114,8 +114,30 @@ test('partidas: abrir una partida, ver la salida del repertorio y agregarla', as
   await page.getByRole('button', { name: 'Ir a esa jugada' }).click();
   await expect(page.locator('[aria-current="true"]')).toHaveText('e5');
   await page.getByRole('button', { name: 'Repasar ahora' }).click();
-  await expect(page).toHaveURL(/#\/train\?card=/);
+  await expect(page).toHaveURL(/#\/train\?card=.*&volver=/);
+  const trainUrl = page.url();
   await expect(page.getByText(/Posición nueva: jugá ♞.f3/)).toBeVisible();
+
+  // Al terminar el repaso suelto, el botón vuelve a la partida (no al inicio).
+  // La nueva se muestra, se juega y después se pregunta.
+  await move(page, 'g1f3');
+  await expect(page.getByText('¿Qué jugás acá?')).toBeVisible();
+  await move(page, 'g1f3');
+  const back = page.getByRole('button', { name: 'Volver a la partida' });
+  await expect(back).toBeVisible();
+  await page.waitForTimeout(300);
+  await shot(page, 'games-review-end-oscuro');
+  await back.click();
+  await expect(page.getByRole('heading', { name: 'vs rival2' })).toBeVisible();
+
+  // ✕ también vuelve a la partida; un `volver` que no es una partida se ignora y ✕ va al inicio.
+  await page.goto(trainUrl);
+  await page.getByRole('button', { name: 'Terminar sesión' }).click();
+  await expect(page.getByRole('heading', { name: 'vs rival2' })).toBeVisible();
+  await page.goto(trainUrl.replace(/volver=[^&]*/, `volver=${encodeURIComponent('/settings')}`));
+  await page.getByRole('button', { name: 'Terminar sesión' }).click();
+  await expect(page).toHaveURL(/#\/$/);
+  await page.emulateMedia({ colorScheme: 'light' });
 
   // Un enlace viejo.
   await page.goto(`/#/games/${encodeURIComponent('https://www.chess.com/game/live/999')}`);
@@ -124,7 +146,6 @@ test('partidas: abrir una partida, ver la salida del repertorio y agregarla', as
 
   expect(errors).toEqual([]);
 });
-
 
 /** Clave 'YYYY/MM' del archivo de hace `ago` meses (relativa a hoy, así el período "12 meses" las incluye). */
 function monthKey(ago: number) {
@@ -307,6 +328,47 @@ test('partidas: "Ver más" pagina de a 50', async ({ page }) => {
   await expect(list).toHaveCount(60);
   await expect(page.getByRole('button', { name: 'Ver más' })).toHaveCount(0);
   await expect(page.getByText('vs prival60')).toBeVisible();
+});
+
+test('partidas: al volver de una partida, la lista conserva el filtro, las filas y el scroll', async ({ page }) => {
+  // 130 partidas sin repertorio (todas fuera de él), mitad con negras: Negras muestra 65, de a 50.
+  const games = gamesOf('q', 130, 2).map((g, i) => (i % 2 ? { ...g, white: g.black, black: 'tester' } : g));
+  await mockChesscom(page, { user: 'tester', months: { [monthKey(0)]: games } });
+  await page.goto('/');
+  await skipIntro(page);
+  await setChesscomUser(page, 'tester');
+  await page.getByRole('button', { name: 'Actualizar partidas' }).click();
+  await expect(page.getByText('130 partidas nuevas')).toBeVisible();
+
+  const list = page
+    .locator('section')
+    .filter({ has: page.getByRole('heading', { name: 'Tus partidas' }) })
+    .getByRole('listitem');
+  // El contador no se anuncia con cada partida que guarda la actualización; sí al cambiar el filtro.
+  const live = page.locator('section [aria-live="polite"]');
+  await expect(live).toHaveText('');
+  await page.getByRole('radio', { name: 'Negras' }).click();
+  await page.getByLabel('Resultado').selectOption('fuera');
+  await expect(page.getByText('65 partidas', { exact: true })).toBeVisible();
+  await expect(live).toHaveText('Con este filtro: 65 partidas.');
+  await expect(list).toHaveCount(50);
+  await page.getByRole('button', { name: 'Ver más' }).click();
+  await expect(list).toHaveCount(65);
+
+  const row = page.getByRole('link', { name: /vs qrival120 / });
+  await row.scrollIntoViewIfNeeded();
+  const before = await row.boundingBox();
+  await row.click();
+  await expect(page.getByRole('heading', { name: 'vs qrival120' })).toBeVisible();
+  await page.getByRole('link', { name: 'Partidas' }).click();
+
+  await expect(page.getByRole('radio', { name: 'Negras' })).toBeChecked();
+  await expect(page.getByLabel('Resultado')).toHaveValue('fuera');
+  await expect(list).toHaveCount(65);
+  await expect(row).toBeInViewport();
+  const after = await row.boundingBox();
+  expect(Math.abs(after!.y - before!.y)).toBeLessThan(4);
+  await shot(page, 'games-list-volver');
 });
 
 test('partidas: cancelar la carga del historial y retomarla', async ({ page }) => {

@@ -22,6 +22,8 @@ interface Props {
   root?: string;
   /** Una sola tarjeta (id de la jugada); manda sobre mode/side/root. */
   card?: string;
+  /** A dónde vuelven ✕ y el botón final (ya validado con `returnPath`); sin esto, al inicio. */
+  volver?: string;
 }
 
 const REPLAY_MS = 150;
@@ -82,7 +84,7 @@ export function TrainScreen(props: Props) {
   }, [ready]);
 
   if (!ready || !step || !session.current) return <div className="grid h-full place-items-center text-muted">Preparando…</div>;
-  return <TrainView session={session.current} initial={step} graphs={graphs} mode={props.mode} />;
+  return <TrainView session={session.current} initial={step} graphs={graphs} mode={props.mode} volver={props.volver} />;
 }
 
 function TrainView({
@@ -90,11 +92,13 @@ function TrainView({
   initial,
   graphs,
   mode,
+  volver,
 }: {
   session: TrainingSession;
   initial: Step;
   graphs: Graphs;
   mode: Props['mode'];
+  volver?: string;
 }) {
   const eco = useEco();
   const [step, setStep] = useState(initial);
@@ -232,7 +236,7 @@ function TrainView({
       <header className="flex items-center gap-3 px-4 pb-3 pt-2">
         <button
           aria-label="Terminar sesión"
-          onClick={() => navigate('/')}
+          onClick={() => navigate(volver ?? '/')}
           className="grid size-10 place-items-center rounded-full text-muted hover:bg-surface"
         >
           <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2">
@@ -268,7 +272,7 @@ function TrainView({
           <>
             {/* La última tarjeta suele ser la trampa: el aviso no se puede perder al cerrar la sesión. */}
             {note?.trap && <Note feedback={note} />}
-            <Summary step={step} mode={mode} />
+            <Summary step={step} mode={mode} volver={volver} />
           </>
         ) : (
           <>
@@ -380,7 +384,7 @@ function Note({ feedback }: { feedback: Feedback }) {
   );
 }
 
-function Summary({ step, mode }: { step: Step; mode: Props['mode'] }) {
+function Summary({ step, mode, volver }: { step: Step; mode: Props['mode']; volver?: string }) {
   const total = step.tally.correct + step.tally.wrong;
   return (
     <div className="mt-2">
@@ -394,8 +398,8 @@ function Summary({ step, mode }: { step: Step; mode: Props['mode'] }) {
           {mode === 'review' && step.tally.wrong > 0 && ' Las que fallaste vuelven pronto.'}
         </p>
       )}
-      <Button variant="primary" className="mt-6 w-full" onClick={() => navigate('/')}>
-        Volver al inicio
+      <Button variant="primary" className="mt-6 w-full" onClick={() => navigate(volver ?? '/')}>
+        {volver ? 'Volver a la partida' : 'Volver al inicio'}
       </Button>
     </div>
   );

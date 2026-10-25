@@ -5,6 +5,7 @@ import { countGames, gamesPage, outcomeKind, type GameFilter, type OutcomeFilter
 import type { GameRow } from '../../types';
 import { Button, Section, Segmented } from '../../ui/kit';
 import { href } from '../../ui/router';
+import { useSessionState } from '../../ui/sessionState';
 import { gamePath, moveNumber, OUTCOME_LABEL, plural, resultLabel, timeClassLabel } from './format';
 
 const PAGE = 50;
@@ -17,26 +18,39 @@ const OUTCOME_FILTERS: { value: OutcomeFilter; label: string }[] = [
   { value: 'fuera', label: 'Fuera del repertorio' },
 ];
 
-/** La lista paginada: consulta en vivo solo las páginas que se ven, así una carga del historial la va llenando. */
+/**
+ * La lista paginada: consulta en vivo solo las páginas que se ven, así una carga del historial la va llenando.
+ * El filtro y cuántas filas se ven quedan en el módulo: al volver de una partida la lista es la misma y el scroll
+ * cae en la fila de antes.
+ */
 export function GameList({ hasGames }: { hasGames: boolean }) {
-  const [filter, setFilter] = useState<GameFilter>({ color: 'todas', outcome: 'todas' });
-  const [limit, setLimit] = useState(PAGE);
+  const [filter, setFilter] = useSessionState<GameFilter>('partidas.filtro', { color: 'todas', outcome: 'todas' });
+  const [limit, setLimit] = useSessionState('partidas.filas', PAGE);
+  // Lo que se anuncia: solo al cambiar el filtro, no con cada partida que guarda una carga en curso.
+  const [announce, setAnnounce] = useState('');
   const rows = useLiveQuery(() => gamesPage(filter, 0, limit), [filter, limit]);
   const count = useLiveQuery(() => countGames(filter), [filter]);
   const selectId = useId();
   const change = (patch: Partial<GameFilter>) => {
-    setFilter((f) => ({ ...f, ...patch }));
+    const next = { ...filter, ...patch };
+    setFilter(next);
     setLimit(PAGE);
+    void countGames(next).then((n) => setAnnounce(`Con este filtro: ${plural(n, 'partida', 'partidas')}.`));
   };
 
   return (
     <Section
       title="Tus partidas"
       aside={
-        // Montado siempre: el contador es una región viva y solo cambia su texto.
-        <span className="text-sm text-muted" aria-live="polite">
-          {hasGames && count !== undefined ? plural(count, 'partida', 'partidas') : ''}
-        </span>
+        <>
+          <span className="text-sm text-muted">
+            {hasGames && count !== undefined ? plural(count, 'partida', 'partidas') : ''}
+          </span>
+          {/* Montada siempre: la región viva solo cambia su texto. */}
+          <span className="sr-only" aria-live="polite">
+            {announce}
+          </span>
+        </>
       }
     >
       {!hasGames ? (

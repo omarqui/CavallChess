@@ -1,3 +1,4 @@
+import { nodeId, type Side } from '../../chess/position';
 import type { GameOutcome } from '../../types';
 
 /** "1 partida", "1.234 partidas". */
@@ -5,6 +6,20 @@ export const plural = (n: number, one: string, many: string) => `${n.toLocaleStr
 
 /** Ruta del visor de una partida (el id es su URL de Chess.com, así que va codificado). */
 export const gamePath = (id: string) => `/games/${encodeURIComponent(id)}`;
+
+/** El repertorio abierto en la posición de un hueco, listo para prepararle una respuesta a `san`. */
+export const gapRepertoirePath = (side: Side, epd: string, san: string) =>
+  `/repertoire/${side}?node=${encodeURIComponent(nodeId(side, epd))}&gap=${encodeURIComponent(san)}`;
+
+/** El repaso de una sola tarjeta desde una partida: ✕ y el botón final vuelven a esa partida. */
+export const reviewFromGamePath = (cardId: string, gameId: string) =>
+  `/train?card=${encodeURIComponent(cardId)}&volver=${encodeURIComponent(gamePath(gameId))}`;
+
+/**
+ * El `volver` de `/train`: solo se acepta la ruta del visor de una partida (`gamePath`), así un enlace armado no
+ * puede mandar a otro lado.
+ */
+export const returnPath = (v: string | null | undefined) => (v && /^\/games\/[^/?#\\]+$/.test(v) ? v : undefined);
 
 const LOSSES = ['checkmated', 'resigned', 'timeout', 'lose', 'abandoned'];
 

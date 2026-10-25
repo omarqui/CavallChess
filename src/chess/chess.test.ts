@@ -122,6 +122,25 @@ describe('importación de PGN', () => {
     expect(g.children(bc4.toId).map((e) => e.san)).toEqual(['Bc5']);
   });
 
+  it('la principal que pierde un choque conservado no cuenta como variante ignorada', () => {
+    const repo = emptyRepo('white');
+    importInto(repo, '1. e4 e5 2. Nf3 Nc6 3. Bc4 *', 'white');
+    const sola = buildImportPlan('1. e4 e5 2. Nf3 Nc6 3. Bb5 *', 'white', existingOf(repo));
+    expect(sola.conflicts).toHaveLength(1);
+    expect(sola.ignoredOwnVariations).toBe(0);
+    // Con la existente como variante, solo cuenta la otra variante propia (Bc4 se sigue, Bb5 es el choque).
+    const conVariantes = buildImportPlan('1. e4 e5 2. Nf3 Nc6 3. Bb5 (3. Bc4 Bc5) (3. d4 exd4) *', 'white', existingOf(repo));
+    expect(conVariantes.ignoredOwnVariations).toBe(1);
+    // Al reemplazar, la existente que aparece como variante sí se ignora.
+    const reemplazo = buildImportPlan(
+      '1. e4 e5 2. Nf3 Nc6 3. Bb5 (3. Bc4 Bc5) *',
+      'white',
+      existingOf(repo),
+      new Map([[sola.conflicts[0].nodeId, 'replace']]),
+    );
+    expect(reemplazo.ignoredOwnVariations).toBe(1);
+  });
+
   it('una transposición dentro del PGN no crea dos jugadas propias para la misma posición', () => {
     const pgn = '1. d4 d5 (1... Nf6 2. Nf3 d5 3. Bf4) 2. Nf3 Nf6 3. c4 *';
     const repo = emptyRepo('white');

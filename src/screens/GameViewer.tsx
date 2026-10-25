@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { DrawShape } from '@lichess-org/chessground/draw';
 import type { RepertoireGraph } from '../chess/graph';
-import { displaySquares, figurine, INITIAL_EPD, nodeId, type Side } from '../chess/position';
+import { displaySquares, figurine, INITIAL_EPD, type Side } from '../chess/position';
 import { useGame, useGraphs } from '../db/hooks';
 import { ensureDue } from '../db/repo';
 import { analyzeGame, type GameAnalysis } from '../games/analyze';
@@ -12,7 +12,7 @@ import { EnginePanel } from '../ui/EnginePanel';
 import { BackLink, Banner, Button, Icon, ICONS, MoveLine, NavButton, Screen, Toggle } from '../ui/kit';
 import { navigate } from '../ui/router';
 import { showToast } from '../ui/toast';
-import { gamePath, resultLabel, timeClassLabel } from './games/format';
+import { gamePath, gapRepertoirePath, resultLabel, reviewFromGamePath, sentence, timeClassLabel } from './games/format';
 
 type Exit = Extract<GameOutcome, { kind: 'myDeviation' | 'gap' }>;
 
@@ -157,12 +157,12 @@ function Player({
     try {
       await ensureDue(cardId);
     } catch (e) {
-      showToast(`No se pudo preparar el repaso: ${e instanceof Error ? e.message : 'error desconocido'}.`);
+      showToast(`No se pudo preparar el repaso: ${sentence(e instanceof Error ? e.message : 'error desconocido')}`);
       reviewBusy.current = false;
       setReviewing(false);
       return;
     }
-    navigate(`/train?card=${encodeURIComponent(cardId)}`);
+    navigate(reviewFromGamePath(cardId, game.id));
   };
 
   return (
@@ -288,9 +288,7 @@ function ExitNotice({
     <Button
       variant={canAddReply ? 'secondary' : 'primary'}
       className="flex-auto !px-3"
-      onClick={() =>
-        navigate(`/repertoire/${side}?node=${encodeURIComponent(nodeId(side, gap.epd))}&gap=${encodeURIComponent(gap.san)}`)
-      }
+      onClick={() => navigate(gapRepertoirePath(side, gap.epd, gap.san))}
     >
       Preparar respuesta
     </Button>

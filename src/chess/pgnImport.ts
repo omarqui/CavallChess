@@ -183,6 +183,7 @@ export function buildImportPlan(
         const ex = existing.mine.get(fromId);
         const prior = chosen.get(fromId);
         let pick: (typeof parsed)[number] | undefined = main;
+        let keptConflict = false;
         if (prior) {
           pick = parsed.find((c) => c.uci === prior);
         } else if (ex && ex.uci !== main.uci) {
@@ -198,9 +199,13 @@ export function buildImportPlan(
               line: [...line],
             });
           }
-          if ((resolutions.get(fromId) ?? 'keep') === 'keep') pick = parsed.find((c) => c.uci === ex.uci);
+          if ((resolutions.get(fromId) ?? 'keep') === 'keep') {
+            pick = parsed.find((c) => c.uci === ex.uci);
+            // La principal que pierde el choque ya se ve como conflicto: no cuenta como variante ignorada.
+            keptConflict = true;
+          }
         }
-        plan.ignoredOwnVariations += parsed.length - (pick ? 1 : 0);
+        plan.ignoredOwnVariations += parsed.length - (pick ? 1 : 0) - (keptConflict ? 1 : 0);
         follow = pick ? [pick] : [];
         if (pick) chosen.set(fromId, pick.uci);
       }

@@ -254,3 +254,36 @@ export function NavButton({
     </button>
   );
 }
+
+/** Acción principal fija abajo, justo sobre la barra de pestañas. */
+export function ActionBar({ children }: { children: ReactNode }) {
+  return (
+    <div
+      className="pointer-events-none fixed inset-x-0 z-10 bg-linear-to-t from-paper from-55% to-transparent"
+      style={{ bottom: 'var(--tabbar-h)' }}
+    >
+      <div className="pointer-events-auto mx-auto max-w-xl px-4 pb-3 pt-7">{children}</div>
+    </div>
+  );
+}
+
+export function ActionButton({
+  done = false,
+  icon,
+  children,
+  ...rest
+}: { done?: boolean; icon?: ReactNode; children: ReactNode } & ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      {...rest}
+      className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-4 text-base font-semibold transition active:scale-[0.98] ${
+        done
+          ? 'bg-good-soft text-ink ring-1 ring-good/30'
+          : 'bg-ink text-paper shadow-[0_8px_24px_-12px_rgb(0_0_0/0.5)] hover:opacity-90 disabled:opacity-40'
+      }`}
+    >
+      {icon && <Icon d={icon} className="size-5" />}
+      {children}
+    </button>
+  );
+}
