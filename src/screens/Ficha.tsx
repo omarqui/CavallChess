@@ -167,7 +167,13 @@ export function BackLink({ to, children }: { to: string; children: ReactNode }) 
 
 const SAVE_DELAY = 600;
 
-/** Campo de nota con guardado automático: al perder el foco y tras 600 ms sin teclear. */
+/**
+ * Campo de nota con guardado automático: tras 600 ms sin teclear, al perder el foco, al desmontarse y cuando la
+ * app pasa a segundo plano (iOS suspende la PWA antes de que venzan los 600 ms).
+ *
+ * `emptyDeletesOnBlur`: vaciar el campo borra la nota recién al soltarlo. Sirve para las notas que existen solo
+ * mientras tengan texto (las de líneas que ya no están): borrarlas mientras escribís desmontaría el campo.
+ */
 function NoteField({
   id,
   note,
@@ -176,6 +182,7 @@ function NoteField({
   placeholder,
   minRows = 3,
   autoFocus = false,
+  emptyDeletesOnBlur = false,
 }: {
   id: string;
   note: Note | undefined;
@@ -184,32 +191,55 @@ function NoteField({
   placeholder: string;
   minRows?: number;
   autoFocus?: boolean;
+  emptyDeletesOnBlur?: boolean;
 }) {
   const [text, setText] = useState(note?.text ?? '');
   const [saved, setSaved] = useState(false);
   const area = useRef<HTMLTextAreaElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latest = useRef(text);
-  const idRef = useRef(id);
-  idRef.current = id;
+  /** Hay texto escrito que todavía no se guardó. */
+  const dirty = useRef(false);
+  const props = useRef({ id, emptyDeletesOnBlur });
+  props.current = { id, emptyDeletesOnBlur };
 
-  const flushRef = useRef(() => {
-    if (timer.current === null) return;
-    clearTimeout(timer.current);
-    timer.current = null;
-    void saveNote(idRef.current, latest.current).then(
+  /** `final`: se suelta el campo (foco perdido o desmontado), así que vaciarlo ya puede borrar la nota. */
+  const saveRef = useRef((final: boolean) => {
+    if (timer.current !== null) {
+      clearTimeout(timer.current);
+      timer.current = null;
+    }
+    if (!dirty.current) return;
+    if (!final && props.current.emptyDeletesOnBlur && !latest.current.trim()) return;
+    dirty.current = false;
+    void saveNote(props.current.id, latest.current).then(
       () => setSaved(true),
-      () => setSaved(false),
+      () => {
+        dirty.current = true;
+        setSaved(false);
+      },
     );
   });
-  const flush = flushRef.current;
+  const save = saveRef.current;
 
-  // Al desmontar (cambio de pestaña, nota plegada) se guarda lo pendiente.
-  useEffect(() => flush, [flush]);
-
-  // Si la nota cambió en otro lado y acá no se está escribiendo, se muestra la guardada.
+  // Segundo plano y cierre: se guarda ya. Al desmontar (cambio de pestaña, nota plegada), lo pendiente también.
   useEffect(() => {
-    if (timer.current === null && document.activeElement !== area.current) {
+    const hide = () => save(false);
+    const visibility = () => {
+      if (document.visibilityState === 'hidden') hide();
+    };
+    window.addEventListener('pagehide', hide);
+    document.addEventListener('visibilitychange', visibility);
+    return () => {
+      window.removeEventListener('pagehide', hide);
+      document.removeEventListener('visibilitychange', visibility);
+      save(true);
+    };
+  }, [save]);
+
+  // Si la nota cambió en otro lado y acá no hay nada sin guardar ni se está escribiendo, se muestra la guardada.
+  useEffect(() => {
+    if (!dirty.current && document.activeElement !== area.current) {
       setText(note?.text ?? '');
       latest.current = note?.text ?? '';
     }
@@ -230,8 +260,9 @@ function NoteField({
     setText(v);
     latest.current = v;
     setSaved(false);
+    dirty.current = true;
     if (timer.current !== null) clearTimeout(timer.current);
-    timer.current = setTimeout(flush, SAVE_DELAY);
+    timer.current = setTimeout(() => save(false), SAVE_DELAY);
   };
 
   return (
@@ -244,7 +275,7 @@ function NoteField({
         aria-labelledby={labelledBy}
         placeholder={placeholder}
         onChange={(e) => change(e.target.value)}
-        onBlur={flush}
+        onBlur={() => save(true)}
         className="block w-full resize-none rounded-xl bg-raised px-3.5 py-3 font-book text-base leading-relaxed text-ink ring-1 ring-line transition placeholder:text-muted/80 focus:outline-none focus:ring-2 focus:ring-brass/70"
       />
       <p aria-live="polite" className="mt-1 flex h-5 items-center gap-1 px-1 text-xs text-muted">
@@ -488,7 +519,14 @@ function NotesTab({ f, notes }: { f: Ficha; notes: Map<string, Note> }) {
               return (
                 <div key={n.id}>
                   <p className="mb-1.5 text-[15px] font-medium">{name}</p>
-                  <NoteField id={n.id} note={n} label={`Nota vieja: ${name}`} placeholder="Nota vacía: se borra." minRows={2} />
+                  <NoteField
+                    id={n.id}
+                    note={n}
+                    label={`Nota vieja: ${name}`}
+                    placeholder="Vacía: se borra al salir del campo."
+                    minRows={2}
+                    emptyDeletesOnBlur
+                  />
                 </div>
               );
             })}
@@ -593,7 +631,7 @@ export function FichaScreen({ id, tab }: { id: string; tab: FichaTab }) {
       </header>
 
       <div ref={anchor} className="h-5" />
-      <div className="sticky top-[env(safe-area-inset-top)] z-10 -mx-4 bg-paper/90 px-4 py-2 shadow-[0_1px_0_var(--line)] backdrop-blur-md [&_[role=radio]]:min-h-10 [&_[role=radio]]:flex-1 [&_[role=radio]]:px-1 [&_[role=radiogroup]]:flex [&_[role=radiogroup]]:w-full">
+      <div className="sticky top-[env(safe-area-inset-top)] z-10 -mx-4 bg-paper/90 px-4 py-2 shadow-[0_1px_0_var(--line)] backdrop-blur-md [&_[role=radio]]:min-h-11 [&_[role=radio]]:flex-1 [&_[role=radio]]:px-1 [&_[role=radiogroup]]:flex [&_[role=radiogroup]]:w-full">
         <Segmented label="Secciones de la ficha" value={tab} options={TABS} onChange={pick} />
       </div>
 

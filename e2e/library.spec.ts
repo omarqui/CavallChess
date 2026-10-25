@@ -44,3 +44,57 @@ test('ficha: las notas se guardan', async ({ page }) => {
   await page.getByRole('radio', { name: 'Mis apuntes' }).click();
   await expect(page.getByLabel('Tu nota: Variante del Avance')).toHaveValue('Ojo con Nh4.');
 });
+
+test('ficha: una nota se guarda al pasar la app a segundo plano', async ({ page }) => {
+  await page.clock.install();
+  await page.goto('/#/biblioteca/caro-kann?tab=apuntes');
+  const nota = page.getByLabel('Sobre la apertura');
+  await nota.waitFor();
+  // Con el reloj quieto, los 600 ms sin teclear nunca se cumplen: solo el paso a segundo plano puede guardar.
+  await page.clock.pauseAt(Date.now() + 2000);
+  await nota.fill('Escrita justo antes de salir.');
+  await page.waitForTimeout(300);
+  await expect(page.getByText('Guardado')).toBeHidden();
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expect(page.getByText('Guardado')).toBeVisible();
+});
+
+test('ficha: vaciar una nota de una línea que ya no está la borra recién al soltar el campo', async ({ page }) => {
+  await page.goto('/#/biblioteca/caro-kann?tab=apuntes');
+  await page.getByLabel('Sobre la apertura').waitFor();
+  // Una nota de una línea que la ficha ya no trae, escrita directo en la base.
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve, reject) => {
+        const req = indexedDB.open('cavallchess');
+        req.onerror = () => reject(req.error);
+        req.onsuccess = () => {
+          const tx = req.result.transaction('notes', 'readwrite');
+          tx.objectStore('notes').put({ id: 'caro-kann|vieja', text: 'Algo que anoté.', updatedAt: 1 });
+          tx.oncomplete = () => {
+            req.result.close();
+            resolve();
+          };
+          tx.onerror = () => reject(tx.error);
+        };
+      }),
+  );
+  await page.reload();
+  await expect(page.getByText('Notas de líneas que ya no están')).toBeVisible();
+  const vieja = page.getByLabel('Nota vieja: Vieja');
+  await expect(vieja).toHaveValue('Algo que anoté.');
+
+  await vieja.fill('');
+  await page.waitForTimeout(1200);
+  await expect(vieja).toBeVisible();
+  await expect(vieja).toBeFocused();
+
+  await vieja.blur();
+  await expect(page.getByText('Notas de líneas que ya no están')).toBeHidden();
+  await page.reload();
+  await page.getByLabel('Sobre la apertura').waitFor();
+  await expect(page.getByText('Notas de líneas que ya no están')).toBeHidden();
+});
