@@ -198,7 +198,8 @@ export async function recordGame(row: GameRow, gap: Omit<Gap, 'count' | 'lastSee
         ...gap,
         count: (prev?.count ?? 0) + 1,
         lastSeen: Math.max(prev?.lastSeen ?? 0, row.endTime),
-        lastGameUrl: row.id,
+        // La carga hacia atrás inserta partidas viejas después de las nuevas: se queda con la más reciente.
+        lastGameUrl: !prev || row.endTime >= prev.lastSeen ? row.id : prev.lastGameUrl,
       });
     }
   });

@@ -32,7 +32,7 @@ live('APIs reales', () => {
     const { archives } = await fetch(`https://api.chess.com/pub/player/${user}/games/archives`, { headers: UA }).then((r) =>
       r.json(),
     );
-    const [month] = archivesToFetch(archives, undefined, 1);
+    const [month] = archivesToFetch(archives, undefined, user, 1);
     const { games } = await fetch(month, { headers: UA }).then((r) => r.json());
     const repo = emptyRepo('white');
     importInto(repo, '1. e4 e5 2. Nf3 Nc6 3. Bb5 (2... Nf6 3. Nxe5) (1... c5 2. Nf3) *', 'white');
