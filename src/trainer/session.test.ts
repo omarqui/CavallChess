@@ -161,4 +161,47 @@ describe('sesión de entrenamiento', () => {
     expect(step.side).toBe('black');
     expect(step.line.map((e) => e.san)).toEqual(['e4']);
   });
+  describe('trampas', () => {
+    const LEGAL = `1. e4 e5 2. Nf3 d6 3. Bc4 Bg4 4. Nc3 g6? { [%trap favor t/legal Mate de Legal] } 5. Nxe5 *`;
+    const CONTRA = `1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nd7 5. Qe2 Ndf6 { [%trap contra t/mate Mate en d6] } *`;
+    const LEGAL_PATH = ['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4', 'Nc3', 'g6', 'Nxe5'];
+
+    it('avisa la trampa a favor al responder el castigo', () => {
+      const { graph } = repoFrom(LEGAL, 'white');
+      const nxe5 = edgeAt(graph, LEGAL_PATH);
+      const s = new TrainingSession({ white: graph }, [nxe5.id], [], 'review', recorder().cb);
+      s.start();
+      const step = s.play(boardUci(nxe5));
+      expect(step.feedback?.trap).toEqual({ kind: 'favor', fichaId: 't', trapId: 'legal', name: 'Mate de Legal' });
+    });
+
+    it('avisa la trampa en contra al responder la jugada correcta', () => {
+      const { graph } = repoFrom(CONTRA, 'black');
+      const ndf6 = edgeAt(graph, ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Nd7', 'Qe2', 'Ndf6']);
+      const s = new TrainingSession({ black: graph }, [ndf6.id], [], 'review', recorder().cb);
+      s.start();
+      const step = s.play(boardUci(ndf6));
+      expect(step.feedback?.trap?.kind).toBe('contra');
+      expect(step.feedback?.trap?.trapId).toBe('mate');
+    });
+
+    it('informa la trampa también después de un fallo', () => {
+      const { graph } = repoFrom(LEGAL, 'white');
+      const nxe5 = edgeAt(graph, LEGAL_PATH);
+      const s = new TrainingSession({ white: graph }, [nxe5.id], [], 'review', recorder().cb);
+      s.start();
+      expect(s.play('a2a3').phase).toBe('fail');
+      const step = s.play(boardUci(nxe5));
+      expect(step.feedback?.kind).toBe('wrong');
+      expect(step.feedback?.trap?.trapId).toBe('legal');
+    });
+
+    it('sin marca no hay aviso', () => {
+      const { graph } = repoFrom(REP, 'white');
+      const e4 = edgeAt(graph, ['e4']);
+      const s = new TrainingSession({ white: graph }, [e4.id], [], 'review', recorder().cb);
+      s.start();
+      expect(s.play('e2e4').feedback?.trap).toBeUndefined();
+    });
+  });
 });
