@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_SETTINGS } from '../../types';
-import { needsInstallStep, shouldMarkIntroSeen, shouldShowIntro } from './gate';
+import { needsInstallStep, shouldMarkIntroSeen, shouldShowIntro, tipVisible } from './gate';
 
 describe('puerta de la bienvenida', () => {
   it('la bienvenida se muestra solo sin tarjetas ni marca', () => {
@@ -19,5 +19,12 @@ describe('puerta de la bienvenida', () => {
     expect(needsInstallStep('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)', false)).toBe(true);
     expect(needsInstallStep('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)', true)).toBe(false);
     expect(needsInstallStep('Mozilla/5.0 (Windows NT 10.0; Win64; x64)', false)).toBe(false);
+  });
+
+  it('un tip se ve una vez y no durante la bienvenida', () => {
+    expect(tipVisible('biblioteca', DEFAULT_SETTINGS)).toBe(false);
+    const s = { ...DEFAULT_SETTINGS, introSeenAt: 1 };
+    expect(tipVisible('biblioteca', s)).toBe(true);
+    expect(tipVisible('biblioteca', { ...s, tipsSeen: ['biblioteca'] })).toBe(false);
   });
 });

@@ -8,6 +8,7 @@ import type { Ficha, FichaLine } from '../library/types';
 import type { Note } from '../types';
 import { Board } from '../ui/Board';
 import { MoveLine, Screen, Segmented } from '../ui/kit';
+import { Tip } from '../ui/Tip';
 import { RichInline, RichText } from '../ui/RichText';
 import { href, navigate } from '../ui/router';
 
@@ -594,6 +595,10 @@ export function FichaScreen({ id, tab }: { id: string; tab: FichaTab }) {
     >
       <header>
         <BackLink to={`/biblioteca?lado=${f.side}`}>Biblioteca</BackLink>
+        <div className="mt-2" />
+        <Tip id="ficha">
+          Las trampas se entrenan como cualquier línea: cuando el rival cae, te toca castigarlo. Tus apuntes son tuyos y no se pisan.
+        </Tip>
         <h1 className="mt-0.5 font-book text-[30px] font-semibold leading-[1.1] tracking-tight">{f.name}</h1>
         <p className="mt-1.5 text-sm text-muted">ECO {f.eco.replace(/\s*-\s*/, '–')}</p>
 

@@ -7,6 +7,7 @@ import type { Ficha } from '../library/types';
 import { MiniBoard } from '../ui/MiniBoard';
 import { href, navigate, useRoute } from '../ui/router';
 import { Screen, Segmented } from '../ui/kit';
+import { Tip } from '../ui/Tip';
 
 const LEVEL: Record<string, string> = { principiante: 'Principiante', club: 'Club' };
 
@@ -70,6 +71,11 @@ export function LibraryScreen() {
   return (
     <Screen title="Biblioteca">
       <p className="-mt-1 mb-4 text-[15px] text-muted">Aperturas listas para sumar a tu repertorio, con ideas y trampas.</p>
+      {groups.length > 0 && (
+        <Tip id="biblioteca">
+          Cada ficha explica una apertura en dos capas: lo básico primero y lo de club después. Con «Agregar al repertorio» la volvés entrenable.
+        </Tip>
+      )}
       <Segmented
         label="Color"
         value={side}

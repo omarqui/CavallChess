@@ -3,6 +3,7 @@ import { useCards, useDays, useEvents, useGraphs } from '../db/hooks';
 import { mastery, streak, weakSpots } from '../srs/stats';
 import type { Side } from '../types';
 import { Button, Meter, MoveLine, Screen, Section, sideLabel } from '../ui/kit';
+import { Tip } from '../ui/Tip';
 import { navigate } from '../ui/router';
 
 export function ProgressScreen() {
@@ -19,6 +20,11 @@ export function ProgressScreen() {
 
   return (
     <Screen title="Progreso">
+      {cards.size > 0 && (
+        <Tip id="progreso">
+          El dominio cuenta las posiciones que ya sabés con firmeza (21 días o más). La racha suma los días en que dejaste los vencidos en cero.
+        </Tip>
+      )}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-xl p-4 ring-1 ring-line">
           <p className="font-book text-3xl font-semibold tabular-nums">{s}</p>

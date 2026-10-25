@@ -7,6 +7,7 @@ import { syncChesscom } from '../games/sync';
 import type { GameRow, Gap } from '../types';
 import { arrow, Board } from '../ui/Board';
 import { Banner, Button, MoveLine, Screen, Section, sideLabel } from '../ui/kit';
+import { Tip } from '../ui/Tip';
 import { navigate } from '../ui/router';
 
 export function GamesScreen() {
@@ -39,6 +40,9 @@ export function GamesScreen() {
 
   return (
     <Screen title="Partidas">
+      {(games.length > 0 || gaps.length > 0) && (
+        <Tip id="partidas">Un desvío hace vencer esa tarjeta hoy. Un hueco es algo que te jugaron y no tenés preparado.</Tip>
+      )}
       {!settings.chesscomUser ? (
         <Banner>
           Para cruzar tus partidas con el repertorio, configurá tu usuario de Chess.com en{' '}
