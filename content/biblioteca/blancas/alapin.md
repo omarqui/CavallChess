@@ -43,7 +43,7 @@ Con `3.e5` echás al caballo y con `4.d4` llegás al centro. Si las negras desar
 4... cxd4 5. Nf3 { Primero desarrollás: el peón de d4 se recaptura después. Si las negras se comen tu peón de c3, el caballo de d5 queda colgado frente a tu dama. }
 5... Nc6 6. Bc4 { [%hint Desarrollá una pieza atacando al caballo centralizado.] }
 6... Nb6 7. Bb3 { Desde b3 el alfil apunta a f7 y sigue vigilando d5. }
-7... d5 8. exd6 { Capturás al paso. Tu peón de e5 ya no tenía apoyo y las negras iban a atacarlo: así lo cambiás por el de d. }
+7... d5 8. exd6 { Capturás al paso. Tu peón de e5 ya no tenía apoyo de peones y las negras iban a atacarlo: así lo cambiás por el de d. }
 8... Qxd6 9. O-O Be6 10. Bxe6 { Cambiás el alfil que vigilaba d5, la casilla clave delante de tu futuro peón aislado. }
 10... Qxe6 11. Nxd4 Nxd4 12. cxd4 { Ahora sí recapturás con el peón. Queda aislado, pero tus piezas tienen espacio detrás de él. }
 12... Qd7 13. Nc3 { [%hint Sumá una pieza que controle la casilla donde las negras quieren bloquear tu peón.] Vigila d5. }
@@ -71,7 +71,7 @@ Con `5...e6` las negras sostienen al caballo de d5 con un peón. Ahora recaptur�
 
 ```pgn
 1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. Nf3 e6 6. cxd4 { Dos peones en el centro: d4 y e5. }
-6... d6 7. Bc4 { [%hint Desarrollá el alfil presionando al caballo de d5.] }
+6... d6 7. Bc4 { [%hint Prepará el enroque sacando una pieza que además trabaje contra el centro negro.] }
 7... Nc6 8. O-O Be7 9. Qe2 { La dama cuida el alfil de c4 y respalda el peón de e5 por la columna e. }
 9... O-O 10. Nc3 { [%hint Desafiá a la pieza que bloquea el centro.] }
 10... Nxc3 11. bxc3 { El peón de c3 vuelve a sostener d4 y la columna b queda abierta para tus torres. }
@@ -98,7 +98,7 @@ Después de `3.e5`, si el caballo negro salta a e4 en vez de ir a d5, se queda e
 
 ```pgn
 1. e4 c5 2. c3 Nf6 3. e5 Ne4? { Parece una casilla activa, pero el caballo no tiene retirada. }
-4. d3 { [%hint Atacá al caballo y contá sus casillas de escape.] No tiene adónde ir: d6 y f6 las controla tu peón de e5, g5 y d2 las cubre tu alfil de c1, y c5 la ocupa un peón negro. }
+4. d3 { [%hint Atacá al caballo y contá sus casillas de escape.] No tiene adónde ir: d6 y f6 las controla tu peón de e5, g5 y d2 las cubre tu alfil de c1, g3 la vigilan tus peones de f2 y h2, y c5 la ocupa un peón negro. }
 4... Ng5 5. Bxg5 { Ganaste una pieza. }
 ```
 

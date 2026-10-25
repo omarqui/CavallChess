@@ -40,11 +40,11 @@ La línea más clásica. La dama va a a5 y clava tu caballo de c3. Vos ocupás e
 4... Nf6 5. Nf3 c6 { Las negras sostienen d5 y le preparan a la dama una retirada por c7. }
 6. Bc4 Bf5 7. Bd2 { [%hint Desarmá la clavada sobre tu caballo y ponete detrás de él, en la diagonal de la dama negra.] }
 7... e6 8. Nd5 { [%hint Mové el caballo con amenaza: tu alfil de d2 destapa un ataque sobre la dama.] Las negras no pueden tomar el caballo: perderían la dama. }
-8... Qd8 9. Nxf6+ gxf6 { Las negras se quedan con la pareja de alfiles, pero con los peones del flanco de rey rotos. }
+8... Qd8 9. Nxf6+ gxf6 { Las negras abren la columna g, pero quedan con los peones del flanco de rey rotos. }
 10. O-O Nd7 11. Re1 Bg6 12. Qe2 { [%hint Sumá la dama a la presión sobre el peón que tapa la columna central.] La torre y la dama apuntan juntas a e6. }
 ```
 
-Las negras tienen la pareja de alfiles, pero su rey no tiene un refugio cómodo. Tu plan: presión en la columna e contra e6, `Bb3` y `a4` para ganar espacio y, en el momento justo, la ruptura `d5`.
+Las negras tienen la columna g semiabierta, pero su rey no tiene un refugio cómodo. Tu plan: presión en la columna e contra e6, `Bb3` y `a4` para ganar espacio y, en el momento justo, la ruptura `d5`.
 
 ## Variante: Con 3...Qd6 {#qd6} [club]
 La dama en d6 está más resguardada que en a5, y por eso esta defensa se volvió muy popular. Vos preparás el fianchetto con `g3`; si el alfil negro cambia en f3, tu dama sale activa, enrocás largo y ganás tiempos contra la dama negra.
@@ -54,8 +54,8 @@ La dama en d6 está más resguardada que en a5, y por eso esta defensa se volvi�
 6. g3 { [%hint Prepará una diagonal larga para el alfil, donde nadie lo va a molestar.] }
 6... Bg4 7. h3 { [%hint Preguntale al alfil qué piensa hacer antes de seguir con tu desarrollo.] }
 7... Bxf3 8. Qxf3 { Tu dama queda activa y las negras se quedaron sin su alfil bueno. El peón de d4 parece colgado, pero si la dama negra lo come, Qxb7 ataca la torre de a8. }
-8... c6 9. Be3 e6 10. O-O-O { [%hint Poné el rey a salvo y, en la misma jugada, llevá una torre frente a la dama negra.] }
-10... Nbd7 11. Bf4 { [%hint Desarrollá ganando un tiempo contra la dama negra.] }
+8... c6 9. Be3 e6 10. O-O-O { [%hint Tu dama ya salió: aprovechá para darle a tu rey un refugio que además sume presión sobre la dama negra.] }
+10... Nbd7 11. Bf4 { [%hint Ganá un tiempo contra la dama negra con una pieza que ya salió.] }
 ```
 
 La dama negra sigue siendo un blanco. Si se va a b4, jugá `Kb1` para proteger a2 y b2, y seguí con `Bc4` o `Bg2`. Tu ventaja de desarrollo es clara.
@@ -66,8 +66,8 @@ Las negras recapturan con el caballo en vez de con la dama. Vos ocupás el centr
 ```pgn
 1. e4 d5 2. exd5 Nf6 3. d4 { [%hint Ocupá el centro: el peón de d5 lo vas a perder igual.] }
 3... Nxd5 4. Nf3 Bg4 5. Be2 { Tapás la clavada. }
-5... e6 6. O-O Nc6 7. c4 { [%hint Echá al caballo del centro con un peón.] }
-7... Nb6 8. Nc3 Be7 9. d5 { [%hint Avanzá el peón central con ataque antes de que las negras completen el desarrollo.] Ataca al caballo de c6 y abre el juego. }
+5... e6 6. O-O Nc6 7. c4 { [%hint Quitale al caballo negro su mejor casilla y ganá espacio en el centro.] }
+7... Nb6 8. Nc3 Be7 9. d5 { [%hint Aprovechá que el rey negro sigue en el centro para abrir el juego ganando un tiempo.] Ataca al caballo de c6 y abre el juego. }
 9... exd5 10. cxd5 Bxf3 11. Bxf3 Ne5 12. Be2 { El alfil se retira y tu peón de d5 sigue firme. }
 12... O-O 13. Qb3 { Tus piezas están más activas y el peón de d5 le quita casillas a las negras. }
 ```

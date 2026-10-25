@@ -44,7 +44,7 @@ Las negras toman el peón y se desarrollan con `...Nc6`, `...d6`, `...e6` y `...
 6... e6 { Cierra la diagonal hacia f7. }
 7. O-O Nf6 8. Qe2 { [%hint Despejá el camino para que una torre llegue a la columna abierta.] }
 8... Be7 9. Rd1 { [%hint Poné presión sobre el peón negro de la columna abierta.] La torre mira directo al peón de d6. }
-9... e5 { Las negras cierran la columna d con su peón, pero la casilla d5 queda para tus piezas. }
+9... e5 { Las negras frenan tu avance e5, pero el peón de d6 queda atrasado y la casilla d5, que ya ningún peón negro puede vigilar, queda para tus piezas. }
 10. h3 { Le quitás la casilla g4 al alfil y al caballo negros. }
 10... O-O 11. Be3 { Con el centro cerrado, el alfil se ubica en e3 y controla las casillas oscuras del flanco de dama. }
 11... Be6 12. Rac1 { [%hint Llevá la última pieza a la otra columna abierta.] Ahora tus dos torres trabajan en columnas abiertas. }
@@ -58,7 +58,7 @@ Si las negras no toman el peón y atacan e4 con `3...Nf6`, avanzá `4.e5`. Despu
 ```pgn
 1. e4 c5 2. d4 cxd4 3. c3 Nf6 4. e5 { [%hint Echá al caballo ganando espacio.] }
 4... Nd5 5. Nf3 { Desarrollás antes de recapturar. Si ahora las negras toman en c3, la columna d se abre y tu dama gana el caballo de d5. }
-5... Nc6 6. Bc4 Nb6 7. Bb3 d5 8. exd6 { Capturás al paso: el peón de e5 ya no tenía apoyo. }
+5... Nc6 6. Bc4 Nb6 7. Bb3 d5 8. exd6 { Capturás al paso: el peón de e5 ya no tenía apoyo de peones. }
 8... Qxd6 9. O-O Be6 10. Bxe6 { Cambiás el alfil que vigilaba d5. }
 10... Qxe6 11. Nxd4 Nxd4 12. cxd4 Qd7 13. Nc3 { [%hint Controlá la casilla donde las negras quieren bloquear tu peón aislado.] }
 ```
@@ -71,7 +71,7 @@ Un esquema muy usado: las negras ponen peones en e6 y a6, sacan el caballo por e
 ```pgn
 1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 Nc6 5. Nf3 e6 6. Bc4 a6 { Prepara ...b5 para ganar un tiempo contra tu alfil. }
 7. O-O Nge7 { El caballo va hacia g6 o f5. }
-8. Bg5 { [%hint Desarrollá con un tiempo contra el caballo que acaba de salir.] Presiona e7 y provoca ...h6 o ...f6, que debilitan el enroque negro. }
+8. Bg5 { [%hint Desarrollá provocando un avance de peón que debilite el enroque.] Presiona e7 y provoca ...h6 o ...f6, que debilitan el enroque negro. }
 8... h6 9. Be3 b5 10. Bb3 Na5 { Las negras quieren cambiar tu alfil de b3, que apunta a e6 y a f7. }
 11. Rc1 { [%hint No pierdas tiempo salvando al alfil: llevá una torre a la columna abierta.] }
 11... Nxb3 12. Qxb3 { Cediste el alfil, pero tu dama queda activa contra e6 y tu torre ya ocupa la columna c. Las negras todavía no enrocaron. }
@@ -103,7 +103,7 @@ En el sistema clásico, si las negras sacan el caballo a f6 antes de jugar `...e
 
 Si las negras responden bien con `7...dxe5`, cambiá damas con `8.Qxd8+` y seguí con `Ng5` o `Nb5`: f7 y c7 son difíciles de defender. Contra `7...Ng4`, el avance `8.e6` abre la posición y recuperás el peón en e6.
 
-## Trampa a favor: La dama gana el caballo de d5 {#caballo-de-d5} [básica]
+## Trampa a favor: El caballo colgado de d5 {#caballo-de-d5} [básica]
 En la rehusada con `3...Nf6`, las negras pueden sentir la tentación de aceptar el gambito una jugada más tarde. Pero con su caballo en d5, comerse el peón de c3 abre la columna d.
 
 ```pgn

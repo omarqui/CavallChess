@@ -51,18 +51,18 @@ Con `...d6`, `...Nc6` y `...g6` las negras arman un esquema parecido. El alfil v
 
 ```pgn
 1. e4 c5 2. Nc3 d6 3. f4 Nc6 4. Nf3 g6 5. Bb5 Bd7 { El alfil defiende al caballo: si cambiás en c6, las negras recapturan sin doblar peones. }
-6. O-O Bg7 7. d3 Nf6 8. Qe1 O-O 9. Bxc6 { [%hint Cambiá tu alfil por el caballo que podía saltar a d4.] }
+6. O-O Bg7 7. d3 Nf6 8. Qe1 O-O 9. Bxc6 { [%hint Eliminá la pieza negra que vigila d4 y e5 antes de abrir el juego.] }
 9... Bxc6 10. f5 { [%hint Con tus piezas listas, abrí la columna contra el enroque.] }
 ```
 
 Seguí con `Qh4` y con `Bh6` o `Bg5`, que ahora tienen la diagonal libre. El alfil negro de c6 apunta a tu peón de e4: mantenelo siempre defendido.
 
 ## Variante: Contra 2...e6 {#e6} [club]
-Con `...e6` las negras preparan `...d5` para atacar tu centro antes de que empiece tu ataque. Cambiás en e4, cambiás alfiles con jaque y jugás con la columna e semiabierta.
+Con `...e6` las negras preparan `...d5` para atacar tu centro antes de que empiece tu ataque. Recapturás en e4, cambiás alfiles con jaque y jugás con la columna e semiabierta.
 
 ```pgn
 1. e4 c5 2. Nc3 e6 3. f4 d5 4. Nf3 { Si las negras cambian en e4, recuperás el peón con el caballo. }
-4... dxe4 5. Nxe4 Nf6 6. Bb5+ { [%hint Desarrollá con jaque y ofrecé cambiar el alfil que las negras usarían por la diagonal larga.] }
+4... dxe4 5. Nxe4 Nf6 6. Bb5+ { [%hint Desarrollá sin perder tiempo y simplificá: a tu rey le conviene que las negras tengan menos piezas que apunten a las casillas claras de tu enroque.] }
 6... Bd7 7. Bxd7+ Nbxd7 8. Nxf6+ Nxf6 9. O-O Be7 10. d3 O-O 11. Qe2 { [%hint Conectá las torres y vigilá la columna central que quedó semiabierta.] }
 ```
 
