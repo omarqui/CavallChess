@@ -6,6 +6,7 @@ import { ArchivedScreen } from './screens/Archived';
 import { GamesScreen } from './screens/Games';
 import { HomeScreen } from './screens/Home';
 import { ImportScreen } from './screens/Import';
+import { LibraryComingSoon, LibraryScreen } from './screens/Library';
 import { ProgressScreen } from './screens/Progress';
 import { RepertoireScreen } from './screens/Repertoire';
 import { SettingsScreen } from './screens/Settings';
@@ -97,6 +98,11 @@ export default function App() {
       tab = 'repertoire';
       screen = <ImportScreen />;
       break;
+    case 'biblioteca':
+      tab = 'biblioteca';
+      // Ficha, línea y agregar: provisorio hasta las Tareas 13 y 14.
+      screen = route.path.length > 1 ? <LibraryComingSoon /> : <LibraryScreen />;
+      break;
     case 'games':
       screen = <GamesScreen />;
       break;
@@ -104,6 +110,7 @@ export default function App() {
       screen = <ProgressScreen />;
       break;
     case 'settings':
+      tab = 'home';
       screen = <SettingsScreen />;
       break;
     default:
@@ -130,6 +137,14 @@ const TABS: { id: string; to: string; label: string; icon: ReactNode }[] = [
     to: '/',
     label: 'Hoy',
     icon: <path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z" />,
+  },
+  {
+    id: 'biblioteca',
+    to: '/biblioteca',
+    label: 'Biblioteca',
+    icon: (
+      <path d="M12 6.5C10.3 5.3 7.8 4.8 4 5v13c3.8-.2 6.3.3 8 1.5M12 6.5C13.7 5.3 16.2 4.8 20 5v13c-3.8-.2-6.3.3-8 1.5M12 6.5v13" />
+    ),
   },
   {
     id: 'repertoire',
@@ -160,17 +175,6 @@ const TABS: { id: string; to: string; label: string; icon: ReactNode }[] = [
     to: '/progress',
     label: 'Progreso',
     icon: <path d="M5 19V11M12 19V5M19 19v-6" />,
-  },
-  {
-    id: 'settings',
-    to: '/settings',
-    label: 'Ajustes',
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="3" />
-        <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4" />
-      </>
-    ),
   },
 ];
 

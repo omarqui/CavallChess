@@ -102,6 +102,7 @@ test('flujo completo: importar, aprender, repasar, fallar, progreso, editor y aj
   await shot(page, '09-editor');
 
   // Ajustes: modo oscuro, tablero, piezas y respaldo
+  await page.getByRole('link', { name: 'Hoy' }).click();
   await page.getByRole('link', { name: 'Ajustes' }).click();
   await page.getByRole('radio', { name: 'Oscuro' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-scheme', 'dark');
