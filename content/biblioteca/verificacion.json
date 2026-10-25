@@ -1,1 +1,52 @@
-{}
+{
+  "caro-kann": {
+    "hash": "3224d32c59cb2f4e5ff6c982a496fe6eda89caae1ed4b0653af095bc87ca408b",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "avance": -0.29,
+      "clasica": -0.37,
+      "cambio": -0.2,
+      "panov": -0.24,
+      "alfil-atrapado": -5.02
+    }
+  },
+  "dos-caballos": {
+    "hash": "fa97fff92e12deb9c17668be9ce098f94f22241dcad8c3630674fc800a99c637",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "pianissimo": -0.16,
+      "truco-del-tenedor": 0.14,
+      "polerio": -0.19,
+      "berlinesa": -0.2,
+      "escocesa": 0,
+      "fried-liver": -1000,
+      "descubierta-en-h2": 8.54
+    }
+  },
+  "eslava": {
+    "hash": "61d286933871959640643aba6c3616938d57d672b64fed11e8198fec47229359",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "checa": -0.37,
+      "alekhine": 0.05,
+      "lenta": -0.13,
+      "cambio": -0.02,
+      "sacrificio-en-h2": 1000
+    }
+  },
+  "gambito-de-dama-rehusado": {
+    "hash": "f6ba4389b752f5dd18ab4e0f9b48c4e4eaf1d6268a3f1277321b77d65e4c2870",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "cambridge-springs": -0.35,
+      "cambio": -0.47,
+      "lasker": -0.11,
+      "elefante": 5.3,
+      "trampa-cambridge-springs": 6.83
+    }
+  }
+}
