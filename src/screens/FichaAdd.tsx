@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import type { RepertoireGraph } from '../chess/graph';
-import { loadGraph } from '../db/repo';
+import { loadActiveGraph } from '../db/repo';
 import { useGraphs, type Graphs } from '../db/hooks';
 import { useFicha } from '../library/catalog';
 import { fichaNames, fichaPgn } from '../library/pgn';
@@ -168,7 +168,7 @@ export function FichaAddScreen({ id }: { id: string }) {
     try {
       const ids = f.lines.filter((l) => chosen.has(l.id)).map((l) => l.id);
       setPicked(chosen);
-      setReview({ pgn: fichaPgn(f, ids), ids, graph: await loadGraph(f.side) });
+      setReview({ pgn: fichaPgn(f, ids), ids, graph: await loadActiveGraph(f.side) });
     } catch (e) {
       showToast(`No se pudo preparar la vista previa: ${e instanceof Error ? e.message : 'error desconocido'}.`);
     } finally {

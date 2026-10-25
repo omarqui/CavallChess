@@ -1,5 +1,5 @@
 import type { RepertoireGraph } from '../chess/graph';
-import { INITIAL_EPD, epdFromNodeId, playUci, sideFromId, type Side } from '../chess/position';
+import { INITIAL_EPD, epdFromNodeId, playUci, type Side } from '../chess/position';
 import type { MoveEdge, TrapMark } from '../types';
 import { Rating, type Grade } from '../srs/scheduler';
 
@@ -80,7 +80,8 @@ export class TrainingSession {
   }
 
   private edgeOf(cardId: string): MoveEdge | undefined {
-    return this.graphs[sideFromId(cardId)]?.edges.get(cardId);
+    // Un grafo por color; cada id lleva su repertorio, así que alcanza con buscarlo en los dos.
+    return this.graphs.white?.edges.get(cardId) ?? this.graphs.black?.edges.get(cardId);
   }
 
   start(): Step {

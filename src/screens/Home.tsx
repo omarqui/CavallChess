@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { displaySquares, epdFromNodeId, INITIAL_EPD } from '../chess/position';
 import { markDayComplete } from '../db/repo';
-import { useCards, useDays, useEvents, useGraphs, useSettings } from '../db/hooks';
+import { useActive, useCards, useDays, useEvents, useGraphs, useRepertoireState, useSettings } from '../db/hooks';
 import { buildDailyQueue } from '../srs/queue';
 import { streak } from '../srs/stats';
 import { Board } from '../ui/Board';
@@ -10,6 +10,23 @@ import { openingName, useEco } from '../ui/opening';
 import { href, navigate } from '../ui/router';
 
 const WEEK = 7 * 86400_000;
+
+/** Con qué repertorio entrenás en cada color; solo si tenés más de uno en alguno. */
+function ActiveRepertoires() {
+  const state = useRepertoireState();
+  const active = useActive();
+  if (!state || !active) return null;
+  const several = (['white', 'black'] as const).some((s) => state.repertoires.filter((r) => r.side === s).length > 1);
+  if (!several) return null;
+  return (
+    <p className="mt-6 text-center text-sm text-muted">
+      Entrenás con {active.repertoires.white.name} (blancas) y {active.repertoires.black.name} (negras).{' '}
+      <button className="min-h-11 font-semibold text-brass underline-offset-2 hover:underline" onClick={() => navigate('/repertorios')}>
+        Cambiar
+      </button>
+    </p>
+  );
+}
 
 export function HomeScreen() {
   const graphs = useGraphs();
@@ -114,6 +131,8 @@ export function HomeScreen() {
           </div>
         </>
       )}
+
+      <ActiveRepertoires />
 
       {backupDue && (
         <div className="mt-8">

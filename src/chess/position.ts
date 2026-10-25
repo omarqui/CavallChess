@@ -18,10 +18,15 @@ export const posFromEpd = (epd: string): Chess => {
 
 export const turnOf = (epd: string): Side => (epd.split(' ')[1] === 'w' ? 'white' : 'black');
 
-export const nodeId = (side: Side, epd: string) => `${side}|${epd}`;
-export const edgeId = (side: Side, epd: string, uci: string) => `${side}|${epd}|${uci}`;
+/**
+ * Los ids empiezan con el id del repertorio (`rep`). Los dos primeros repertorios se llaman como su color
+ * (`white`, `black`), así que los ids de antes de los repertorios múltiples siguen valiendo.
+ */
+export const nodeId = (rep: string, epd: string) => `${rep}|${epd}`;
+export const edgeId = (rep: string, epd: string, uci: string) => `${rep}|${epd}|${uci}`;
 export const epdFromNodeId = (id: string) => id.slice(id.indexOf('|') + 1);
-export const sideFromId = (id: string): Side => (id.startsWith('white|') ? 'white' : 'black');
+/** Repertorio de un id de posición, jugada, tarjeta o hueco. */
+export const repFromId = (id: string) => id.slice(0, id.indexOf('|'));
 
 export interface PlayedMove {
   uci: string; // normalizado (enroque como rey→torre, igual que chessops)

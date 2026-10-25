@@ -80,7 +80,7 @@ export function namesMap(plan: ImportPlan, proposals: NameProposal[]): Map<strin
   const names = new Map<string, string>();
   for (const p of proposals) {
     const epd = plan.chapters[p.chapter]?.mainline[p.root]?.epd;
-    if (p.enabled && epd) names.set(nodeId(plan.side, epd), p.name);
+    if (p.enabled && epd) names.set(nodeId(plan.rep, epd), p.name);
   }
   return names;
 }

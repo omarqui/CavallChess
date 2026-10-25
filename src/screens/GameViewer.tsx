@@ -2,9 +2,10 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { DrawShape } from '@lichess-org/chessground/draw';
 import type { RepertoireGraph } from '../chess/graph';
 import { displaySquares, figurine, INITIAL_EPD, nodeId, type Side } from '../chess/position';
-import { useGame, useGraphs, useSettings } from '../db/hooks';
+import { useActive, useGame, useRepertoireState, useSettings } from '../db/hooks';
 import { ensureDue } from '../db/repo';
-import { analyzeGame, type GameAnalysis } from '../games/analyze';
+import type { GameAnalysis } from '../games/analyze';
+import { analyzeBest } from '../games/best';
 import { gameMoves, type GameMove } from '../games/gamePgn';
 import { openingInsight } from '../games/insight';
 import { useLibrary } from '../library/catalog';
@@ -53,16 +54,37 @@ export function GameNotFound() {
 
 export function GameViewerScreen({ id }: { id: string }) {
   const game = useGame(id);
-  const graphs = useGraphs();
-  if (game === undefined || !graphs) return null;
-  if (!game) return <GameNotFound />;
-  return <Viewer game={game} graph={graphs[game.myColor]} />;
+  const state = useRepertoireState();
+  const active = useActive();
+  const color = game?.myColor;
+  const graphs = useMemo(() => {
+    if (!state || !active || !color) return undefined;
+    const mine = state.repertoires.filter((r) => r.side === color).flatMap((r) => state.graphs.get(r.id) ?? []);
+    return mine.length ? mine : [active.graphs[color]];
+  }, [state, active, color]);
+  const names = useMemo(() => new Map(state?.repertoires.map((r) => [r.id, r.name])), [state]);
+  if (game === null) return <GameNotFound />;
+  if (game === undefined || !graphs || !active) return null;
+  return <Viewer game={game} graphs={graphs} preferred={active.repertoires[game.myColor].id} names={names} />;
 }
 
-function Viewer({ game, graph }: { game: GameRow; graph: RepertoireGraph }) {
+function Viewer({
+  game,
+  graphs,
+  preferred,
+  names,
+}: {
+  game: GameRow;
+  /** Los repertorios del color con el que jugaste. */
+  graphs: RepertoireGraph[];
+  /** El activo de ese color: gana si empata con otro. */
+  preferred: string;
+  names: Map<string, string>;
+}) {
   const moves = useMemo(() => gameMoves(game.pgn), [game.pgn]);
-  // El resultado se recalcula contra el repertorio de ahora, no el que se guardó al importar.
-  const analysis = useMemo(() => analyzeGame(game.pgn, graph), [game.pgn, graph]);
+  // El resultado se recalcula contra los repertorios de ahora (el que más la cubre), no lo que se guardó al importar.
+  const analysis = useMemo(() => analyzeBest(game.pgn, graphs, preferred), [game.pgn, graphs, preferred]);
+  const graph = graphs.find((g) => g.rep === analysis.rep) ?? graphs[0];
   if (!moves) {
     return (
       <div className="mx-auto w-full max-w-xl px-4 safe-top">
@@ -71,7 +93,15 @@ function Viewer({ game, graph }: { game: GameRow; graph: RepertoireGraph }) {
       </div>
     );
   }
-  return <Player game={game} graph={graph} moves={moves} analysis={analysis} />;
+  return (
+    <Player
+      game={game}
+      graph={graph}
+      moves={moves}
+      analysis={analysis}
+      repName={graphs.length > 1 ? names.get(graph.rep) : undefined}
+    />
+  );
 }
 
 function GameHeader({ game, aside }: { game: GameRow; aside?: ReactNode }) {
@@ -117,11 +147,14 @@ function Player({
   graph,
   moves,
   analysis,
+  repName,
 }: {
   game: GameRow;
   graph: RepertoireGraph;
   moves: GameMove[];
   analysis: GameAnalysis;
+  /** Con qué repertorio se cruzó, si tenés más de uno de ese color. */
+  repName?: string;
 }) {
   const o = analysis.outcome;
   const exit = exitOf(o);
@@ -211,6 +244,7 @@ function Player({
       {/* El aviso va arriba del tablero: así se ve con su acción principal aunque "Analizar" ocupe lugar abajo. */}
       <div className="gv-info safe-top shrink-0 px-4 pb-2">
         <GameHeader game={game} aside={<Toggle label="Analizar" checked={analyze} onChange={setAnalyze} />} />
+        {repName && o.kind !== 'noBook' && <p className="text-sm text-muted">Con tu repertorio {repName}</p>}
         <OpeningSummary insight={insight} moves={moves} judgements={judgements} onGo={go} />
         {o.kind === 'myDeviation' || o.kind === 'gap' ? (
           <ExitNotice
@@ -266,7 +300,7 @@ function Player({
           moves={moves}
           ply={ply}
           epd={epd}
-          known={new Set(graph.children(nodeId(game.myColor, epd)).map((e) => e.uci))}
+          known={new Set(graph.children(nodeId(graph.rep, epd)).map((e) => e.uci))}
           token={token}
           judging={judging}
           judgements={judgements}
@@ -348,7 +382,7 @@ function ExitNotice({
     <Button
       variant={canAddReply ? 'secondary' : 'primary'}
       className="flex-auto !px-3"
-      onClick={() => navigate(gapRepertoirePath(side, gap.epd, gap.san))}
+      onClick={() => navigate(gapRepertoirePath(side, gap.id, gap.epd, gap.san))}
     >
       Preparar respuesta
     </Button>

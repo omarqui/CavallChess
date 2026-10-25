@@ -10,8 +10,8 @@ import {
   turnOf,
   type Side,
 } from '../chess/position';
-import { addMove, deleteEdge, updateEdge, updateNode } from '../db/repo';
-import { useCards, useGraphs, useSettings } from '../db/hooks';
+import { addMove, deleteEdge, setActiveRepertoire, updateEdge, updateNode } from '../db/repo';
+import { useActive, useCards, useRepertoireState, useSettings } from '../db/hooks';
 import { mastery } from '../srs/stats';
 import type { MoveEdge } from '../types';
 import { arrow, Board } from '../ui/Board';
@@ -21,9 +21,24 @@ import { Banner, Button, MoveLine, Screen, Section, Segmented, sideLabel, Toggle
 import { Tip } from '../ui/Tip';
 import { openingName, useEco } from '../ui/opening';
 import { navigate } from '../ui/router';
+import { repertoirePath } from './games/format';
 
-export function RepertoireScreen({ side, nodeParam, gapSan }: { side: Side; nodeParam?: string; gapSan?: string }) {
-  const graphs = useGraphs();
+/**
+ * El editor del repertorio activo de `side`, o de `repParam` (aunque no sea el activo) si es de ese color.
+ */
+export function RepertoireScreen({
+  side,
+  repParam,
+  nodeParam,
+  gapSan,
+}: {
+  side: Side;
+  repParam?: string;
+  nodeParam?: string;
+  gapSan?: string;
+}) {
+  const state = useRepertoireState();
+  const active = useActive();
   const cards = useCards();
   const settings = useSettings();
   const eco = useEco();
@@ -34,8 +49,12 @@ export function RepertoireScreen({ side, nodeParam, gapSan }: { side: Side; node
   const [pendingDelete, setPendingDelete] = useState<{ edge: MoveEdge; archive: number } | null>(null);
   const [showEngine, setShowEngine] = useState(false);
 
-  if (!graphs || !cards || !settings) return null;
-  const g = graphs[side];
+  if (!state || !active || !cards || !settings) return null;
+  const asked = repParam ? state.graphs.get(repParam) : undefined;
+  const g = asked?.side === side ? asked : active.graphs[side];
+  const rep = state.repertoires.find((r) => r.id === g.rep) ?? active.repertoires[side];
+  const isActive = rep.id === active.repertoires[side].id;
+  const several = state.repertoires.filter((r) => r.side === side).length > 1;
   const nodeId = nodeParam && g.nodes.has(nodeParam) ? nodeParam : g.rootId;
   const node = g.node(nodeId)!;
   const epd = node.epd;
@@ -47,13 +66,13 @@ export function RepertoireScreen({ side, nodeParam, gapSan }: { side: Side; node
   const mine = g.mineEdge(nodeId);
   const lastEdge = path?.at(-1);
   const name = openingName(g, nodeId, eco);
-  const go = (id: string) => navigate(`/repertoire/${side}?node=${encodeURIComponent(id)}`);
+  const go = (id: string) => navigate(repertoirePath(side, g.rep, id));
 
   const onMove = async (uci: string) => {
     setPendingReplace(null);
     const played = playUci(epd, uci);
     if (!played) return setSyncKey((k) => k + 1);
-    const existing = g.edges.get(edgeId(side, epd, played.uci));
+    const existing = g.edges.get(edgeId(g.rep, epd, played.uci));
     if (existing) return go(existing.toId);
     if (myTurn && mine) {
       setPendingReplace({ uci: played.uci, san: played.san, mine, archive: g.wouldArchive(mine.id).length });
@@ -93,6 +112,25 @@ export function RepertoireScreen({ side, nodeParam, gapSan }: { side: Side; node
         </div>
       }
     >
+      <div className="mb-3 flex min-h-11 items-center justify-between gap-3">
+        <p className="min-w-0 truncate text-[15px]">
+          <span className="font-semibold">{rep.name}</span>
+          {several && isActive && <span className="text-muted"> · activo</span>}
+        </p>
+        <Button variant="ghost" className="shrink-0 !px-3" onClick={() => navigate('/repertorios')}>
+          {several ? 'Cambiar' : 'Tus repertorios'}
+        </Button>
+      </div>
+      {!isActive && (
+        <div className="mb-3">
+          <Banner compact>
+            <p>No es tu repertorio activo: con {sideLabel(side).toLowerCase()} entrenás con {active.repertoires[side].name}.</p>
+            <Button className="mt-2" onClick={() => void setActiveRepertoire(rep.id)}>
+              Entrenar con este
+            </Button>
+          </Banner>
+        </div>
+      )}
       {cards.size > 0 && (
         <Tip id="repertorio">
           Tu repertorio es un árbol de posiciones: «Cortar aquí» marca el final de una línea, y borrar archiva sin perder el historial.
@@ -388,9 +426,10 @@ function Tree({ graph, current, onPick }: { graph: RepertoireGraph; current: str
 function ArchivedLink({ graph, side }: { graph: RepertoireGraph; side: Side }) {
   const n = graph.archivedNodeIds().length;
   if (!n) return null;
+  const to = `/archived/${side}${graph.rep === side ? '' : `?rep=${encodeURIComponent(graph.rep)}`}`;
   return (
     <div className="mt-6">
-      <Button variant="ghost" className="-ml-3 text-muted" onClick={() => navigate(`/archived/${side}`)}>
+      <Button variant="ghost" className="-ml-3 text-muted" onClick={() => navigate(to)}>
         {n} {n === 1 ? 'posición archivada' : 'posiciones archivadas'}
       </Button>
     </div>

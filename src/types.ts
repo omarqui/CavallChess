@@ -10,8 +10,19 @@ export interface Shape {
   brush: 'green' | 'red' | 'blue' | 'yellow';
 }
 
+/**
+ * Un repertorio de un color. Sus posiciones, jugadas, tarjetas y huecos llevan su `id` como prefijo del id
+ * (ver `nodeId`); los dos primeros se llaman `white` y `black`.
+ */
+export interface Repertoire {
+  id: string;
+  side: Side;
+  name: string;
+  createdAt: number;
+}
+
 export interface PositionNode {
-  id: string; // `${side}|${epd}`
+  id: string; // `${rep}|${epd}` (rep = id del repertorio)
   side: Side;
   epd: string;
   myTurn: boolean;
@@ -35,7 +46,7 @@ export interface Note {
 }
 
 export interface MoveEdge {
-  id: string; // `${side}|${epd}|${uci}`
+  id: string; // `${rep}|${epd}|${uci}`
   side: Side;
   fromId: string;
   toId: string;
@@ -69,7 +80,7 @@ export interface CardRow {
 }
 
 export interface Gap {
-  id: string; // `${side}|${epd}|${uci}`
+  id: string; // `${rep}|${epd}|${uci}`
   side: Side;
   epd: string;
   uci: string;
@@ -95,6 +106,8 @@ export interface GameRow {
   result: string; // 'win' | 'loss' | 'draw' | ...
   outcome: GameOutcome;
   pgn: string;
+  /** Repertorio contra el que se cruzó (el que más la cubre); sin él, el primero del color (`myColor`). */
+  rep?: string;
 }
 
 export interface StudyDay {
@@ -103,6 +116,8 @@ export interface StudyDay {
 
 export interface Settings {
   newPerDay: number;
+  /** Repertorio con el que entrenás en cada color; si falta o ya no existe, el más viejo de ese color. */
+  activeRep?: Partial<Record<Side, string>>;
   boardTheme: 'brown' | 'blue' | 'green' | 'slate';
   pieceSet: PieceSetId; // registrados en src/ui/pieceSets.ts
   colorScheme: 'system' | 'light' | 'dark';

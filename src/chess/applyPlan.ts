@@ -22,7 +22,7 @@ export function applyPlan(
   names: Map<string, string>,
   now: number,
 ): PlanChanges {
-  const side = plan.side;
+  const { side, rep } = plan;
   const upsertNodes: PositionNode[] = [];
   const upsertEdges: MoveEdge[] = [];
   const deleteEdgeIds: string[] = [];
@@ -42,7 +42,7 @@ export function applyPlan(
   }
 
   for (const c of plan.conflicts) {
-    if (resolutions.get(c.nodeId) === 'replace') deleteEdgeIds.push(edgeId(side, c.epd, c.existingUci));
+    if (resolutions.get(c.nodeId) === 'replace') deleteEdgeIds.push(edgeId(rep, c.epd, c.existingUci));
   }
 
   let i = 0;
@@ -71,8 +71,8 @@ export function applyPlan(
     const edge: MoveEdge = {
       id: e.id,
       side,
-      fromId: nodeId(side, e.fromEpd),
-      toId: nodeId(side, e.toEpd),
+      fromId: nodeId(rep, e.fromEpd),
+      toId: nodeId(rep, e.toEpd),
       uci: e.uci,
       san: e.san,
       mine: e.mine,

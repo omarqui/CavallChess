@@ -32,13 +32,13 @@ export function analyzeGame(pgn: string, graph: RepertoireGraph): GameAnalysis {
   /** Salirse en la posición inicial es no tener repertorio de ese color: queda fuera, no "terminó tu preparación". */
   const fin = (ply: number): GameAnalysis => ({ outcome: ply === 0 ? { kind: 'noBook' } : { kind: 'endOfBook', ply } });
 
-  const side = graph.side;
+  const { side, rep } = graph;
   let ply = 0;
   let node = game.moves;
   while (node.children.length) {
     const child = node.children[0];
     const epd = epdOf(pos);
-    const id = nodeId(side, epd);
+    const id = nodeId(rep, epd);
     if (!graph.trainable.has(id) || graph.node(id)?.cutHere) return fin(ply);
     const move = parseSan(pos, child.data.san);
     if (!move) break;
@@ -57,7 +57,7 @@ export function analyzeGame(pgn: string, graph: RepertoireGraph): GameAnalysis {
       const options = graph.children(id);
       if (!options.length) return fin(ply);
       if (!options.some((e) => e.uci === uci)) {
-        const gid = edgeId(side, epd, uci);
+        const gid = edgeId(rep, epd, uci);
         return { outcome: { kind: 'gap', ply, playedSan: san, gapId: gid }, gap: { id: gid, epd, uci, san } };
       }
     }

@@ -1,7 +1,7 @@
 import { db, type CavallDB } from '../db/db';
-import { loadGraph } from '../db/repo';
+import { loadAllGraphs } from '../db/repo';
 import type { Gap, GameOutcome, GameRow, Side } from '../types';
-import { analyzeGame } from './analyze';
+import { analyzeBest } from './best';
 import { runExclusive } from './lock';
 
 export type OutcomeFilter = 'todas' | 'desvios' | 'novedades' | 'dentro' | 'fuera';
@@ -73,18 +73,16 @@ async function recalc(
   onProgress: ((done: number, total: number) => void) | undefined,
   d: CavallDB,
 ): Promise<{ games: number; gaps: number }> {
-  const graphs: Record<Side, Awaited<ReturnType<typeof loadGraph>>> = {
-    white: await loadGraph('white', d),
-    black: await loadGraph('black', d),
-  };
+  const graphs = await loadAllGraphs(d);
   const ids = (await d.games.orderBy('endTime').primaryKeys()) as string[];
   const total = ids.length;
   const gaps = new Map<string, Gap>();
   let done = 0;
 
-  /** Cruza una partida con su grafo y, si trae una novedad, la suma a los huecos. */
+  /** Cruza una partida con los repertorios de su color y, si trae una novedad, la suma a los huecos. */
   const analizar = (row: GameRow): GameRow => {
-    const { outcome, gap } = analyzeGame(row.pgn, graphs[row.myColor]);
+    const mine = graphs[row.myColor];
+    const { outcome, gap, rep } = analyzeBest(row.pgn, mine.graphs, mine.active);
     if (gap) {
       // Igual que recordGame: cuenta, última vez y partida más reciente.
       const prev = gaps.get(gap.id);
@@ -97,7 +95,7 @@ async function recalc(
         lastGameUrl: esReciente ? row.id : prev.lastGameUrl,
       });
     }
-    return { ...row, outcome };
+    return { ...row, outcome, rep };
   };
 
   // Además de entre tandas, se suelta el hilo cada ~40 ms: una tanda de PGN largos no congela la interfaz.
@@ -113,7 +111,7 @@ async function recalc(
     for (const row of rows) {
       const nueva = analizar(row);
       // No se reescribe lo que no cambió.
-      if (JSON.stringify(nueva.outcome) !== JSON.stringify(row.outcome)) updated.push(nueva);
+      if (nueva.rep !== row.rep || JSON.stringify(nueva.outcome) !== JSON.stringify(row.outcome)) updated.push(nueva);
       if (performance.now() - ultimaCesion >= CEDER_CADA_MS) await ceder();
     }
     await d.games.bulkPut(updated);
