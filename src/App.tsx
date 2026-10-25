@@ -6,7 +6,9 @@ import { shouldAutoSync, syncChesscom } from './games/sync';
 import { ArchivedScreen } from './screens/Archived';
 import { FichaScreen, parseFichaTab } from './screens/Ficha';
 import { FichaAddScreen } from './screens/FichaAdd';
+import { GameAddScreen } from './screens/GameAdd';
 import { GamesScreen } from './screens/Games';
+import { GameViewerScreen } from './screens/GameViewer';
 import { HomeScreen } from './screens/Home';
 import { ImportScreen } from './screens/Import';
 import { IntroScreen } from './screens/Intro';
@@ -170,9 +172,18 @@ export default function App() {
       } else screen = <FichaScreen key={id} id={id} tab={parseFichaTab(route.params.get('tab'))} />;
       break;
     }
-    case 'games':
-      screen = <GamesScreen />;
+    case 'games': {
+      const [, id, sub] = route.path;
+      if (!id) screen = <GamesScreen />;
+      else if (!sub) {
+        // Visor a pantalla completa: sin barra de pestañas.
+        tab = null;
+        screen = <GameViewerScreen key={id} id={decodeSegment(id)} />;
+      } else if (sub === 'agregar') {
+        screen = <GameAddScreen key={id} id={decodeSegment(id)} plies={Number(route.params.get('hasta'))} />;
+      } else screen = <GamesScreen />;
       break;
+    }
     case 'progress':
       screen = <ProgressScreen />;
       break;
@@ -210,6 +221,15 @@ export default function App() {
       {tab && <TabBar active={tab} />}
     </div>
   );
+}
+
+/** Un segmento de la ruta codificado con `encodeURIComponent` (el router no los decodifica). */
+function decodeSegment(s: string): string {
+  try {
+    return decodeURIComponent(s);
+  } catch {
+    return s; // mal codificado: la pantalla dice que no lo encuentra
+  }
 }
 
 /**

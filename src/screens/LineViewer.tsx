@@ -162,7 +162,7 @@ function Viewer({ ficha, line }: { ficha: Ficha; line: FichaLine }) {
   );
 }
 
-function NavButton({
+export function NavButton({
   label,
   icon,
   disabled,

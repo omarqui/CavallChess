@@ -164,7 +164,7 @@ function GameItem({ game }: { game: GameRow }) {
   const result = game.result === 'win' ? 'Ganaste' : ['checkmated', 'resigned', 'timeout', 'lose', 'abandoned'].includes(game.result) ? 'Perdiste' : 'Tablas';
   return (
     <li className="px-3 py-2.5">
-      <a href={game.id} target="_blank" rel="noreferrer" className="block">
+      <a href={'#/games/' + encodeURIComponent(game.id)} className="block">
         <div className="flex items-baseline justify-between gap-3 text-[15px]">
           <span className="truncate">
             vs {game.opponent} <span className="text-muted">· {game.timeClass} · {result}</span>
