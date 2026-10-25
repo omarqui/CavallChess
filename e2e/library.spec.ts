@@ -44,3 +44,14 @@ test('ficha: las notas se guardan', async ({ page }) => {
   await page.getByRole('radio', { name: 'Mis apuntes' }).click();
   await expect(page.getByLabel('Tu nota: Variante del Avance')).toHaveValue('Ojo con Nh4.');
 });
+
+test('visor: recorrer una línea y analizar', async ({ page }) => {
+  await page.goto('/#/biblioteca/caro-kann?tab=variantes');
+  await page.getByRole('button', { name: 'Ver en el tablero' }).first().click();
+  await page.getByRole('button', { name: 'Siguiente' }).click();
+  await page.getByRole('button', { name: 'Siguiente' }).click();
+  await page.getByRole('button', { name: 'Anterior' }).click();
+  await page.getByLabel('Analizar').check();
+  await expect(page.getByText(/Calculando|[+−-]\d/)).toBeVisible();
+  await shot(page, '22-visor');
+});

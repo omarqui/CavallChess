@@ -8,7 +8,8 @@ import { FichaAddScreen } from './screens/FichaAdd';
 import { GamesScreen } from './screens/Games';
 import { HomeScreen } from './screens/Home';
 import { ImportScreen } from './screens/Import';
-import { LibraryComingSoon, LibraryScreen } from './screens/Library';
+import { LibraryScreen } from './screens/Library';
+import { LineViewerScreen } from './screens/LineViewer';
 import { ProgressScreen } from './screens/Progress';
 import { RepertoireScreen } from './screens/Repertoire';
 import { SettingsScreen } from './screens/Settings';
@@ -108,8 +109,11 @@ export default function App() {
       if (!id) screen = <LibraryScreen />;
       else if (!sub) screen = <FichaScreen key={id} id={id} tab={parseFichaTab(route.params.get('tab'))} />;
       else if (sub === 'agregar' && route.path.length === 3) screen = <FichaAddScreen key={id} id={id} />;
-      // Visor de línea: provisorio hasta la Tarea 14.
-      else screen = <LibraryComingSoon />;
+      else if (sub === 'linea' && route.path[3] && route.path.length === 4) {
+        // Visor a pantalla completa: sin barra de pestañas.
+        tab = null;
+        screen = <LineViewerScreen key={route.path[3]} fichaId={id} lineId={route.path[3]} />;
+      } else screen = <FichaScreen key={id} id={id} tab={parseFichaTab(route.params.get('tab'))} />;
       break;
     }
     case 'games':
