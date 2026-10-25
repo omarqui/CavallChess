@@ -61,9 +61,40 @@ export default function App() {
   useAppearance();
 
   // Cada pantalla nueva arranca desde arriba (los cambios de parámetros, como una pestaña, no).
+  // Al volver a la pantalla anterior (visor -> ficha -> catálogo) se restaura donde estabas.
+  const trail = useRef<{ key: string; scroll: number }[]>([]);
+  const lastScroll = useRef(0);
   useLayoutEffect(() => {
-    if (main.current) main.current.scrollTop = 0;
-  }, [pathKey]);
+    const el = main.current;
+    if (!el) return;
+    const stack = trail.current;
+    let target = 0;
+    if (stack.length && stack[stack.length - 1].key === pathKey) {
+      /* mismo camino: solo cambiaron los parámetros */
+      return;
+    }
+    if (stack.length) stack[stack.length - 1].scroll = lastScroll.current;
+    if (stack.length >= 2 && stack[stack.length - 2].key === pathKey) {
+      stack.pop();
+      target = stack[stack.length - 1].scroll;
+    } else {
+      stack.push({ key: pathKey, scroll: 0 });
+      if (stack.length > 30) stack.shift();
+    }
+    lastScroll.current = target;
+    el.scrollTop = target;
+    // El contenido puede cargar después (catálogo, grafos): reintenta unos cuadros hasta alcanzar la posición.
+    let tries = 0;
+    let raf = 0;
+    const settle = () => {
+      if (target && Math.abs(el.scrollTop - target) > 1 && tries++ < 20) {
+        el.scrollTop = target;
+        raf = requestAnimationFrame(settle);
+      }
+    };
+    if (target) raf = requestAnimationFrame(settle);
+    return () => cancelAnimationFrame(raf);
+  }, [pathKey, ready]);
 
   useEffect(() => {
     void ensureRoots()
@@ -155,7 +186,13 @@ export default function App() {
 
   return (
     <div className="flex h-full flex-col" style={{ '--tabbar-h': TABBAR_H } as CSSProperties}>
-      <main ref={main} className="flex-1 overflow-y-auto">
+      <main
+        ref={main}
+        className="flex-1 overflow-y-auto"
+        onScroll={(e) => {
+          lastScroll.current = e.currentTarget.scrollTop;
+        }}
+      >
         {screen}
       </main>
       {toast && (
