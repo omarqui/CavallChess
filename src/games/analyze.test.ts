@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { analyzeGame } from './analyze';
-import { edgeAt, repoFrom } from '../test/helpers';
+import { edgeAt, emptyRepo, graphOf, repoFrom } from '../test/helpers';
 
 const REP = '1. e4 e5 2. Nf3 Nc6 (2... d6 3. d4) 3. Bb5 a6 4. Ba4 *';
 
@@ -38,6 +38,13 @@ describe('análisis de partidas', () => {
     const black = repoFrom('1. e4 c5 2. Nf3 d6 *', 'black').graph;
     expect(analyzeGame('1. d4 Nf6 *', black).outcome).toMatchObject({ kind: 'gap', ply: 0, playedSan: 'd4' });
     expect(analyzeGame('1. e4 e5 *', black).outcome).toMatchObject({ kind: 'myDeviation', ply: 1 });
+  });
+
+  it('sin repertorio de ese color la partida queda fuera, no "terminó tu preparación" en la jugada 0', () => {
+    const blancas = graphOf(emptyRepo('white'), 'white');
+    expect(analyzeGame('1. e4 e5 *', blancas).outcome).toEqual({ kind: 'noBook' });
+    const negras = graphOf(emptyRepo('black'), 'black');
+    expect(analyzeGame('1. e4 e5 *', negras).outcome).toEqual({ kind: 'noBook' });
   });
 
   it('las transposiciones se reconocen por posición', () => {

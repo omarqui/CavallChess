@@ -52,6 +52,15 @@ describe('consultas de partidas', () => {
     expect(matchesFilter(row(0), { color: 'black', outcome: 'todas' })).toBe(false);
   });
 
+  it('un endOfBook en la jugada 0 guardado antes del arreglo cuenta como fuera del repertorio', () => {
+    const vieja: GameRow = { ...row(0), outcome: { kind: 'endOfBook', ply: 0 } };
+    expect(matchesFilter(vieja, { color: 'todas', outcome: 'fuera' })).toBe(true);
+    expect(matchesFilter(vieja, { color: 'todas', outcome: 'dentro' })).toBe(false);
+    const dentro: GameRow = { ...row(0), outcome: { kind: 'endOfBook', ply: 1 } };
+    expect(matchesFilter(dentro, { color: 'todas', outcome: 'dentro' })).toBe(true);
+    expect(matchesFilter(dentro, { color: 'todas', outcome: 'fuera' })).toBe(false);
+  });
+
   it('gamesPage pagina en orden de fecha y aplica color y resultado', async () => {
     await seed();
     const todas = await gamesPage({ color: 'todas', outcome: 'todas' }, 0, 50, d);
@@ -87,6 +96,48 @@ describe('consultas de partidas', () => {
       }
     }
     expect(await countGames({ color: 'todas', outcome: 'todas' }, d)).toBe(120);
+  });
+
+  it('sin filtro, contar y paginar no leen todas las filas (cada una trae el PGN entero)', async () => {
+    // Cuenta, en el núcleo de Dexie, cursores abiertos y valores leídos de la tabla de partidas.
+    const lecturas = { cursores: 0, valores: 0 };
+    const db2 = new CavallDB(`store-${n++}`);
+    db2.use({
+      stack: 'dbcore',
+      name: 'contador',
+      create: (down) => ({
+        ...down,
+        table: (name) => {
+          const t = down.table(name);
+          if (name !== 'games') return t;
+          return {
+            ...t,
+            openCursor: async (req) => {
+              lecturas.cursores++;
+              const c = await t.openCursor(req);
+              if (!c) return c;
+              return Object.create(c, {
+                value: {
+                  get() {
+                    lecturas.valores++;
+                    return c.value;
+                  },
+                },
+              });
+            },
+          };
+        },
+      }),
+    });
+    await db2.games.bulkPut(Array.from({ length: 120 }, (_, i) => row(i)));
+    const todas: GameFilter = { color: 'todas', outcome: 'todas' };
+
+    expect(await countGames(todas, db2)).toBe(120);
+    expect(lecturas.cursores).toBe(0);
+
+    const pagina = await gamesPage(todas, 100, 10, db2);
+    expect(pagina.map((r) => r.id)).toEqual(Array.from({ length: 10 }, (_, i) => row(19 - i).id));
+    expect(lecturas.valores).toBeLessThanOrEqual(10);
   });
 });
 
