@@ -1,1 +1,50 @@
-{}
+{
+  "avance-contra-caro-kann": {
+    "hash": "95afa19b1ca563be51133100d57b1c913a621836f4c1e2b7a842bb6fab600fcd",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "sistema-short": 0.26,
+      "peon-envenenado-e5": 3.96,
+      "contra-c5": 0.14,
+      "sacrificio-griego": 6.72
+    }
+  },
+  "contra-petrov-y-philidor": {
+    "hash": "e6aa61601300e33b1e367620dfbb59bde27e6069039914e15154f994c5393254",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "petrov-nimzowitsch": 0.26,
+      "copia-en-la-petrov": 8.15,
+      "gambito-stafford": -1000,
+      "philidor": 0.28,
+      "mate-de-legal": 1000
+    }
+  },
+  "gambito-de-dama": {
+    "hash": "97f803be3b29bb60736ebaafd84b523ecc96093ef650ca22ce8a8ec13cfce30e",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "rehusado-cambio": 0.36,
+      "trampa-del-elefante": -5.3,
+      "eslava": 0.19,
+      "aceptado": 0.09,
+      "peon-c4-con-b5": 5.56,
+      "trampa-de-lasker": -10.36
+    }
+  },
+  "escandinava": {
+    "hash": "5b19938ecf62f99f0b28005e042d73e367a63eb35d494ae8b3da2432069b031f",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "principal-qa5": -0.14,
+      "descubierta-en-d5": -5.32,
+      "ataque-ne5-g4": -0.18,
+      "contra-2-nc3": 0.58,
+      "contra-2-e5": 0.11
+    }
+  }
+}
