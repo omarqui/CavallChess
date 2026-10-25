@@ -15,6 +15,9 @@ import { HistorySection } from './games/HistorySection';
 import type { Job, RunJob } from './games/jobs';
 import { ToolsSection } from './games/ToolsSection';
 
+/** Huecos visibles de entrada (los más frecuentes): cada uno lleva un tablero y empujarían la lista hacia abajo. */
+const GAPS_SHOWN = 5;
+
 /**
  * Partidas, de arriba abajo: actualizar, el historial, las herramientas contra el repertorio, los huecos y, al final,
  * la lista (que con el historial cargado no tiene fin).
@@ -27,6 +30,7 @@ export function GamesScreen() {
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [job, setJob] = useState<Job | null>(null);
+  const [allGaps, setAllGaps] = useState(false);
   const running = useRef(false);
   if (!settings || !gaps || total === undefined || !graphs) return null;
 
@@ -100,11 +104,18 @@ export function GamesScreen() {
             Cuando un rival juegue algo que tu repertorio no cubre, aparece acá para que prepares tu respuesta.
           </p>
         ) : (
-          <ul className="space-y-3">
-            {gaps.slice(0, 30).map((g) => (
-              <GapItem key={g.id} gap={g} graphs={graphs} />
-            ))}
-          </ul>
+          <>
+            <ul className="space-y-3">
+              {gaps.slice(0, allGaps ? 30 : GAPS_SHOWN).map((g) => (
+                <GapItem key={g.id} gap={g} graphs={graphs} />
+              ))}
+            </ul>
+            {!allGaps && gaps.length > GAPS_SHOWN && (
+              <Button className="mt-3 w-full" onClick={() => setAllGaps(true)}>
+                Ver {gaps.length > 30 ? 'los 30 más frecuentes' : `los ${gaps.length} huecos`}
+              </Button>
+            )}
+          </>
         )}
       </Section>
 
