@@ -22,14 +22,14 @@ La idea que ordena toda la defensa es simple: **tu alfil de casillas claras sale
 
 ## Ideas y planes
 - **Avance (`3.e5`):** las blancas ganan espacio y te quitan f6 para el caballo. Tu plan es atacar la base de la cadena con `...c5`, presionar d4 con los caballos (`...Nc6`, `...Nge7`) y, más adelante, romper con `...f6` contra e5.
-- **Clásica (`3.Nc3 dxe4 4.Nxe4`):** cambiás el peón central y te queda una estructura sana, sin peones débiles. El alfil va a f5 y después a g6 o h7; las blancas suelen enrocar largo y empujar en el flanco de rey, y vos cambiás piezas y preparás `...c5`.
+- **Clásica (`3.Nc3` o `3.Nd2`, y después `3...dxe4 4.Nxe4`):** cambiás el peón central y te queda una estructura sana, sin peones débiles. El alfil va a f5 y después a g6 o h7; las blancas suelen enrocar largo y empujar en el flanco de rey, y vos cambiás piezas y preparás `...c5`.
 - **Cambio (`3.exd5 cxd5`):** la estructura es simétrica, pero las blancas tienen tres peones contra dos en el flanco de dama. Ese es tu blanco: el ataque de minorías (`...b5` y `...b4`) les deja un peón débil en c3.
 - **Panov (`4.c4`):** las blancas suelen quedarse con un peón aislado en d4. Tu receta: bloquear la casilla d5 con una pieza, cambiar piezas menores y llevar la partida a un final donde ese peón sea una carga.
 
 ## Consejos
 - Antes de jugar `...e6`, fijate dónde quedó tu alfil de casillas claras.
 - Ante el avance `3.e5`, tu ruptura natural es `...c5`: ataca la base de la cadena.
-- Si las blancas empujan el peón de h para perseguir a tu alfil, respondé a tiempo con tu propio peón de h para dejarle una salida.
+- Si las blancas empujan el peón de h para perseguir a tu alfil, respondé a tiempo con tu propio peón de h: en la Clásica, `...h6` le deja la retirada a h7; en el Avance, contra `4.h4`, `...h5` frena al peón.
 - En el Cambio, el peón de b7 suele quedar en la mira de la dama blanca desde b3: tené pensado cómo defenderlo.
 - Contra el peón aislado de la Panov, cada cambio de piezas te favorece.
 
@@ -40,7 +40,7 @@ Las blancas ganan espacio con `3.e5`. Vos sacás el alfil a f5 antes de cerrar c
 1. e4 c6 2. d4 d5 3. e5 Bf5 { [%hint Antes de cerrar la diagonal con tus peones, sacá a pasear la pieza que se quedaría encerrada.] El alfil sale antes de que e6 le tape el camino. }
 4. Nf3 e6 5. Be2 c5 { [%hint Atacá la cadena blanca por su base.] El peón de d4 sostiene al de e5: si cae, toda la cadena se debilita. [%cal Gc5d4] }
 6. O-O Nc6 { Más presión sobre d4. }
-7. c3 cxd4 8. cxd4 Nge7 { [%hint Este caballo no puede ir a su casilla natural, que controla el peón de e5: buscale otro camino hacia el centro.] Desde acá puede saltar a f5 o a g6. }
+7. c3 cxd4 8. cxd4 Nge7 { [%hint Este caballo no puede ir a su casilla natural, que controla el peón de e5: buscale otro camino hacia el centro.] Desde acá va a g6, o a f5 cuando el alfil se mueva. }
 9. Nc3 Bg4 { [%hint Atacá a una de las piezas que defienden d4.] }
 10. Nh4 { Las blancas esquivan el cambio en f3. } Bxe2 11. Nxe2 Ng6 { Le hacés frente al caballo del borde y vigilás e5. }
 12. Nf3 Be7
@@ -49,7 +49,7 @@ Las blancas ganan espacio con `3.e5`. Vos sacás el alfil a f5 antes de cerrar c
 Enrocá corto y después tenés dos ideas: llevar las torres a la columna c y romper con `...f6` para atacar el peón de e5.
 
 ## Variante: Variante Clásica {#clasica} [club]
-Con `3.Nc3` las blancas defienden e4. Vos lo cambiás y sacás el alfil a f5 atacando al caballo. Si en vez de `3.Nc3` juegan `3.Nd2`, respondé igual: después de `3...dxe4 4.Nxe4` llegás a la misma posición.
+Con `3.Nc3` las blancas defienden e4. Vos lo cambiás y sacás el alfil a f5 atacando al caballo. Si en vez de `3.Nc3` juegan `3.Nd2`, respondé igual: lo ves en la variante siguiente.
 
 ```pgn
 1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 { [%hint Desarrollá la pieza clave de la defensa atacando al caballo centralizado.] }
@@ -61,6 +61,18 @@ Con `3.Nc3` las blancas defienden e4. Vos lo cambiás y sacás el alfil a f5 ata
 
 Las blancas enrocaron largo y vos enrocás corto. Tu estructura no tiene debilidades: cambiá piezas y prepará la ruptura `...c5`. El peón blanco de h5 puede volverse un blanco en el final.
 
+## Variante: Clásica con el caballo a d2 {#clasica-nd2} [club]
+Con `3.Nd2` las blancas también defienden e4. Respondés igual que contra `3.Nc3`: cambiás en e4 y, cuando el caballo recaptura, ya estás en la Variante Clásica. Esta vez las blancas sacan el caballo de g1 antes de empujar el peón de h, y tus respuestas son las mismas en otro orden.
+
+```pgn
+1. e4 c6 2. d4 d5 3. Nd2 dxe4 4. Nxe4 Bf5 { [%hint Desarrollá la pieza clave de la defensa atacando al caballo centralizado.] }
+5. Ng3 Bg6 6. Nf3 Nd7 { [%hint Cubrí la casilla central a la que quiere saltar el caballo blanco.] El caballo de f3 no puede ir a e5 sin que se lo cambies. }
+7. h4 h6 { [%hint El peón blanco viene a echar a tu alfil: dejale preparada una retirada.] Si el peón llega a h5, el alfil vuelve a h7 sin problemas. }
+8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 e6 { Con el alfil ya cambiado, ahora sí cerrás con e6. }
+```
+
+Es la misma posición de la Variante Clásica después de `10...e6`: seguí con `...Ngf6`, `...Be7` y el enroque corto, como allá.
+
 ## Variante: Variante del Cambio {#cambio} [básica]
 Con `3.exd5 cxd5` la estructura queda simétrica y tranquila. Desarrollo sano, el alfil afuera antes de e6 y ojo con el peón de b7.
 
@@ -69,7 +81,8 @@ Con `3.exd5 cxd5` la estructura queda simétrica y tranquila. Desarrollo sano, e
 7. Qb3 { Ataca b7. } Qd7 { Defiende b7 sin crear debilidades. }
 8. Nd2 e6 { El alfil ya está afuera: ahora sí cerrás con e6. }
 9. Ngf3 Bd6 { Ofrecés cambiar los alfiles de casillas oscuras. }
-10. Bxd6 Qxd6 11. O-O O-O 12. Rae1 Rab8 { [%hint Prepará el avance de tus dos peones del flanco de dama contra los tres blancos.] La torre apoya el avance del peón de b. [%cal Gb7b5] }
+10. Bxd6 Qxd6 { La dama ya no cuida b7. Si las blancas lo comen, Rb8 y la dama tiene que volver a a6; después enrocás y, con la torre en la columna b, recuperás el peón de b2: la posición queda pareja. }
+11. O-O O-O 12. Rae1 Rab8 { [%hint Prepará el avance de tus dos peones del flanco de dama contra los tres blancos.] La torre apoya el avance del peón de b. [%cal Gb7b5] }
 ```
 
 El plan es `...b5` y `...b4`: si se cambian peones en c3, a las blancas les queda un peón atrasado en la columna abierta. Mientras tanto, vigilá la casilla e5, donde suele saltar el caballo blanco.
@@ -91,7 +104,7 @@ En el Avance, algunos rivales juegan `4.h4` con la idea de seguir con g4 y h5 pa
 
 ```pgn
 1. e4 c6 2. d4 d5 3. e5 Bf5 4. h4 h5 { [%hint Frená al peón que viene por tu alfil.] Ahora g4 ya no asusta: tu peón de h5 controla esa casilla. [%cal Gh5g4] }
-(4... e6? { Natural, pero el alfil se queda sin escape. } 5. g4 Be4 6. f3 Bg6 7. h5 { El alfil no tiene casillas seguras: h7 está ocupada por tu propio peón, y f5, e4 y g6 están controladas. })
+(4... e6? { Natural, pero el alfil se queda sin escape. } 5. g4 Be4 6. f3 Bg6 7. h5 { El alfil de g6 quedó atrapado: h7 la ocupa tu propio peón y todas sus otras casillas están controladas. Comer en c2 o en h5 solo te da un peón por la pieza. })
 ```
 
 Después seguí con `...e6` y `...c5`, como en la variante del Avance. El precio de `4...h5` es que la casilla g5 queda para las piezas blancas, porque ya no podés echarlas con el peón de h.

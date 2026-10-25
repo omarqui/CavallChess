@@ -52,7 +52,7 @@ Contra `4.Nc3` conviene conocer un golpe: entregás el caballo por el peón de e
 ```pgn
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 { [%hint Un peón tuyo puede atacar dos piezas a la vez: prepará ese golpe.] }
 5. Nxe4 d5 { [%hint Atacá dos piezas con un solo peón.] Tenedor: el peón ataca al alfil y al caballo. [%cal Gd5c4,Gd5e4] }
-6. Bd3 dxe4 7. Bxe4 Bd6 { [%hint Defendé el peón de e5 con una pieza que además apunte al enroque blanco.] }
+6. Bd3 dxe4 7. Bxe4 Bd6 { [%hint Defendé el peón de e5 con una pieza que además apunte al flanco de rey blanco.] }
 8. d4 exd4 { Cambiás y las blancas se quedan sin peones en el centro. }
 9. O-O O-O
 ```
@@ -69,7 +69,7 @@ Igualaste con comodidad: tus piezas salen fácil y el caballo de c6 defiende el 
 9. Nf3 e4 { [%hint Seguí ganando tiempos contra el mismo caballo.] }
 10. Ne5 Bd6 { Desarrolla y ataca al caballo de e5. }
 11. d4 exd3 { Captura al paso: abrís líneas para tus piezas. }
-12. Nxd3 Qc7 { [%hint Armá una batería que apunte al enroque blanco.] La dama y el alfil miran a h2. }
+12. Nxd3 Qc7 { [%hint Armá una batería que apunte al flanco de rey blanco.] La dama y el alfil miran a h2. }
 ```
 
 Estás un peón abajo, pero tus piezas están mucho más activas y las blancas tienen que enrocar con cuidado, porque h2 está en la mira. Seguí con el enroque corto y con `...Bf5` o `...Re8`.
