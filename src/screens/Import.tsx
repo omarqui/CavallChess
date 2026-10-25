@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import type { RepertoireGraph } from '../chess/graph';
-import { buildImportPlan } from '../chess/pgnImport';
+import { buildImportPlan, existingOf } from '../chess/pgnImport';
 import type { Side } from '../chess/position';
 import { getSettings, loadGraph } from '../db/repo';
 import { fetchStudyPgn, parseStudyUrl } from '../integrations/lichess';
-import { ImportPreview, existingOf } from '../ui/ImportPreview';
+import { ImportPreview } from '../ui/ImportPreview';
 import { Banner, Button, Screen, Segmented } from '../ui/kit';
 import { navigate } from '../ui/router';
 

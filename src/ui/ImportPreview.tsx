@@ -1,17 +1,10 @@
 import { useState } from 'react';
 import type { RepertoireGraph } from '../chess/graph';
-import { buildImportPlan, type ImportPlan, type Resolutions } from '../chess/pgnImport';
+import { buildImportPlan, existingOf, type ImportPlan, type Resolutions } from '../chess/pgnImport';
 import { figurine, type Side } from '../chess/position';
 import { commitImport } from '../db/repo';
 import { namesMap, type NameProposal } from '../library/pgn';
 import { Banner, Button, MoveLine, Screen, Section, Segmented } from './kit';
-
-/** Lo que ya tiene el repertorio, en la forma que espera `buildImportPlan`. */
-export function existingOf(g: RepertoireGraph) {
-  const mine = new Map<string, { uci: string; san: string }>();
-  for (const e of g.edges.values()) if (e.mine) mine.set(e.fromId, { uci: e.uci, san: e.san });
-  return { mine, nodeIds: new Set(g.nodes.keys()) };
-}
 
 /** Una propuesta por capítulo; activa si hay varios capítulos o el nombre no es un "Capítulo N" genérico. */
 export function chapterProposals(plan: ImportPlan): NameProposal[] {

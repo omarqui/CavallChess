@@ -5,6 +5,7 @@ import type { Chess } from 'chessops/chess';
 import type { Move } from 'chessops/types';
 import { edgeId, epdOf, INITIAL_EPD, nodeId, turnOf, type Side } from './position';
 import type { Shape, TrapMark } from '../types';
+import type { RepertoireGraph } from './graph';
 
 export interface ImportedEdge {
   id: string;
@@ -54,6 +55,13 @@ export interface ExistingRepertoire {
   mine: Map<string, { uci: string; san: string }>;
   /** nodos existentes (para aceptar capítulos que empiezan desde una posición ya conocida) */
   nodeIds: Set<string>;
+}
+
+/** Lo que ya tiene el repertorio (también lo archivado), en la forma que espera `buildImportPlan`. */
+export function existingOf(g: RepertoireGraph): ExistingRepertoire {
+  const mine = new Map<string, { uci: string; san: string }>();
+  for (const e of g.edges.values()) if (e.mine) mine.set(e.fromId, { uci: e.uci, san: e.san });
+  return { mine, nodeIds: new Set(g.nodes.keys()) };
 }
 
 /** Resolución por conflicto: 'keep' conserva lo existente, 'replace' adopta lo del PGN. */
