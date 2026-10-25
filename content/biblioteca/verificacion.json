@@ -12,6 +12,20 @@
       "caballo-colgado": 5.63
     }
   },
+  "ataque-austriaco": {
+    "hash": "e746ee9453d7a2173bef97a2635c4ecfe3a589b1045fffd5ab9b25b650e7a3c2",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "principal-nc6": 0.22,
+      "principal-na6": 0.98,
+      "con-c5": 0.28,
+      "moderna": 1.24,
+      "nxe4-falso": 5.03,
+      "e5-prematuro": 3.83,
+      "horquilla-g5": -2.73
+    }
+  },
   "avance-contra-francesa": {
     "hash": "2c87aa055afa3882a927ae75429f55a2b9238418dd4e97e713d2cd4cc09d9cf3",
     "profundidad": 18,
@@ -37,6 +51,18 @@
       "alfil-atrapado": -5.02
     }
   },
+  "contra-alekhine": {
+    "hash": "05422ae11c390f570d4a4e654d1caf5459610c1425b523f240596232fe2e88f2",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "principal-bg4": 0.13,
+      "kengis": 0.48,
+      "alburt": 0.81,
+      "mate-en-f7": 1000,
+      "nxf7-falso": -3.98
+    }
+  },
   "contra-escandinava": {
     "hash": "e561494cbec7bd8b86684914800190e03dfcb659b285cc824ef08785b9cc2500",
     "profundidad": 18,
@@ -47,6 +73,30 @@
       "nf6": 0.53,
       "salto-nd5": 8.25,
       "peon-envenenado": 8.27
+    }
+  },
+  "contra-holandesa": {
+    "hash": "71abcbe7c5e55d4c5a003eb204d2f43d36b0ea3548abb9cef9c1335a539c7459",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "leningrado-qe8": 0.29,
+      "leningrado-c6": 0.45,
+      "leningrado-nc6": 0.75,
+      "stonewall": 0.33,
+      "peon-e4": 4.71
+    }
+  },
+  "contra-india-de-rey": {
+    "hash": "0416b200b4fc56fa983b4b5454ebd063b93be50bd352eaae22fa07b51e4d666c",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "mar-del-plata": 0.15,
+      "cambio-en-d4": 0.62,
+      "con-nbd7": 0.87,
+      "con-na6": 0.54,
+      "truco-e4": 7.87
     }
   },
   "dos-caballos": {
@@ -99,6 +149,19 @@
       "d6": 0.01,
       "e6": -0.11,
       "horquilla-c7": 9.64
+    }
+  },
+  "inglesa": {
+    "hash": "16ecd0de9ca90809d6d0b2bae59377ce51c1742c8b762c51cb59c4c00249ecfa",
+    "profundidad": 18,
+    "fecha": "2026-10-24",
+    "evals": {
+      "siciliana-invertida": 0,
+      "cerrada": 0.17,
+      "simetrica": 0.31,
+      "botvinnik": 0.26,
+      "caballo-d5": 7.05,
+      "avance-e4": 2.74
     }
   },
   "italiana": {
