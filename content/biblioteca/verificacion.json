@@ -1,69 +1,90 @@
 {
   "alapin": {
+    "version": 2,
     "hash": "d97aa70ea063d65ddebc70d5278b4f96ec4a2e5246602f462e780ec4c8dcc26a",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "nf6-nc6": 0.1,
       "d5": 0.01,
       "nf6-e6": 0.23,
       "e6": 0.25,
       "caballo-sin-casillas": 7.26,
-      "caballo-colgado": 5.63
+      "caballo-sin-casillas:previa": 0.07,
+      "caballo-sin-casillas:tras-error": 5.07,
+      "caballo-colgado": 5.63,
+      "caballo-colgado:previa": 0.18,
+      "caballo-colgado:tras-error": 5.75
     }
   },
   "anti-sicilianas": {
-    "hash": "68cf9a84fd5355fd5be531a7635a2ecf221a9101eb87f5865e85b238c52f9ed1",
+    "version": 2,
+    "hash": "9826a0094d33e0902e4247f5637f361d9ab94d1cf26987ef6a1f5b2d650aaf18",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "alapin": -0.1,
       "alapin-e5": 0.25,
       "morra": 0.2,
       "grand-prix-bb5": -0.26,
-      "grand-prix-bc4": 0.55,
-      "jaque-en-f7": -8
+      "grand-prix-bc4": 0.55
     }
   },
   "ataque-austriaco": {
+    "version": 2,
     "hash": "e746ee9453d7a2173bef97a2635c4ecfe3a589b1045fffd5ab9b25b650e7a3c2",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "principal-nc6": 0.22,
       "principal-na6": 0.98,
       "con-c5": 0.28,
       "moderna": 1.24,
       "nxe4-falso": 5.03,
+      "nxe4-falso:previa": 0.44,
+      "nxe4-falso:tras-error": 5.39,
       "e5-prematuro": 3.83,
-      "horquilla-g5": -2.73
+      "e5-prematuro:previa": 1.82,
+      "e5-prematuro:tras-error": 3.61,
+      "horquilla-g5": -2.73,
+      "horquilla-g5:caida-1": -3.37
     }
   },
   "avance-contra-caro-kann": {
+    "version": 2,
     "hash": "95afa19b1ca563be51133100d57b1c913a621836f4c1e2b7a842bb6fab600fcd",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "sistema-short": 0.26,
       "peon-envenenado-e5": 3.96,
+      "peon-envenenado-e5:previa": 0.38,
+      "peon-envenenado-e5:tras-error": 3.5,
       "contra-c5": 0.14,
-      "sacrificio-griego": 6.72
+      "sacrificio-griego": 6.72,
+      "sacrificio-griego:previa": 0.21,
+      "sacrificio-griego:tras-error": 2.32
     }
   },
   "avance-contra-francesa": {
+    "version": 2,
     "hash": "2c87aa055afa3882a927ae75429f55a2b9238418dd4e97e713d2cd4cc09d9cf3",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "c4": 0.25,
       "bd7": 0.29,
       "nh6": 0.06,
       "jaque-en-b5": 8.32,
-      "horquilla-c3": -3.15
+      "jaque-en-b5:previa": 0.11,
+      "jaque-en-b5:tras-error": 3.43,
+      "horquilla-c3": -3.15,
+      "horquilla-c3:caida-1": -3.14
     }
   },
   "benoni-y-benko": {
-    "hash": "60189afba749d0829f4da28aff9177c8b068b48e8323c86492926160b0cd55d6",
+    "version": 2,
+    "hash": "992136f37d3636ebfb14aa1027e5d44c082ce44ea62c836f7708fe327cd71ee0",
     "profundidad": 18,
     "fecha": "2026-10-25",
     "evals": {
@@ -73,109 +94,142 @@
       "rehusado": 0.26,
       "benoni-moderna": -0.52,
       "avance-e5": -2.19,
-      "rayos-x": 4.24
+      "avance-e5:caida-1": -2.42
     }
   },
   "caro-kann": {
+    "version": 2,
     "hash": "0af5cd3fb56cc11e5eea28b35de4eba5abcf1c075bf6eee4e22b1780b841e664",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "avance": -0.29,
       "clasica": -0.37,
       "clasica-nd2": -0.29,
       "cambio": -0.2,
       "panov": -0.24,
-      "alfil-atrapado": -5.02
+      "alfil-atrapado": -5.02,
+      "alfil-atrapado:caida-1": -4.94
     }
   },
   "contra-alekhine": {
+    "version": 2,
     "hash": "05422ae11c390f570d4a4e654d1caf5459610c1425b523f240596232fe2e88f2",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "principal-bg4": 0.13,
       "kengis": 0.48,
       "alburt": 0.81,
       "mate-en-f7": 1000,
-      "nxf7-falso": -3.98
+      "mate-en-f7:previa": 0.5,
+      "mate-en-f7:tras-error": 1000,
+      "nxf7-falso": -3.98,
+      "nxf7-falso:caida-1": -3.04
     }
   },
   "contra-escandinava": {
+    "version": 2,
     "hash": "e561494cbec7bd8b86684914800190e03dfcb659b285cc824ef08785b9cc2500",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "qa5": 0.92,
       "qd6": 1.39,
       "nf6": 0.53,
       "salto-nd5": 8.25,
-      "peon-envenenado": 8.27
+      "salto-nd5:previa": 0.9,
+      "salto-nd5:tras-error": 8.55,
+      "peon-envenenado": 8.27,
+      "peon-envenenado:previa": 1.46,
+      "peon-envenenado:tras-error": 8.57
     }
   },
   "contra-holandesa": {
+    "version": 2,
     "hash": "71abcbe7c5e55d4c5a003eb204d2f43d36b0ea3548abb9cef9c1335a539c7459",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "leningrado-qe8": 0.29,
       "leningrado-c6": 0.45,
       "leningrado-nc6": 0.75,
       "stonewall": 0.33,
-      "peon-e4": 4.71
+      "peon-e4": 4.71,
+      "peon-e4:previa": 0.59,
+      "peon-e4:tras-error": 2.48
     }
   },
   "contra-india-de-rey": {
+    "version": 2,
     "hash": "0416b200b4fc56fa983b4b5454ebd063b93be50bd352eaae22fa07b51e4d666c",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "mar-del-plata": 0.15,
       "cambio-en-d4": 0.62,
       "con-nbd7": 0.87,
       "con-na6": 0.54,
-      "truco-e4": 7.87
+      "truco-e4": 7.87,
+      "truco-e4:previa": 0.59,
+      "truco-e4:tras-error": 6.14
     }
   },
   "contra-inglesa": {
+    "version": 2,
     "hash": "30d94a67e9ab1cea5c9b4652ad7f13550e883e54634ce101ab444c0e938bbab7",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "cuatro-caballos-g3": -0.09,
       "cambio-en-d4": -0.19,
       "dragon-invertido": 0.01,
       "2g3": -0.05,
-      "mate-en-f3": 1000
+      "mate-en-f3": 1000,
+      "mate-en-f3:previa": 0.9,
+      "mate-en-f3:tras-error": 1000
     }
   },
   "contra-londres": {
+    "version": 2,
     "hash": "059d64f91b9785e26982fdc0d8a4d4b9faa778c506d9b9b5b112a1b8634d2a7c",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "c3-dama-b6": 0,
       "cambio-de-damas": 0.36,
       "nbd2": 0.04,
       "dxc5": 0.12,
       "dama-antes-de-tiempo": -3.68,
+      "dama-antes-de-tiempo:caida-1": -1.77,
       "dama-come-alfil": 5.5,
-      "b4-y-dama-f6": 6.31
+      "dama-come-alfil:previa": 0.22,
+      "dama-come-alfil:tras-error": 5.76,
+      "b4-y-dama-f6": 6.31,
+      "b4-y-dama-f6:previa": -0.02,
+      "b4-y-dama-f6:tras-error": 3.33
     }
   },
   "contra-petrov-y-philidor": {
+    "version": 2,
     "hash": "e6aa61601300e33b1e367620dfbb59bde27e6069039914e15154f994c5393254",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "petrov-nimzowitsch": 0.26,
       "copia-en-la-petrov": 8.15,
+      "copia-en-la-petrov:previa": 0.54,
+      "copia-en-la-petrov:tras-error": 8.4,
       "gambito-stafford": -1000,
+      "gambito-stafford:caida-1": -3.08,
       "philidor": 0.28,
-      "mate-de-legal": 1000
+      "mate-de-legal": 1000,
+      "mate-de-legal:previa": 2.47,
+      "mate-de-legal:tras-error": 1000
     }
   },
   "contragambito-albin": {
+    "version": 2,
     "hash": "1a5d7c3f68ffeded13574aa6d25463093b99c8b5c416f7945c8c9e537167fcb1",
     "profundidad": 18,
     "fecha": "2026-10-25",
@@ -184,13 +238,16 @@
       "nbd2": -0.77,
       "a3": 0.28,
       "e3": 0.08,
-      "lasker": 9.03
+      "lasker": 9.03,
+      "lasker:previa": 0.11,
+      "lasker:tras-error": 7.59
     }
   },
   "dos-caballos": {
+    "version": 2,
     "hash": "fa97fff92e12deb9c17668be9ce098f94f22241dcad8c3630674fc800a99c637",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "pianissimo": -0.16,
       "truco-del-tenedor": 0.14,
@@ -198,102 +255,126 @@
       "berlinesa": -0.2,
       "escocesa": 0,
       "fried-liver": -1000,
-      "descubierta-en-h2": 8.54
+      "fried-liver:caida-1": -1.08,
+      "descubierta-en-h2": 8.54,
+      "descubierta-en-h2:previa": 0.65,
+      "descubierta-en-h2:tras-error": 8.3
     }
   },
   "escandinava": {
+    "version": 2,
     "hash": "5b19938ecf62f99f0b28005e042d73e367a63eb35d494ae8b3da2432069b031f",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "principal-qa5": -0.14,
       "descubierta-en-d5": -5.32,
+      "descubierta-en-d5:caida-1": -5.24,
       "ataque-ne5-g4": -0.18,
       "contra-2-nc3": 0.58,
       "contra-2-e5": 0.11
     }
   },
   "escocesa": {
+    "version": 2,
     "hash": "840dbc685fd8498af4b0c3ecc01faec6631dc6b0adf4129023aac5e45e473122",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "clasica-dxc6": -0.01,
       "clasica-bxc6": 0.3,
       "mieses": -0.2,
       "mate-en-f2": -1000,
-      "caballo-en-f4": 6.35
+      "mate-en-f2:caida-1": -1000,
+      "caballo-en-f4": 6.35,
+      "caballo-en-f4:previa": 0.13,
+      "caballo-en-f4:tras-error": 6.77
     }
   },
   "eslava": {
+    "version": 2,
     "hash": "ee7755e9fbbba039150af16f572b886787ba1114e8d37bb07fe12b2cdb6b9d80",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "checa": -0.37,
       "alekhine": 0.05,
       "lenta": -0.13,
       "chebanenko": -0.38,
       "cambio": -0.02,
-      "sacrificio-en-h2": 1000
+      "sacrificio-en-h2": 1000,
+      "sacrificio-en-h2:previa": -0.13,
+      "sacrificio-en-h2:tras-error": 8.42
     }
   },
   "espanola": {
+    "version": 2,
     "hash": "f6534e8dd0cea0db82d5a6f32ff194bcf246a33f309b122162d8b9598d59b9fa",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "cerrada": 0.47,
       "berlinesa": 0.22,
       "schliemann": 0.58,
       "bird": 0.63,
       "arca-de-noe": -4.69,
+      "arca-de-noe:caida-1": -4.23,
       "tarrasch": 6.05,
-      "mortimer": -3.58
+      "tarrasch:previa": -0.27,
+      "tarrasch:tras-error": 6.17,
+      "mortimer": -3.58,
+      "mortimer:caida-1": -1.77
     }
   },
   "francesa": {
+    "version": 2,
     "hash": "ba46f14421e9c9c0085bca2b09790699173dac3eb82046327045f8752e4c41f4",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "avance": -0.16,
       "cambio": -0.11,
       "steinitz": -0.34,
       "burn": -0.45,
       "tarrasch": -0.36,
-      "jaque-en-b5": -9.47
+      "jaque-en-b5": -9.47,
+      "jaque-en-b5:caida-1": -5.22
     }
   },
   "gambito-de-dama": {
-    "hash": "97f803be3b29bb60736ebaafd84b523ecc96093ef650ca22ce8a8ec13cfce30e",
+    "version": 2,
+    "hash": "36aa5e60af552aba682df2ab82a7bad3558bba8e0b5d21c667672207ec9edd83",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "rehusado-cambio": 0.36,
       "trampa-del-elefante": -5.3,
+      "trampa-del-elefante:caida-1": -5.6,
       "eslava": 0.19,
       "aceptado": 0.09,
       "peon-c4-con-b5": 5.56,
-      "trampa-de-lasker": -10.36
+      "peon-c4-con-b5:previa": 1.89,
+      "peon-c4-con-b5:tras-error": 5.72,
+      "albin": 0.67
     }
   },
   "gambito-de-dama-aceptado": {
-    "hash": "45400e249d700070aa54ffb97c18de63d9053f858786a7aa5c26f11678becb78",
+    "version": 2,
+    "hash": "333bf4372327ab0cf732f484efdef6366fa8da8eef8717443238ac0883f84079",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "clasica-cambio": -0.08,
       "clasica-a4": -0.18,
       "central": -0.37,
-      "con-e3": 0,
-      "peon-con-b5": -5.85
+      "con-e3": 0
     }
   },
   "gambito-de-dama-rehusado": {
+    "version": 2,
     "hash": "2a20d88a4bcf4bbba00e56ae411d40d0d9abbcb9ce971e809b8d27ce8d338351",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "cambridge-springs": -0.35,
       "cambio": -0.47,
@@ -301,13 +382,18 @@
       "lasker": -0.11,
       "tres-caballos": -0.12,
       "elefante": 5.3,
-      "trampa-cambridge-springs": 6.83
+      "elefante:previa": -0.28,
+      "elefante:tras-error": 5.6,
+      "trampa-cambridge-springs": 6.83,
+      "trampa-cambridge-springs:previa": -0.17,
+      "trampa-cambridge-springs:tras-error": 6.29
     }
   },
   "gambito-de-rey": {
+    "version": 2,
     "hash": "110c99b395e3a4083175058b9c06fec44d5c05756ce9d1fda0a77181cd2b88b5",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "moderna": -0.09,
       "kieseritzky": -0.33,
@@ -315,11 +401,17 @@
       "rehusado-bc5": 0.81,
       "falkbeer": 0.47,
       "jaque-en-h4": -4.57,
+      "jaque-en-h4:caida-1": -5.07,
       "falkbeer-f2": 4.34,
-      "clavada-e4": 5.77
+      "falkbeer-f2:previa": 0.64,
+      "falkbeer-f2:tras-error": 2.42,
+      "clavada-e4": 5.77,
+      "clavada-e4:previa": 0.7,
+      "clavada-e4:tras-error": 6.09
     }
   },
   "gambito-evans": {
+    "version": 2,
     "hash": "bc9218a89241a427e66ad560f79a0ad16fde58d0f1dd5fbe3f5ec97f34a29f2d",
     "profundidad": 18,
     "fecha": "2026-10-25",
@@ -329,174 +421,221 @@
       "comprometida": 0.9,
       "aceptado-be7": 1.23,
       "rehusado": 0.25,
-      "doble-ataque-d5": 5
+      "doble-ataque-d5": 5,
+      "doble-ataque-d5:previa": 2.09,
+      "doble-ataque-d5:tras-error": 4.97
     }
   },
   "grand-prix": {
+    "version": 2,
     "hash": "1c89d02a89dbaadff95e4355db495a8a4eb72c0bfa84042842ab444aa9b19492",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "nc6-g6": 0.51,
       "d6": 0.01,
       "e6": -0.11,
-      "horquilla-c7": 9.64
+      "horquilla-c7": 9.64,
+      "horquilla-c7:previa": -0.19,
+      "horquilla-c7:tras-error": 9.68
     }
   },
   "grunfeld": {
+    "version": 2,
     "hash": "af1cde982a64be47e16ce8d8dfdc183b18bf81c124b5ba125c12a70c8d01b183",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "cambio-be3": -0.05,
       "cambio-bc4": -0.09,
       "cambio-rb1": -0.35,
       "nf3-bf4": -0.2,
       "sistema-ruso": -0.21,
-      "captura-en-e5": 4.33
+      "captura-en-e5": 4.33,
+      "captura-en-e5:previa": -0.07,
+      "captura-en-e5:tras-error": 4.26
     }
   },
   "holandesa": {
-    "hash": "736f93b1d85ee2673713931dd3d1e0a88d8103d5b5b89fde123c41a16dcfe663",
+    "version": 2,
+    "hash": "3ec68041213a88e4e9fac077d6d3f5b4c4039c75ce8fd595978178c4dea38091",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "leningrado": -0.5,
       "contra-bg5": -0.07,
       "staunton": 0.13,
-      "diagonal-larga": 6.08
+      "diagonal-larga": 7.42,
+      "diagonal-larga:previa": -0.36,
+      "diagonal-larga:tras-error": 6.42
     }
   },
   "india-de-dama": {
+    "version": 2,
     "hash": "57112c479ec7f593de376b507c65ff6a69bc01880f3bf70cdffbe45dc16c012c",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "fianchetto": -0.34,
       "petrosian": -0.17,
       "cuatro-e3": -0.08,
-      "peon-envenenado": -6.31
+      "peon-envenenado": -6.31,
+      "peon-envenenado:caida-1": -6.34
     }
   },
   "india-de-rey": {
+    "version": 2,
     "hash": "52e60ff4bf874732c8e3eafda26ec116c47205c07c2c17607e910a16b849f3d1",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "clasica": -0.2,
       "samisch": -0.11,
       "cuatro-peones": 0.29,
-      "contragolpe-en-c4": 2.53
+      "contragolpe-en-c4": 2.53,
+      "contragolpe-en-c4:previa": 0,
+      "contragolpe-en-c4:tras-error": 2.42
     }
   },
   "inglesa": {
+    "version": 2,
     "hash": "16ecd0de9ca90809d6d0b2bae59377ce51c1742c8b762c51cb59c4c00249ecfa",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "siciliana-invertida": 0,
       "cerrada": 0.17,
       "simetrica": 0.31,
       "botvinnik": 0.26,
       "caballo-d5": 7.05,
-      "avance-e4": 2.74
+      "caballo-d5:previa": 0.29,
+      "caballo-d5:tras-error": 7.29,
+      "avance-e4": 2.74,
+      "avance-e4:previa": 0.29,
+      "avance-e4:tras-error": 2.71
     }
   },
   "italiana": {
-    "hash": "f15948967306b9a8204381460aa6a0fbd6e58fc7b5544b6e06dbe121ea82e24d",
+    "version": 2,
+    "hash": "8333afc055e3d52969f2ab4052cb8aec39325bf53be05af0bab19f7cd670971c",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "giuoco-piano": 0.27,
       "piano-nxe4": 0.21,
       "retirada-b6": 3.03,
+      "retirada-b6:previa": 0.01,
+      "retirada-b6:tras-error": 2.06,
       "piano-bb6": 1.46,
       "pianissimo": 0.09,
       "dos-caballos-be7": 0.19,
       "mate-de-legal": 1000,
-      "blackburne-shilling": -1000
+      "mate-de-legal:previa": 0.49,
+      "mate-de-legal:tras-error": 2.19,
+      "blackburne-shilling": 1.21
     }
   },
   "nimzo-india": {
-    "hash": "115a9f4a4b04e9ba62c207329bfd704c5162e8830437a3050ec31bf5e1b2cc31",
+    "version": 2,
+    "hash": "60eb4f2f7717172002cc00a4975950762bfb4fe7052789d320041977bcd35443",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "samisch": -0.05,
       "clasica": -0.14,
       "hubner": 0.46,
       "descubierta-en-h4": 7.58,
-      "horquilla-en-g5": -4.55
+      "descubierta-en-h4:previa": -0.19,
+      "descubierta-en-h4:tras-error": 7.59
     }
   },
   "siciliana-dragon": {
-    "hash": "a88e192d9aae085967ab4c0fada308bcc503b01e1e4c7c48484251583902d24d",
+    "version": 2,
+    "hash": "6db62e20499233dd1984e906215c161572bed9a2f3a0880d3031c31a0d9b6323",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "yugoslavo-soltis": -0.42,
       "yugoslavo-d5": -0.52,
       "clasica": -0.01,
       "bc4": 0.09,
       "levenfish": 0.22,
-      "levenfish-e5": -5.9,
-      "sacrificio-en-f7": 5.3
+      "sacrificio-en-f7": 5.3,
+      "sacrificio-en-f7:previa": 0.01,
+      "sacrificio-en-f7:tras-error": 5.24
     }
   },
   "siciliana-najdorf": {
+    "version": 2,
     "hash": "28546354fb1aab70a63da16a124b5c0e446160e48b66a0f72e69e8f0ab809a0f",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "ataque-ingles": -0.23,
       "opocensky": -0.38,
       "bg5": -0.51,
       "sozin": -0.05,
       "salto-a-b5": 5.59,
-      "diagonal-larga": -3.64
+      "salto-a-b5:previa": -0.3,
+      "salto-a-b5:tras-error": 5.25,
+      "diagonal-larga": -3.64,
+      "diagonal-larga:caida-1": -2.8
     }
   },
   "siciliana-taimanov": {
+    "version": 2,
     "hash": "e0567df42e6acf492fe3269f07c0c323a83fbcbfb99176f9084c1a6720cf2db9",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "ataque-ingles": -0.16,
       "bd3": -0.1,
       "be2": -0.43,
       "ndb5": -0.33,
       "nb5": -0.08,
-      "peon-e4": 4.6
+      "peon-e4": 4.6,
+      "peon-e4:previa": -0.41,
+      "peon-e4:tras-error": 4.41
     }
   },
   "sistema-londres": {
+    "version": 2,
     "hash": "3319a767c7f05ec3c86dd45377998d4da32fb30d50cfa1eec72ae7afd48696a4",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "clasica": 0.3,
       "c5-nc6": 0.46,
       "c5-qb6": 0.84,
       "peon-envenenado": 6.77,
+      "peon-envenenado:previa": 0.72,
+      "peon-envenenado:tras-error": 5.63,
       "india-de-rey": 0.23,
       "nf6-c5": -0.03
     }
   },
   "smith-morra": {
+    "version": 2,
     "hash": "5f93fa297969aded6796aa7e7b83682b34c7888f6faf0b77f8066e25394c852a",
     "profundidad": 18,
-    "fecha": "2026-10-24",
+    "fecha": "2026-10-25",
     "evals": {
       "aceptado-clasico": -0.13,
       "rehusado-nf6": 0.1,
       "aceptado-e6-a6": 0,
       "rehusado-d5": 0.29,
       "avance-e5": 8,
+      "avance-e5:previa": 0.09,
+      "avance-e5:tras-error": 5,
       "caballo-de-d5": 5.63,
-      "trampa-siberiana": -1000
+      "caballo-de-d5:previa": 0.18,
+      "caballo-de-d5:tras-error": 5.75,
+      "trampa-siberiana": -1000,
+      "trampa-siberiana:caida-1": -5.01
     }
   },
   "vienesa": {
+    "version": 2,
     "hash": "105edc8539a0a507bb3f5ef56ae5c7ce0696bc2d6342c10361a54150a0047c6c",
     "profundidad": 18,
     "fecha": "2026-10-25",
@@ -506,8 +645,13 @@
       "bc4-bc5": 0.01,
       "bc4-na5": 0,
       "recaptura-d4": -7.07,
+      "recaptura-d4:caida-1": -6.94,
       "caballo-en-h5": 5.81,
-      "caballo-en-g4": 7.15
+      "caballo-en-h5:previa": 0.38,
+      "caballo-en-h5:tras-error": 5.69,
+      "caballo-en-g4": 7.15,
+      "caballo-en-g4:previa": 0,
+      "caballo-en-g4:tras-error": 7.39
     }
   }
 }

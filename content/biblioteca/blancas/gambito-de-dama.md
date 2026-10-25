@@ -76,11 +76,13 @@ El intento más natural de quedarse con el peón de c4 es sostenerlo con ...b5. 
 
 Ganaste una pieza. Después de `7...Bd7` no tomes la torre: la defiende la dama negra. Retirá la dama con calma y seguí desarrollando.
 
-## Trampa en contra: Trampa de Lasker {#trampa-de-lasker} [club]
+## Variante: Contragambito Albin {#albin} [club]
 El Contragambito Albin (`2...e5`) es poco común, pero tramposo: el peón que llega a d4 molesta mucho. La respuesta sana es desarrollar el caballo.
 
 ```pgn
-1. d4 d5 2. c4 e5 3. dxe5 d4 { El peón se instala en el centro y te quita e3 y c3. } 4. Nf3 { [%hint Desarrollá una pieza que vigile d4 en lugar de abrirle a tu rey una diagonal.] } (4. e3? { Parece lógico atacar el peón, pero abre tu rey. } Bb4+ 5. Bd2 dxe3! 6. Bxb4?? exf2+ 7. Ke2 fxg1=N+! { Corona en caballo y con jaque. } 8. Rxg1 Bg4+ { Jaque, y la dama de d1 cae. }) Nc6 5. g3 { [%hint Prepará el alfil en la gran diagonal para presionar el flanco de dama y al caballo que defiende d4.] }
+1. d4 d5 2. c4 e5 3. dxe5 d4 { El peón se instala en el centro y te quita e3 y c3. } 4. Nf3 { [%hint Desarrollá una pieza que vigile d4 en lugar de abrirle a tu rey una diagonal.] } Nc6 5. g3 { [%hint Prepará el alfil en la gran diagonal para presionar el flanco de dama y al caballo que defiende d4.] }
 ```
 
-Con Bg2, enroque y Nbd2-b3 vas a presionar d4 con el peón de más. Si caíste en `4.e3`, lo menos malo es `6.fxe3`: el negro tiene iniciativa, pero no hay desastre.
+Con Bg2, enroque y Nbd2-b3 vas a presionar d4 con el peón de más.
+
+Atacar el peón con `4.e3` parece lógico, pero abre la diagonal de tu rey y te expone a la **trampa de Lasker**. Después de `4...Bb4+ 5.Bd2 dxe3` la buena es `6.fxe3`, y el negro tiene la iniciativa. Si en cambio comés el alfil con `6.Bxb4??`, viene `6...exf2+ 7.Ke2 fxg1=N+!`: el peón corona en caballo y con jaque, y después de `8.Rxg1 Bg4+` cae tu dama.

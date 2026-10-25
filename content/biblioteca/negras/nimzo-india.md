@@ -27,7 +27,7 @@ Con `3...Bb4` no peleás el centro con peones sino con piezas. El caballo de c3 
 ## Consejos
 - No cambies en c3 por costumbre: hacelo cuando el rival recapture con un peón o cuando ganes un tiempo.
 - Con los peones blancos doblados en c3 y c4, sumá atacantes contra c4: `...b6`, `...Ba6`, `...Na5` y una torre en la columna c.
-- Si las blancas empujan f4 contra tu centro en e5, no te apures a cambiar: mirá la Horquilla en g5 de esta ficha.
+- Si las blancas empujan f4 contra tu centro en e5, no te apures a cambiar: `...exf4` les abre el juego a sus alfiles con tu rey todavía en e8.
 - En la Clásica, cuando la dama blanca está en c3 y el alfil en h4, buscá una descubierta de tu dama por la diagonal d8-h4.
 
 ## Variante: Sämisch {#samisch} [básica]
@@ -67,13 +67,15 @@ Contra `4.e3` jugás `4...c5` y, una vez que el caballo de g1 salió a f3 y ya n
 7. bxc3 d6 { [%hint Prepará el avance del peón de e para trabar el centro en casillas oscuras.] }
 8. e4 e5 9. d5 Ne7 { [%hint Llevá el caballo atacado hacia el flanco de rey.] }
 10. Nh4 h6 { [%hint Quitale al alfil blanco la casilla desde donde clavaría a tu caballo.] }
-11. f4 Ng6 { [%hint Atacá al caballo del borde sin abrir el centro.] Cambiar en f4 parece natural, pero es justo lo que esperan las blancas: mirá la Horquilla en g5. }
+11. f4 Ng6 { [%hint Atacá al caballo del borde sin abrir el centro.] Cambiar en f4 parece natural, pero es justo lo que esperan las blancas: abre el centro con tu rey todavía en e8. }
 12. Nxg6 fxg6 { Recapturás hacia el centro y la columna f queda abierta para tu torre. }
 13. fxe5 dxe5 14. Be3 b6 { [%hint El alfil de e3 ya ataca c5: reforzalo antes de que caiga.] }
 15. O-O O-O
 ```
 
 Los peones doblados de c3 y c4 no pueden avanzar y el alfil de e3 no tiene nada que atacar. Un plan típico: `...a5` para fijar el flanco de dama, `...Bd7`, `...Qe7` y el caballo de f6 hacia h5 y f4. Fischer siguió con esas ideas y terminó ganando.
+
+Ojo con la jugada 11. Si cambiás con `11...exf4?`, después de `12.Bxf4` ya quedás peor, y la horquilla `12...g5`, que parece ganar una pieza, empeora todo: `13.e5!` ataca al caballo de f6 y abre la columna e. Si además seguís con `13...gxh4??`, `14.exf6` deja a tu caballo de e7 atacado y a tu rey sin refugio. Con `11...Ng6` el centro sigue cerrado, que es lo que te conviene con caballos contra alfiles. La regla: si el rival te ofrece abrir el juego mientras tu rey sigue en el centro, primero preguntate quién llega antes.
 
 ## Trampa a favor: Descubierta sobre el alfil de h4 {#descubierta-en-h4} [básica]
 En la Clásica, después de `11.cxd5 Nxd5` tu caballo ataca a la dama de c3 y, al mismo tiempo, tu dama queda mirando al alfil de h4. Lo único que sirve es `12.Bxd8`. Si las blancas salvan la dama, pierden el alfil con jaque.
@@ -86,16 +88,3 @@ Qxh4+ { [%hint Comé la pieza que quedó sin defensa, y con jaque.] }
 
 Ganaste una pieza limpia. Lo mismo pasa con cualquier retirada de la dama (`12.Qc2`, `12.Qd3` o `12.Qb3`): mientras el alfil siga en h4, la diagonal d8-h4 lo deja colgado.
 
-## Trampa en contra: Horquilla en g5 {#horquilla-en-g5} [club]
-En el plan Hübner, cuando las blancas juegan `11.f4`, cambiar en f4 y atacar con el peón de g al alfil y al caballo a la vez parece ganar material. No caigas: el contragolpe e5 abre el centro con tu rey todavía en e8.
-
-```pgn
-1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. e3 c5 5. Bd3 Nc6 6. Nf3 Bxc3+ 7. bxc3 d6 8. e4 e5 9. d5 Ne7 10. Nh4 h6
-11. f4 Ng6 { [%hint Atacá al caballo del borde sin abrir el centro.] }
-(11... exf4? 12. Bxf4 g5?? { La horquilla parece ganar una pieza. }
-13. e5! { Ataca al caballo de f6 y abre la columna e contra tu rey. } gxh4
-14. exf6 { El material está igualado, pero tu caballo de e7 está atacado, tu rey no tiene refugio y las blancas atacan por la columna e, con jaques de dama en e2, y contra f7 con la dama en h5. })
-12. Nxg6 fxg6
-```
-
-Con `11...Ng6` mantenés el centro cerrado, que es lo que te conviene con caballos contra alfiles. La regla: si el rival te ofrece abrir el juego mientras tu rey sigue en el centro, primero preguntate quién llega antes.

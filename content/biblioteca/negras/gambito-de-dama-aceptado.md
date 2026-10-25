@@ -13,7 +13,7 @@ resumen: Tomás el peón de c4 sin intentar conservarlo: mientras las blancas lo
 ## Para empezar
 Con `2...dxc4` aceptás el peón, pero **no tratás de quedártelo**: las blancas lo recuperan casi siempre con el alfil. Lo que ganás es tiempo. Mientras el alfil blanco va a c4, vos sacás el caballo, liberás tu alfil de f8 con e6 y atacás el centro con c5, o con e5 si las blancas jugaron e4.
 
-- No defiendas el peón de c4 con b5: es la trampa clásica de esta apertura.
+- No defiendas el peón de c4 con b5: es la trampa clásica de esta apertura (la explica la variante con `3.e3`).
 - Contra `3.Nf3` y `3.e3` el esquema es siempre el mismo: Nf6, e6, c5 y a6.
 - Contra `3.e4`, respondé en el centro con e5.
 - Enrocá corto y buscá cambiar el peón blanco de d4.
@@ -74,6 +74,8 @@ El material está igualado. A cambio del peón doblado tenés la columna f para 
 ## Variante: Con 3.e3 {#con-e3} [club]
 Con `3.e3` las blancas preparan recuperar el peón con el alfil. Usás el mismo esquema que contra `3.Nf3` y llegás a la misma posición de la Clásica.
 
+La tentación de todo principiante es quedarse con el peón de c4 empujando `3...b5?`. Después de `4.a4` ya quedás peor, y si insistís en sostenerlo con `4...c6??`, `5.axb5 cxb5 6.Qf3` ataca la torre de a8 por la diagonal que se abrió: perdés una pieza. Por eso, primero `3...Nf6`: el peón de c4 se pierde igual, pero vos ganás tiempo.
+
 ```pgn
 1. d4 d5 2. c4 dxc4 3. e3 Nf6 { [%hint Desarrollá una pieza antes de pensar en el peón de c4.] }
 4. Bxc4 e6 { [%hint Abrí la diagonal de tu alfil de casillas oscuras.] }
@@ -87,13 +89,3 @@ Con `3.e3` las blancas preparan recuperar el peón con el alfil. Usás el mismo 
 
 Las blancas abrieron el centro, pero tu desarrollo está completo y los alfiles apuntan bien. Seguí con `...Rfd8` o `...Rac8` y estate atento a la ruptura e5 y a los sacrificios en e6: con el alfil en b3 y un caballo en d4, las blancas siempre tienen esa idea.
 
-## Trampa en contra: Defender el peón con b5 {#peon-con-b5} [básica]
-La tentación de todo principiante es quedarse con el peón de c4 empujando b5. Con a4 y la dama a f3, las blancas te desarman el flanco de dama.
-
-```pgn
-1. d4 d5 2. c4 dxc4 3. e3 Nf6 { [%hint Desarrollá una pieza antes de pensar en el peón de c4.] }
-(3... b5? { Parece sostener el peón, pero después del cambio en b5 la diagonal hasta a8 queda abierta. } 4. a4 c6 5. axb5 cxb5 6. Qf3 { La dama ataca la torre de a8 y no hay buena forma de taparla: vas a perder una pieza. })
-4. Bxc4 e6 5. Nf3 c5
-```
-
-Con `3...Nf6` el peón de c4 se pierde igual, pero vos ganás tiempo y llegás a las posiciones de la Clásica.

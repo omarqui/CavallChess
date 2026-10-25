@@ -70,13 +70,14 @@ Con `2.e4` las blancas entregan un peón para abrir líneas rápido. Lo tomás, 
 Devolviste el peón, pero tenés la pareja de alfiles y una posición sana. Si las blancas cambian damas en e7, recapturá con el alfil: el final es cómodo para vos.
 
 ## Trampa a favor: La diagonal larga {#diagonal-larga} [club]
-En el Leningrado, si las blancas juegan b3 con el caballo en c3 y el peón de d4 ya cambiado, ese caballo queda sin defensores. Tu alfil de g7 lo apunta por la diagonal larga, pero el caballo de f6 se la tapa: `...Ne4` le abre la diagonal al alfil de g7 y suma el segundo ataque.
+En el Leningrado, con el peón de d4 ya cambiado, el caballo de c3 depende de sus defensores. Tu alfil de g7 lo apunta por la diagonal larga, pero el caballo de f6 se la tapa: `...Ne4` le abre la diagonal al alfil de g7 y suma el segundo ataque. Si las blancas lo cuidan una sola vez, como con el alfil en b2, y siguen con su plan, pierden una pieza.
 
 ```pgn
 1. d4 f5 2. c4 Nf6 3. g3 g6 4. Bg2 Bg7 5. Nf3 O-O 6. O-O d6 7. Nc3 c6 8. d5 e5 9. dxe6 Bxe6
-10. b3 Ne4 { [%hint Saltá al centro y apuntá dos piezas al caballo de c3.] }
-11. Bb2?? { Parece defender el caballo, pero un defensor no alcanza contra dos atacantes. }
-Nxc3 12. Bxc3 Bxc3 { [%hint Cambiá y quedate con la pieza que sobra.] }
+10. b3 Na6 { [%hint Desarrollá el caballo por el borde, rumbo a c5 o b4.] }
+11. Bb2 Ne4 { [%hint Saltá al centro: le abrís la diagonal a tu alfil y apuntás dos piezas al caballo de c3.] }
+12. Re1?? { Prepara e4, pero no hace nada por el caballo de c3: un defensor no alcanza contra dos atacantes. }
+Nxc3 13. Bxc3 Bxc3 { [%hint Cambiá y quedate con la pieza que sobra.] Además, tu alfil ataca a las dos torres. }
 ```
 
-Ganaste una pieza. Lo correcto para las blancas era `11.Nxe4 fxe4`, con una posición pareja.
+Ganaste una pieza y, como tu alfil ataca a las dos torres, también te vas a llevar la calidad. Lo correcto para las blancas era cuidar c3 otra vez (`12.Qc2` o `12.Rc1`) o tapar la diagonal con `12.Nd4`, con una posición pareja.

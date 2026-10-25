@@ -102,11 +102,13 @@ Contra `3...d6` desarrollás el caballo a c3. Si las negras clavan tu caballo co
 
 Si en vez de comer la dama toman tu caballo, jugá `7.Qxh5` y ganás un peón. Después de `6...Nxe5 7.Qxh5` el caballo puede comerte el alfil (`7...Nxc4`), pero `8.Qb5+` lo recupera; después de `6...dxe5 7.Qxh5` el peón de más ya es tuyo. Contra `5...Bxf3`, que es lo correcto, recapturá con la dama y seguí desarrollándote.
 
-## Trampa en contra: Gambito Blackburne Shilling {#blackburne-shilling} [básica]
-Con `3...Nd4` las negras dejan el peón de e5 colgando a propósito. Comerlo con el caballo es justo lo que esperan.
+## Variante: Contra el Gambito Blackburne Shilling {#blackburne-shilling} [básica]
+Con `3...Nd4` las negras dejan el peón de e5 colgando a propósito. Comerlo con el caballo es justo lo que esperan: con `4.Nxd4` cambiás la pieza que se metió en tu campo y quedás claramente mejor.
 
 ```pgn
-1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4 4. Nxd4 { [%hint El peón de e5 es una carnada: ocupate primero de la pieza que se metió en tu campo.] Cambiás el caballo que se adelantó y te quedás con una posición cómoda. } (4. Nxe5? Qg5 { La dama ataca tu caballo y el peón de g2 a la vez. } 5. Nxf7?? Qxg2 6. Rf1 Qxe4+ 7. Be2 Nf3#) 4... exd4 5. O-O { Enrocás tranquilo; más adelante podés atacar el peón de d4 con c3. }
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4 4. Nxd4 { [%hint El peón de e5 es una carnada: ocupate primero de la pieza que se metió en tu campo.] Cambiás el caballo que se adelantó y te quedás con una posición cómoda. } exd4 5. O-O { Enrocás tranquilo; más adelante podés atacar el peón de d4 con c3. }
 ```
 
-Con `4.Nxd4` y el enroque estás mejor. Si alguna vez comiste en e5 y la dama ya está en g5, no toques f7: enrocá, que perdés poco y seguís en partida.
+Con `4.Nxd4` y el enroque estás mejor: tenés más desarrollo y el peón de d4 es un blanco.
+
+La carnada funciona así: después de `4.Nxe5? Qg5` la dama ataca tu caballo y el peón de g2 a la vez. Si además tomás en f7 (`5.Nxf7??`), viene `5...Qxg2 6.Rf1 Qxe4+ 7.Be2 Nf3#`: mate. Si alguna vez comiste en e5 y la dama ya está en g5, no toques f7: enrocá con `5.O-O`, que perdés poco y seguís en partida.

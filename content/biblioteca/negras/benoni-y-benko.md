@@ -48,6 +48,8 @@ Las blancas aceptan el peón y desarrollan el alfil en g2. Es la forma más prud
 
 Las blancas tienen un peón de más, pero tus piezas presionan a2 y b2. Una idea para seguir es `...Ne8`, `...Nc7` y `...Nb5` para cambiar el caballo de c3, que es el que más defiende; otra, `...Ng4` y `...Nge5`.
 
+Tené presente el rayos X de la columna a: tu torre de a8 está detrás del alfil de a6. Si en la jugada 11 la dama blanca va a a4 en vez de a c2, `11.Qa4?? Bxe2!` destapa la torre con ataque. Si `12.Nxe2`, `12...Rxa4` y te quedás con la dama; si la dama se escapa, por ejemplo con `12.Qc2`, `12...Bxf1` te deja con la calidad y un peón de más.
+
 ## Variante: Benko aceptado: e4 y el rey a g2 {#rey-a-g2} [club] [gambito]
 Con `7.e4` las blancas ocupan el centro, pero después del cambio de alfiles pierden el enroque. El rey se va a g2 en un par de jugadas.
 
@@ -113,14 +115,3 @@ En el Benko con e4, apenas el rey blanco se fue a f1, las blancas pueden empujar
 ```
 
 Recuperaste el peón del gambito, el material está igualado y tus piezas siguen activas: la posición es buena para vos. Seguí con el plan de siempre, la dama al flanco de dama y las torres a las columnas a y b.
-
-## Trampa a favor: Rayos X en la columna a {#rayos-x} [club]
-Más que una trampa frecuente, es un motivo que tenés que tener presente: puede aparecer cuando una pieza blanca se para en la columna a, sobre todo la dama, que suele buscar a4 o a3 para presionar tu flanco de dama. En el Benko tu torre de a8 está detrás del alfil de a6: si el alfil se mueve con ganancia, destapa a la torre.
-
-```pgn
-1. d4 Nf6 2. c4 c5 3. d5 b5 4. cxb5 a6 5. bxa6 Bxa6 6. Nc3 d6 7. Nf3 g6 8. g3 Bg7 9. Bg2 Nbd7 10. O-O O-O
-11. Qa4?? { Ataca el alfil, pero se pone en la línea de tu torre. } Bxe2 { [%hint Mové el alfil con un ataque propio y destapá la torre.] Si 12.Nxe2, 12...Rxa4 y te quedás con la dama. }
-12. Qc2 Bxf1 13. Bxf1
-```
-
-Ganaste la calidad y un peón. Para recordar: con la torre detrás del alfil en la columna a, cualquier pieza blanca que se pare en esa columna puede quedar expuesta.

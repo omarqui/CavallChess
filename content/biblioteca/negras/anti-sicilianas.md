@@ -29,7 +29,7 @@ No hace falta memorizar mucho: alcanza con un plan para cada uno.
 
 ## Consejos
 - En el Alapin, si las blancas se quedan con un peón aislado en d4, ponele un caballo adelante y cambiá piezas.
-- En el Morra, no saques el caballo de g8 antes de jugar `...e6`: el avance e5 y el jaque en f7 te pueden costar la dama.
+- En el Morra, jugá `...e6` antes de sacar el caballo de g8. Si igual sale antes y las blancas empujan e5, no tomes ese peón con el caballo: `...Nxe5??` permite `Nxe5 dxe5` y `Bxf7+`, que te cuesta la dama.
 - En el Morra, las casillas d6 y f7 son los blancos de las piezas blancas: tenelas siempre defendidas.
 - Contra el Grand Prix con `Bb5`, saltá con `...Nd4`: si cambian el caballo, recapturás con el peón y ganás espacio; si no, te quedás con la pareja de alfiles.
 - Si empiezan con `2.f4`, jugá `2...Nc6` y `...g6`: las ideas son las mismas que contra el Grand Prix.
@@ -74,6 +74,8 @@ Tomás el peón y te desarrollás con un esquema sólido. Las blancas tienen act
 
 Seguís con el peón de más y una posición sólida. Plan: `...Rc8` y `...Qa5`, sin apuro: cuantas más piezas se cambien, más pesa tu peón extra.
 
+El orden de `6...e6` te ahorra un truco muy conocido. Si sacás antes el caballo (`6...Nf6`), las blancas pueden empujar `7.e5`, y ahí hay que contestar con precisión: `7...Ng4` o `7...d5`. Lo que no podés hacer es tomar con el caballo: `7...Nxe5?? 8.Nxe5 dxe5 9.Bxf7+! Kxf7 10.Qxd8` y perdiste la dama.
+
 ## Variante: Ataque Grand Prix con 5.Bb5 {#grand-prix-bb5} [básica]
 Contra `2.Nc3` y `3.f4` armás el fianchetto. Si el alfil blanco va a b5, tu caballo salta a d4.
 
@@ -99,15 +101,3 @@ Con el alfil en c4, las blancas apuntan a f7. Le cerrás la diagonal y después 
 ```
 
 Si cambian en d4, recapturá con el peón: el caballo de c3 tiene que retroceder y vos seguís con `...b5` y `...Bb7`. Tenés más espacio y buen juego en el flanco de dama.
-
-## Trampa en contra: El jaque en f7 del Morra {#jaque-en-f7} [básica]
-En el Morra, el orden de las jugadas importa. Si sacás el caballo de g8 antes de jugar `...e6`, el avance e5 trae una trampa muy conocida.
-
-```pgn
-1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 Nc6 5. Nf3 d6
-6. Bc4 e6 { [%hint Cerrá la diagonal que apunta a f7 antes de sacar el caballo del flanco de rey.] }
-(6... Nf6? { Parece desarrollo normal, pero deja que el peón de e4 avance con tempo. } 7. e5! Nxe5?? { Tomar el peón parece lo natural. } 8. Nxe5 dxe5 9. Bxf7+! { El jaque saca a tu rey de e8 y tu dama se queda sin defensa. } Kxf7 10. Qxd8 { Perdiste la dama. })
-7. O-O Nf6 { Con el peón en e6, el caballo sale sin riesgo. }
-```
-
-Después de `6...Nf6 7.e5` tampoco sirve `7...dxe5`: con `8.Qxd8+ Nxd8 9.Nb5` el caballo amenaza c7 y quedás en problemas. Hay que encontrar `7...Ng4` o `7...d5`; más simple es no permitirlo y jugar primero `6...e6`.

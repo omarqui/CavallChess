@@ -103,15 +103,7 @@ Con `6.f4` las blancas amenazan avanzar e5 enseguida. Por eso tu primera jugada 
 
 Tu estructura es sana y el caballo de c5 puede cambiarse por el alfil de d3. Enrocá corto y seguí con `...Bf6` o `...Re8`. Como a las blancas ya no les quedan peones que puedan cubrir e4, esa casilla, apoyada por tu peón de d5, puede ser un gran puesto para tu caballo.
 
-## Trampa en contra: El avance e5 en el Levenfish {#levenfish-e5} [club]
-Contra `6.f4`, la jugada que pide el Dragón es `6...Bg7`. Justo ahí el avance e5 llega con mucha fuerza.
-
-```pgn
-1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. f4 Nc6 { [%hint Antes de terminar el fianchetto, sacá la pieza que vigila e5 y d4.] }
-(6... Bg7? { Lo natural, pero deja que el peón central avance con tempo. No pierde por sí sola, pero te obliga a defenderte con precisión. } 7. e5! { El caballo de f6 se queda sin buenas casillas. La defensa precisa es 7...dxe5 8.fxe5 Nfd7, y aun así las blancas quedan algo mejor. } dxe5 8. fxe5 Ng4?? { Parece la casilla más activa, pero pierde material. } 9. Bb5+! { Jaque, y el caballo de g4 queda sin defensa. Tapar con el caballo de b8 tampoco alcanza: también pierde material. } Bd7 10. Qxg4 { Las blancas ganaron una pieza: si tomás en b5, recapturan con el caballo. })
-```
-
-`6...Bg7` es dudosa, no perdedora: si ya la jugaste, después de `7.e5 dxe5 8.fxe5` el caballo tiene que volver a d7, nunca a g4. Más simple es `6...Nc6`: el avance e5 pierde fuerza, porque si las blancas cambian en c6 y empujan, tu caballo vuelve a d7 con todo bajo control. Lo que sigue lo tenés en el Ataque Levenfish.
+¿Por qué no `6...Bg7`? No pierde, pero deja que el peón central avance con tempo: después de `7.e5 dxe5 8.fxe5` el caballo tiene que volver a d7 (`8...Nfd7`), y aun así las blancas quedan algo mejor. Nunca a g4: `8...Ng4? 9.Bb5+!` deja ese caballo sin defensa. Si tapás con `9...Bd7`, `10.Qxg4` gana una pieza, y con `9...Nc6` las blancas también quedan claramente mejor.
 
 ## Trampa a favor: El sacrificio en f7 que no funciona {#sacrificio-en-f7} [básica]
 Contra `6.Bc4 Bg7 7.Be3`, sin f3, tu caballo salta a g4 y ataca al alfil de e3. Algunos rivales responden con un golpe en f7 que parece ganar.
