@@ -153,6 +153,34 @@ describe('loadOlderGames', () => {
     expect(r2.remaining).toBe(2);
   });
 
+  it('un mes que escribe otra carga a mitad de camino no se pierde', async () => {
+    const now = Date.now();
+    mockApi({
+      '2026-10': [game('o', now)],
+      '2026-09': [game('s', now)],
+      // "otra carga" registra un mes viejo mientras esta lee agosto
+      '2026-08': async () => {
+        await setSettings({ chesscomMonths: { ...(await getSettings(d)).chesscomMonths, [url('2026-05')]: '' } }, d);
+        return json({ games: [game('a', now)] });
+      },
+    });
+    await loadOlderGames({ months: 3 }, d);
+    expect(await loadedKeys()).toEqual([url('2026-05'), url('2026-08'), url('2026-09'), url('2026-10')]);
+  });
+
+  it('informa el final con done === total, también al cancelar', async () => {
+    mockApi({ '2026-10': [game('o', Date.now())], '2026-09': [game('s', Date.now())] });
+    const calls: [string, number, number][] = [];
+    await loadOlderGames({ months: 2, onProgress: (m, a, b) => calls.push([m, a, b]) }, d);
+    expect(calls.at(-1)).toEqual(['Listo.', 2, 2]);
+
+    const ctl = new AbortController();
+    ctl.abort();
+    const c2: [string, number, number][] = [];
+    await loadOlderGames({ months: 2, signal: ctl.signal, onProgress: (m, a, b) => c2.push([m, a, b]) }, d);
+    expect(c2.at(-1)![1]).toBe(c2.at(-1)![2]);
+  });
+
   it('si un mes falla, los anteriores quedan guardados y se informa el error', async () => {
     const now = Date.now();
     mockApi({ '2026-10': [game('o', now)], '2026-09': [game('s', now)], '2026-08': () => json({}, 500) });

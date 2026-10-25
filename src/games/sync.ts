@@ -6,6 +6,7 @@ import { archiveMonth, archivesToFetch, fetchArchives, fetchMonth, olderArchives
 
 export interface SyncResult {
   imported: number;
+  /** Solo los desvíos que hicieron vencer la tarjeta (partidas de hace 30 días o menos). */
   deviations: number;
   gaps: number;
 }
@@ -32,6 +33,12 @@ async function userOf(d: CavallDB) {
   const user = settings.chesscomUser?.trim().toLowerCase();
   if (!user) throw new Error('Configurá tu usuario de Chess.com en Ajustes.');
   return { settings, user };
+}
+
+/** Registra un mes como leído, mezclando con lo que haya guardado ahora (otra carga puede estar corriendo). */
+async function markMonth(url: string, d: CavallDB) {
+  const current = (await getSettings(d)).chesscomMonths ?? {};
+  await setSettings({ chesscomMonths: { ...current, [url]: '' } }, d);
 }
 
 /** Procesa las partidas de un mes: las analiza, registra desvíos (recientes) y huecos, y guarda cada una. */
@@ -71,7 +78,6 @@ export async function syncChesscom(onProgress?: (msg: string) => void, d: Cavall
   const { settings, user } = await userOf(d);
   onProgress?.('Buscando archivos…');
   const archives = await fetchArchives(user);
-  const months = { ...(settings.chesscomMonths ?? {}) };
   const toFetch = archivesToFetch(archives, settings.chesscomMonths);
   const graphs = await loadGraphs(d);
   const result: SyncResult = { imported: 0, deviations: 0, gaps: 0 };
@@ -79,10 +85,9 @@ export async function syncChesscom(onProgress?: (msg: string) => void, d: Cavall
   for (const url of toFetch) {
     onProgress?.(`Leyendo ${archiveMonth(url)}…`);
     await processMonth(await fetchMonth(url), user, graphs, result, d);
-    months[url] = '';
-    await setSettings({ chesscomMonths: months }, d); // si el mes siguiente falla, este ya quedó leído
+    await markMonth(url, d); // si el mes siguiente falla, este ya quedó leído
   }
-  await setSettings({ chesscomMonths: months, lastChesscomSync: Date.now() }, d);
+  await setSettings({ lastChesscomSync: Date.now() }, d);
   return result;
 }
 
@@ -98,8 +103,7 @@ export async function loadOlderGames(
   const { settings, user } = await userOf(d);
   opts.onProgress?.('Buscando archivos…', 0, 0);
   const archives = await fetchArchives(user);
-  const months = { ...(settings.chesscomMonths ?? {}) };
-  const toFetch = olderArchives(archives, Object.keys(months), opts.months);
+  const toFetch = olderArchives(archives, Object.keys(settings.chesscomMonths ?? {}), opts.months);
   const graphs = await loadGraphs(d);
   const result: SyncResult = { imported: 0, deviations: 0, gaps: 0 };
   let cancelled = false;
@@ -111,9 +115,10 @@ export async function loadOlderGames(
     }
     opts.onProgress?.(`Leyendo ${archiveMonth(url)}…`, i, toFetch.length);
     await processMonth(await fetchMonth(url), user, graphs, result, d);
-    months[url] = '';
-    await setSettings({ chesscomMonths: months }, d);
+    await markMonth(url, d);
   }
-  const remaining = olderArchives(archives, Object.keys(months), 'all').length;
+  const loaded = Object.keys((await getSettings(d)).chesscomMonths ?? {});
+  opts.onProgress?.(cancelled ? 'Cancelado.' : 'Listo.', toFetch.length, toFetch.length);
+  const remaining = olderArchives(archives, loaded, 'all').length;
   return { ...result, remaining, cancelled };
 }
