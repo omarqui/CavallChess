@@ -92,7 +92,7 @@
 **Interfaces — Produces:**
 - `interface GameMove { san: string; uci: string; fromEpd: string; epd: string }`.
 - `gameMoves(pgn: string): GameMove[] | null`: la línea principal desde la posición inicial. Devuelve `null` si la partida tiene `[FEN]` distinto del inicial o si no se puede leer.
-- `gamePgnUntil(pgn: string, plies: number): string | null`: un PGN de una sola partida con las primeras `plies` jugadas. Encabezados mínimos: `[Event "…"]` con "vs <rival>" si está.
+- `gamePgnUntil(pgn: string, plies: number): string | null`: un PGN de una sola partida con las primeras `plies` jugadas. Encabezados: solo `[Event "<White> vs <Black>"]` tomado de los originales (aparece únicamente en mensajes de error de la importación); sin `[FEN]`.
 - `interface GameForBuild { pgn: string; myColor: Side; result: string; endTime: number }`.
 - `buildFromGames(games: GameForBuild[], side: Side, opts: { maxOwnMoves: number; minRival: number; since?: number }): { pgn: string; gamesUsed: number }`. Algoritmo:
   - Usa solo las partidas de `side` con `endTime >= since` y con `gameMoves` no nulo.
@@ -152,7 +152,7 @@
   - en los dos casos, "Ir a esa jugada".
 - **Repasar ahora:** `await ensureDue(cardId)` y después `navigate('/train?card=…')`.
 - **Navegación y análisis:** ◀ ▶ de 56 px y "Analizar" (`EnginePanel`), como en el visor de líneas. El botón fijo "Agregar al repertorio hasta acá" lleva a `agregar?hasta=<ply actual>` y queda deshabilitado con `ply === 0`.
-- **`GameAdd`:** `ImportPreview` con `pgn = gamePgnUntil(pgn, hasta)`, `side = myColor` y `title = "Agregar desde la partida"`. Al guardar muestra `showToast("Sumaste …")` y vuelve al visor.
+- **`GameAdd`:** `ImportPreview` con `pgn = gamePgnUntil(pgn, hasta)`, `side = myColor`, `title = "Agregar desde la partida"` y `proposeNames={() => []}` **[decisión]** (no se propone nombrar la raíz con el rival). Al guardar muestra `showToast("Sumaste …")` y vuelve al visor.
 
 - [ ] **Step 1: e2e que falla.** El test `'partidas: abrir una partida, ver la salida del repertorio y agregarla'` arma la API simulada con `page.route('https://api.chess.com/**')`: archivos de un mes y un JSON con 2 partidas PGN del usuario `tester`. Después:
   1. carga un repertorio corto por "Pegar PGN" y configura el usuario;
@@ -184,7 +184,7 @@
   - "mínimo de partidas para una respuesta del rival", de 1 a 10 y 2 por defecto;
   - período: últimos 3 meses, 12 meses o todo lo cargado.
 
-  "Ver vista previa" usa `buildFromGames` sobre `db.games` y muestra `ImportPreview` (con `key`). Arriba va "A partir de K partidas." y un `Banner`: "Esto copia lo que jugaste, incluidos los errores: revisá las líneas con el motor en el editor." Si el PGN queda vacío: "No hay suficientes partidas con ese filtro."
+  "Ver vista previa" usa `buildFromGames` sobre `db.games` y muestra `ImportPreview` (con `key` y `proposeNames={() => []}`: el diseño pide no proponer nombres de raíz). Arriba va "A partir de K partidas." y un `Banner`: "Esto copia lo que jugaste, incluidos los errores: revisá las líneas con el motor en el editor." Si el PGN queda vacío: "No hay suficientes partidas con ese filtro."
 
 - [ ] **Step 1: e2e que falla.** El test `'partidas: historial, filtros y armar repertorio desde muchas'` usa la API simulada con 3 meses de archivos y 4 partidas. Después:
   1. sincroniza;
