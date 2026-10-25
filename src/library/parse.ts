@@ -59,9 +59,14 @@ function readChain(
 
 /** Lee un PGN con una sola partida desde la posición inicial. */
 function readGame(pgn: string, errors: string[], where: string) {
-  const games = parsePgn(pgn);
+  // Las líneas en blanco parten el PGN en varias partidas: se sacan.
+  const games = parsePgn(pgn.split(/\r?\n/).filter((l) => l.trim() !== '').join('\n'));
   if (games.length !== 1) {
     errors.push(`${where}: el PGN tiene que ser una sola partida (hay ${games.length}).`);
+    return null;
+  }
+  if (games[0].comments?.some((c) => c.trim())) {
+    errors.push(`${where}: el comentario antes de la primera jugada se pierde: pasalo al texto de la línea.`);
     return null;
   }
   const start = startingPosition(games[0].headers);
@@ -78,7 +83,7 @@ function parseFrontmatter(md: string, errors: string[]) {
     errors.push('Falta el frontmatter (el archivo tiene que empezar con ---).');
     return null;
   }
-  const end = lines.indexOf('---', 1);
+  const end = lines.findIndex((l, i) => i > 0 && l.trim() === '---');
   if (end < 0) {
     errors.push('El frontmatter no se cierra con ---.');
     return null;

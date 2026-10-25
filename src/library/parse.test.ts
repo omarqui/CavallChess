@@ -100,6 +100,22 @@ describe('validateFicha', () => {
     expect(errores.join('\n')).toMatch(/prueba/);
   });
 
+  it('un bloque pgn con líneas en blanco es una sola partida', () => {
+    const g = ok(FICHA_PRUEBA.replace('3. Nc3 dxe4 { Cambiás', '3. Nc3\n\n  \ndxe4 { Cambiás'));
+    expect(g.lines[1].moves.map((m) => m.uci)).toEqual(line('karpov').moves.map((m) => m.uci));
+  });
+
+  it('rechaza un comentario antes de la primera jugada', () => {
+    const md = FICHA_PRUEBA.replace('1. e4 c6 2. d4 d5 3. e5 Bf5 {', '{ Intro perdida } 1. e4 c6 2. d4 d5 3. e5 Bf5 {');
+    const r = parseFicha(md);
+    expect(r.ficha).toBeUndefined();
+    expect(r.errors.join('\n')).toMatch(/prueba, línea avance.*antes de la primera jugada/);
+  });
+
+  it('acepta el cierre del frontmatter con espacios al final', () => {
+    ok(FICHA_PRUEBA.replace('Ficha de prueba.\n---\n', 'Ficha de prueba.\n--- \n'));
+  });
+
   it('rechaza un grupo que no es del lado', () => {
     const r = parseFicha(FICHA_PRUEBA.replace('grupo: Contra 1.e4', 'grupo: Abrís con 1.e4'));
     expect(validateFicha(r.ficha!).join('\n')).toMatch(/grupo/);

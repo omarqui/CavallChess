@@ -56,6 +56,8 @@ El cuerpo de cada línea es: párrafos opcionales (la `intro`), **un único** bl
 ### El PGN
 
 - Empieza en `1.` desde la posición inicial, sin encabezados `[Tag "…"]`, y es **lineal**: sin variantes `( … )`, salvo en la trampa en contra.
+- No pongas ningún comentario antes de la primera jugada (`{ … } 1. e4`): se perdería y el parser lo rechaza. Ese texto va en los párrafos de la línea.
+- Podés dejar líneas en blanco dentro del bloque para espaciar: se ignoran.
 - Cada comentario `{ … }` va **después** de la jugada y la explica.
 - Un comentario puede llevar texto, `[%hint …]`, flechas `[%cal Gd2d4]` y casillas `[%csl Rd4]`, y la jugada puede llevar NAGs (`?`, `??`, `!`, `!?`…).
 - `[%hint …]` es la pista que ve quien estudia antes de jugar: **solo en jugadas propias** (las del lado de la ficha).
