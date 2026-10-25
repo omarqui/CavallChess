@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo } from 'react';
 import { RepertoireGraph } from '../chess/graph';
-import { DEFAULT_SETTINGS, type CardRow, type Note, type Settings, type Side } from '../types';
+import { DEFAULT_SETTINGS, type CardRow, type GameRow, type Note, type Settings, type Side } from '../types';
 import { db } from './db';
 
 export type Graphs = Record<Side, RepertoireGraph>;
@@ -51,3 +51,9 @@ export function useSettings(): Settings | undefined {
 
 export const useGaps = () => useLiveQuery(() => db.gaps.orderBy('count').reverse().toArray());
 export const useGames = () => useLiveQuery(() => db.games.orderBy('endTime').reverse().limit(60).toArray());
+
+/** Una partida por id: `undefined` mientras carga, `null` si no existe. */
+export function useGame(id: string): GameRow | null | undefined {
+  const res = useLiveQuery(async () => ({ row: await db.games.get(id) }), [id]);
+  return res === undefined ? undefined : (res.row ?? null);
+}

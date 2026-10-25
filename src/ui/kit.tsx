@@ -79,18 +79,23 @@ export function Section({ title, children, aside }: { title: string; children: R
   );
 }
 
-/** Línea de jugadas tipeada como en un libro: 1.e4 c5 2.♘f3 … */
+/**
+ * Línea de jugadas tipeada como en un libro: 1.e4 c5 2.♘f3 …
+ * `mark` resalta una jugada con su propio color (p. ej. donde una partida salió del repertorio).
+ */
 export function MoveLine({
   moves,
   startPly = 0,
   active,
   onPick,
+  mark,
   className = '',
 }: {
   moves: Pick<MoveEdge, 'san' | 'id'>[];
   startPly?: number;
   active?: number;
   onPick?: (index: number) => void;
+  mark?: { index: number; className: string };
   className?: string;
 }) {
   if (!moves.length) return <span className={`notation text-muted ${className}`}>Posición inicial</span>;
@@ -99,10 +104,11 @@ export function MoveLine({
       {moves.map((m, i) => {
         const ply = startPly + i;
         const showNumber = ply % 2 === 0 || i === 0;
+        const marked = mark?.index === i ? mark.className : '';
         const label = (
           <>
             {showNumber && <span className="text-muted">{moveNumberLabel(ply)}</span>}
-            {figurine(m.san)}
+            {marked ? <span className={marked}>{figurine(m.san)}</span> : figurine(m.san)}
           </>
         );
         return (
