@@ -169,6 +169,21 @@ describe('importación de PGN', () => {
     expect(nc6.explanation).toBeUndefined();
   });
 
+  it('una marca mal formada no queda cruda en la explicación', () => {
+    const pgn = `1. e4 { Centro. [%hint] [%trap favor t/x] [%trap CONTRA t/x Nombre] [%trap favor t/x    ] } e5 *`;
+    const plan = buildImportPlan(pgn, 'white', existingOf(emptyRepo('white')));
+    const e4 = [...plan.edges.values()].find((e) => e.san === 'e4')!;
+    expect(e4.explanation).toBe('Centro.');
+    expect(e4.trap).toBeUndefined();
+    expect(e4.hint).toBeUndefined();
+  });
+
+  it('el nombre de la trampa se colapsa y no puede quedar vacío', () => {
+    const plan = buildImportPlan('1. e4 { [%trap favor t/x   Trampa   de   X ] } *', 'white', existingOf(emptyRepo('white')));
+    const e4 = [...plan.edges.values()].find((e) => e.san === 'e4')!;
+    expect(e4.trap?.name).toBe('Trampa de X');
+  });
+
   it('no pisa la pista ni la marca existentes, pero completa las que faltan', () => {
     const { repo } = repoFrom('1. e4 { [%hint Mía.] } *', 'white');
     importInto(repo, '1. e4 { [%hint Otra.] [%trap contra a/b Nueva] } *', 'white');

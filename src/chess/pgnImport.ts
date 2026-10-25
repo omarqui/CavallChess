@@ -64,7 +64,9 @@ const STRIP_TAGS = /\[%(anno|clk|emt|eval)[^\]]*\]/g;
 /** `[%hint <texto>]`: pista para la jugada. */
 const HINT_TAG = /\[%hint\s+([^\]]*)\]/g;
 /** `[%trap <favor|contra> <fichaId>/<trapId> <nombre>]`: marca de trampa. */
-const TRAP_TAG = /\[%trap\s+(favor|contra)\s+([^/\s\]]+)\/([^\s\]]+)\s+([^\]]*)\]/g;
+const TRAP_TAG = /\[%trap\s+(favor|contra)\s+([^/\s\]]+)\/([^\s\]]+)\s+([^\]]+)\]/g;
+/** Restos de marcas propias mal formadas (sin nombre, `kind` inválido o en mayúsculas): no deben quedar crudos. */
+const LEFTOVER_TAG = /\[%(?:hint|trap)[^\]]*(?:\]|$)/g;
 
 export function commentOf(data: PgnNodeData): { text?: string; shapes: Shape[]; hint?: string; trap?: TrapMark } {
   const parts: string[] = [];
@@ -79,9 +81,11 @@ export function commentOf(data: PgnNodeData): { text?: string; shapes: Shape[]; 
         return '';
       })
       .replace(TRAP_TAG, (_, kind: string, fichaId: string, trapId: string, name: string) => {
-        trap ??= { kind: kind as TrapMark['kind'], fichaId, trapId, name: name.trim() };
+        const clean = name.replace(/\s+/g, ' ').trim();
+        if (clean) trap ??= { kind: kind as TrapMark['kind'], fichaId, trapId, name: clean };
         return '';
-      });
+      })
+      .replace(LEFTOVER_TAG, '');
     const c = parseComment(sinMarcas);
     const text = c.text.replace(STRIP_TAGS, '').replace(/\s+/g, ' ').trim();
     if (text) parts.push(text);

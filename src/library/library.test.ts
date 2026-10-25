@@ -195,6 +195,16 @@ describe('biblioteca: carga, estado y agregado', () => {
   });
 });
 
+describe('buscador por ECO con listas', () => {
+  const con = (eco: string) => ({ ...f, eco });
+  it('rango, lista separada por comas y exclusión', () => {
+    expect(searchFichas([con('B10-B19')], 'B12')).toHaveLength(1);
+    expect(searchFichas([con('C25-C29, C45')], 'C45')).toHaveLength(1);
+    expect(searchFichas([con('C25-C29, C45')], 'C27')).toHaveLength(1);
+    expect(searchFichas([con('C25-C29, C45')], 'C30')).toHaveLength(0);
+  });
+});
+
 describe('texto de las fichas', () => {
   it('texto enriquecido: negrita, listas y jugadas', () => {
     expect(parseRich('Jugá **rápido** `Nf3`.\n\n- uno')).toEqual([
