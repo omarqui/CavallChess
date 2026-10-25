@@ -4,7 +4,7 @@ import { buildImportPlan, type ImportPlan, type Resolutions } from '../chess/pgn
 import { figurine, type Side } from '../chess/position';
 import { commitImport } from '../db/repo';
 import { namesMap, type NameProposal } from '../library/pgn';
-import { Button, MoveLine, Screen, Section, Segmented } from './kit';
+import { Banner, Button, MoveLine, Screen, Section, Segmented } from './kit';
 
 /** Lo que ya tiene el repertorio, en la forma que espera `buildImportPlan`. */
 export function existingOf(g: RepertoireGraph) {
@@ -44,6 +44,7 @@ export function ImportPreview({
   const [plan, setPlan] = useState<ImportPlan>(() => buildImportPlan(pgn, side, existingOf(graph)));
   const [naming, setNaming] = useState<NameProposal[]>(() => proposeNames(plan));
   const [busy, setBusy] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const resolve = (id: string, v: 'keep' | 'replace') => {
     const next = new Map(resolutions).set(id, v);
@@ -53,12 +54,21 @@ export function ImportPreview({
 
   const save = async () => {
     setBusy(true);
+    setSaveError(null);
+    let saved: Awaited<ReturnType<typeof commitImport>>;
     try {
       const named = naming.map((n) => ({ ...n, name: n.name.trim(), enabled: n.enabled && !!n.name.trim() }));
-      onSaved(await commitImport(plan, resolutions, namesMap(plan, named)));
+      saved = await commitImport(plan, resolutions, namesMap(plan, named));
+    } catch (e) {
+      // La transacción no dejó nada a medias: se puede volver a intentar.
+      setSaveError(
+        `No se pudo guardar (${e instanceof Error ? e.message : 'error desconocido'}). Tu repertorio quedó como estaba: probá de nuevo.`,
+      );
+      return;
     } finally {
       setBusy(false);
     }
+    onSaved(saved);
   };
 
   const newEdges = [...plan.edges.values()].filter((e) => !graph.edges.has(e.id));
@@ -161,10 +171,15 @@ export function ImportPreview({
       </Section>
 
       <div className="mt-8 flex flex-col gap-3">
+        {saveError && (
+          <div role="alert">
+            <Banner tone="bad">{saveError}</Banner>
+          </div>
+        )}
         <Button variant="primary" disabled={busy} onClick={() => void save()}>
           Guardar en el repertorio
         </Button>
-        <Button variant="ghost" onClick={onBack}>
+        <Button variant="ghost" disabled={busy} onClick={onBack}>
           Volver
         </Button>
       </div>
