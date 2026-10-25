@@ -37,7 +37,7 @@ La línea más famosa de la India de Rey. Cerrás el centro con d5 y la partida 
 
 ```pgn
 1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 { [%hint Ganá espacio con tiempo sobre el caballo.] } Ne7 9. Ne1 { [%hint Despejá el camino de tu peón de f y llevá este caballo hacia donde apoye el avance del peón de c.] }
-9... Nd7 10. Be3 f5 11. f3 { [%hint Sostené e4 con un peón para que la cadena no se rompa.] } f4 12. Bf2 g5 13. Nd3 Ng6 14. c5 { [%hint Abrí líneas en el flanco donde atacás vos.] } Nf6 15. Rc1
+9... Nd7 10. Be3 f5 11. f3 { [%hint Reforzá tu cadena de peones antes de que el avance negro llegue a atacarla.] } f4 12. Bf2 g5 13. Nd3 Ng6 14. c5 { [%hint Abrí líneas en el flanco donde atacás vos.] } Nf6 15. Rc1
 ```
 
 Ahora cxd6 abre la columna c para tus torres y Nb5 apunta a c7. Las negras van a empujar `...g4`: defendé con piezas y no pierdas tiempo, porque esta posición se gana por velocidad.
@@ -46,7 +46,7 @@ Ahora cxd6 abre la columna c para tus torres y Nb5 apunta a c7. Las negras van a
 Las negras cambian el peón central y presionan e4. Recapturás con el caballo, sostenés e4 con f3 y desarrollás sin apuro.
 
 ```pgn
-1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O exd4 8. Nxd4 { El caballo queda muy bien parado en el centro. } Re8 { Ataca al peón de e4. } 9. f3 { [%hint Defendé el peón central con un peón, así tus piezas quedan libres.] }
+1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O exd4 8. Nxd4 { El caballo queda muy bien parado en el centro. } Re8 { Ataca al peón de e4. } 9. f3 { [%hint Asegurá tu centro sin dejar piezas atadas a su defensa.] }
 9... Nc6 10. Be3 { [%hint Reforzá la casilla d4 con una pieza que además se desarrolla.] } Nxd4 11. Bxd4 Be6 12. Qd2 c6 13. Rad1 { [%hint Llevá una torre frente al peón negro más débil.] }
 ```
 
@@ -56,7 +56,7 @@ Tu centro está firme y el peón de d6 es un blanco permanente. Las ideas son pr
 Con el caballo en d7 las negras mantienen opciones: cambiar en d4 y saltar a c5, o preparar `...c6` y `...Qb6`. Desarrollás el alfil a e3 y, si cambian en d4, jugás como en la variante anterior.
 
 ```pgn
-1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nbd7 8. Be3 { [%hint Desarrollá la pieza que controla las casillas oscuras del centro.] } exd4 9. Nxd4 Re8 10. f3 { [%hint El recurso de siempre contra la presión en e4.] }
+1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nbd7 8. Be3 { [%hint Desarrollá la pieza que controla las casillas oscuras del centro.] } exd4 9. Nxd4 Re8 10. f3 { [%hint Mismo plan que en el cambio en d4: centro firme sin atar piezas.] }
 10... c6 11. Qd2 a6 12. Rad1
 ```
 

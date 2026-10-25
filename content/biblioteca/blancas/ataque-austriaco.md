@@ -23,7 +23,7 @@ Ese peón hace dos trabajos: sostiene un avance futuro a e5, que echa al caballo
 ## Ideas y planes
 - **Estructura:** con peones en e4, d4 y f4 tenés más espacio. Las negras atacan ese centro desde los costados: con `...c5` contra d4 y con `...e5` contra d4 y f4.
 - **El avance e5:** echa al caballo de f6 y le quita su mejor casilla. Funciona mejor cuando las negras abrieron el centro antes de terminar el desarrollo.
-- **Cerrar con d5:** contra `...e5` o `...c5`, el avance d5 gana espacio y deja al alfil de g7 frente a una pared de peones. Desde ahí el juego se va al flanco de rey: dama a e1 y después a h4 o g3, cambio del alfil de g7 con Bd4 o Bh6, y el avance f5.
+- **Cerrar con d5:** contra `...e5`, el avance d5 gana espacio y el alfil de g7 queda tapado por el propio peón negro de e5. Contra `...c5` es distinto: d5 gana espacio y le quita al caballo de a6 las casillas centrales, pero la diagonal del alfil de g7 sigue abierta hacia c3 y b2, así que vigilala. En los dos casos el juego se va al flanco de rey: dama a e1 y después a h4 o g3, cambio del alfil de g7 con Bd4 o Bh6, y el avance f5.
 - **Cuidado con ...g5:** con tu dama en h4 y tu alfil en f4, el peón negro de g puede saltar a g5 y atacar las dos piezas a la vez. Antes de llevar la dama a h4, mirá qué queda en la cuarta fila.
 - **Contra la Moderna:** sin caballo en f6, las negras juegan `...a6`, `...b5` y ponen el alfil en b7 contra tu peón de e4. La receta es parecida: protegés e4 con la dama, avanzás a e5 y usás la casilla e4 para un caballo.
 
@@ -38,7 +38,7 @@ Contra el enroque negro sacás el alfil a d3 y enrocás. Si las negras atacan el
 
 ```pgn
 1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. f4 { [%hint Sumá un tercer peón al centro: después puede seguir avanzando y echar al caballo de f6.] Este es el Ataque Austríaco. } Bg7 5. Nf3 O-O 6. Bd3 { Defiende e4 y deja listo el enroque. }
-6... Nc6 7. O-O e5 8. d5 { [%hint Contra el golpe en el centro, ganá espacio y echá al caballo.] El caballo pierde su casilla y el alfil de g7 queda frente a tu cadena de peones. }
+6... Nc6 7. O-O e5 8. d5 { [%hint Contra el golpe en el centro, ganá espacio y echá al caballo.] El caballo pierde su casilla y el alfil de g7 queda tapado por su propio peón de e5. }
 8... Ne7 9. Qe1 { [%hint Prepará el traslado de la dama hacia el flanco donde va a estar tu ataque.] } exf4 10. Bxf4 h6 11. h3 { [%hint Cubrí la casilla g4 y no muevas la dama hasta tener todo controlado.] Ojo: la tentadora Qh4 acá pierde una pieza por ...g5. }
 11... g5 12. Be3 Nh5 13. Bd4 { [%hint Ofrecé el cambio de la pieza que mejor defiende al rey negro.] } Ng6 14. Bxg7 Nxg7 15. e5 { [%hint Abrí el centro ahora que el rey negro perdió a su mejor defensor.] }
 ```
@@ -49,7 +49,7 @@ Sin el alfil de g7, las casillas oscuras alrededor del rey negro quedan flojas. 
 Con `6...Na6` las negras preparan `...c5` sin encerrar a su alfil de c8. Respondés como contra cualquier golpe en el centro: d5 y espacio.
 
 ```pgn
-1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. f4 Bg7 5. Nf3 O-O 6. Bd3 Na6 7. O-O c5 8. d5 { [%hint No cambies: ganá espacio y dejá al alfil de g7 sin diagonal.] }
+1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. f4 Bg7 5. Nf3 O-O 6. Bd3 Na6 7. O-O c5 8. d5 { [%hint No cambies: ganá espacio y quitale al caballo de a6 las casillas centrales.] Ojo: acá la diagonal del alfil de g7 sigue abierta hacia c3 y b2. }
 8... Nc7 9. a4 { [%hint Frená la expansión negra en el flanco de dama antes de que empiece.] Sin este peón, ...b5 llegaría muy rápido. }
 9... a6 10. Qe1 Rb8 11. Qh4 { Acá no tenés un alfil en f4: el salto de la dama es seguro. } b5 12. f5 { [%hint Abrí líneas contra el enroque negro ahora que la dama ya apunta al rey.] }
 ```
@@ -68,12 +68,12 @@ Las negras golpean el centro antes de enrocar. Capturás en c5 y, mientras la da
 
 Tenés todas las piezas en juego y presión sobre d6 y f7. Mirá la idea e5 cuando el caballo de f6 no tenga buenas casillas, y vigilá la clavada del alfil negro sobre tu caballo de f3.
 
-## Variante: Moderna con ...a6 y ...b5 {#moderna} [club]
+## Variante: Moderna {#moderna} [club]
 En la Moderna las negras demoran `...Nf6` y atacan tu centro con los peones del flanco de dama y el alfil en b7. Vos defendés e4 con la dama y, cuando conviene, avanzás a e5. Si después de `4.f4` juegan `4...Nf6`, seguí con `5.Nf3`: es la Pirc de las otras variantes.
 
 ```pgn
 1. e4 g6 2. d4 Bg7 3. Nc3 d6 4. f4 { El mismo centro de tres peones que contra la Pirc. } a6 5. Nf3 b5 6. Bd3 Bb7 7. Qe2 { [%hint El alfil de b7 apunta a tu peón central: sumale un defensor que además prepare su avance.] }
-7... Nd7 8. e5 { [%hint Ganá espacio en el centro y bloqueá la diagonal del alfil de g7.] } e6 9. Ne4 { [%hint Aprovechá la casilla que acaba de dejar libre tu peón para centralizar un caballo.] Desde acá apunta a d6, f6 y g5. }
+7... Nd7 8. e5 { [%hint Ganá espacio en el centro y bloqueá la diagonal del alfil de g7.] } e6 9. Ne4 { [%hint Centralizá una pieza menor con amenazas sobre d6 y f6.] Desde acá apunta a d6, f6 y g5. }
 9... Ne7 10. Bd2 Bxe4 11. Bxe4 d5 12. Bd3 c5 13. c3 { Sostiene d4 y deja la cadena firme. }
 ```
 
@@ -95,7 +95,7 @@ Si las negras rompen con `6...e5` sin preparación, el cambio de peones deja a s
 ```pgn
 1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. f4 Bg7 5. Nf3 O-O 6. Bd3 e5?! 7. dxe5 dxe5 8. fxe5 { [%hint Capturá de forma que el caballo de f6 quede atacado.] }
 8... Nfd7? { La retirada natural, pero el caballo deja de tapar la diagonal que va de g5 a la dama. La mejor era ...Ng4. }
-9. Bg5 { [%hint Atacá a la dama ahora que nada se interpone.] } f6 10. exf6 Bxf6 11. Bxf6 Qxf6 12. Nd5 { La dama tiene que moverse y el caballo amenaza saltar a c7 con ataque doble a la torre de a8. }
+9. Bg5 { [%hint Atacá a la dama ahora que nada se interpone.] } f6 10. exf6 Bxf6 11. Bxf6 Qxf6 12. Nd5 { La dama tiene que moverse, y el caballo amenaza Nxc7 atacando la torre de a8. }
 ```
 
 Aunque las negras salven la dama, su desarrollo quedó atrasado y tus piezas dominan el centro. Enrocá y seguí apuntando a c7 y al rey negro.

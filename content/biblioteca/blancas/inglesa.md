@@ -48,12 +48,12 @@ La posición está equilibrada y es cómoda para vos: el alfil de g2 domina la d
 Los dos fianchetan y nadie toca el centro todavía. Tu plan es el flanco de dama: Rb1, a3 y b4.
 
 ```pgn
-1. c4 e5 2. Nc3 Nc6 3. g3 g6 4. Bg2 Bg7 5. d3 d6 6. Rb1 { [%hint Prepará el avance del peón de b sacando antes la torre de la diagonal del alfil negro.] }
+1. c4 e5 2. Nc3 Nc6 3. g3 g6 4. Bg2 Bg7 5. d3 d6 6. Rb1 { [%hint Preparate para ganar espacio en el flanco de dama, lejos del alcance del alfil de g7.] }
 6... a5 7. a3 { [%hint Preparate para empujar igual el peón de b, apoyándolo con otro peón.] } Nf6 8. b4 axb4 9. axb4 O-O 10. b5 { [%hint Echá al caballo que controla d4 y e5.] }
 10... Ne7 11. Nf3
 ```
 
-Con el caballo negro lejos de c6, el flanco de dama es tuyo. Enrocá y seguí con Bb2 o con Nd2 y Nb3, y usá la columna a si se abre del todo.
+Con el caballo negro lejos de c6, el flanco de dama es tuyo. Enrocá, seguí con Bb2 o con Nd2 y Nb3, y disputá la columna a, que ya quedó abierta.
 
 ## Variante: Simétrica {#simetrica} [club]
 Contra `1...c5` usás el mismo esquema. Cuando tu rey ya está seguro, rompés con d4 y abrís el juego.
@@ -63,13 +63,13 @@ Contra `1...c5` usás el mismo esquema. Cuando tu rey ya está seguro, rompés c
 10. Qd3 { [%hint Sacá la dama de la diagonal del alfil de g7 antes de que el caballo negro se mueva y la descubra.] } a6 11. Bd2 Rb8 12. Rac1
 ```
 
-Tenés espacio y presión en la columna c. Las negras van a buscar `...b5`: respondé con b3 para sostener c4, y llevá la otra torre a d1.
+Tenés espacio, y la torre de c1 respalda a tu peón de c4 y a un futuro avance c5. Las negras van a buscar `...b5`: respondé con b3 para sostener c4, y llevá la otra torre a d1.
 
 ## Variante: Sistema Botvinnik contra 1...Nf6 y ...g6 {#botvinnik} [club]
 Contra `1...Nf6` y el fianchetto negro armás el sistema Botvinnik: peones en c4 y e4 que controlan d5. Si las negras juegan `2...e5`, seguí con `3.g3`: es la Siciliana invertida.
 
 ```pgn
-1. c4 Nf6 2. Nc3 g6 3. g3 Bg7 4. Bg2 O-O 5. e4 { [%hint Sumá otro peón al control de d5, del lado opuesto.] } d6 6. Nge2 { [%hint Desarrollá el caballo sin tapar ni el peón de f ni a tu alfil.] }
+1. c4 Nf6 2. Nc3 g6 3. g3 Bg7 4. Bg2 O-O 5. e4 { [%hint Reforzá tu control de d5 y del centro antes de que las negras lo disputen.] } d6 6. Nge2 { [%hint Desarrollá la pieza que falta dejando libres la diagonal de tu alfil y el avance f4.] }
 6... e5 7. O-O c5 8. d3 Nc6 9. a3 { [%hint Prepará la expansión en el flanco de dama.] } Nd4 10. Rb1 Be6 11. b4
 ```
 
