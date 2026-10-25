@@ -25,6 +25,7 @@ Formato `clave: valor`, una por línea, sin comentarios ni comillas. Las listas 
 | `nivel` | sí | `principiante`, `club` o ambos separados por coma. |
 | `jugadas` | sí | Posición característica en PGN desde la inicial (`1. e4 c6`). **Toda línea de la ficha empieza con estas jugadas.** |
 | `resumen` | sí | Una frase. |
+| `nombrar-raiz` | no | `si` (por defecto) o `no`. Con `no`, la ficha no le pone su nombre a la posición de `jugadas` y cada variante se nombra `<nombre de la ficha>: <variante>`. Usalo cuando `jugadas` es una posición por la que pasan muchas otras fichas, como `1. d4`, `1. e4` o `1. e4 c5`: si no, el nombre de la ficha se antepone a todo tu repertorio que pase por ahí. |
 
 Grupos válidos:
 

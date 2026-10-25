@@ -12,7 +12,7 @@ const KIND_BY_HEAD: Record<string, LineKind> = {
   'Trampa en contra': 'contra',
 };
 const HEADING = /^(Variante|Trampa a favor|Trampa en contra):\s*(.+?)\s*\{#([^}\s]+)\}\s*(.*)$/;
-const FRONT_KEYS = ['id', 'nombre', 'alias', 'lado', 'grupo', 'orden', 'eco', 'nivel', 'jugadas', 'resumen'];
+const FRONT_KEYS = ['id', 'nombre', 'alias', 'lado', 'grupo', 'orden', 'eco', 'nivel', 'jugadas', 'resumen', 'nombrar-raiz'];
 
 interface Branch {
   /** Índice en la principal de la jugada que reemplaza. */
@@ -91,7 +91,7 @@ function parseFrontmatter(md: string, errors: string[]) {
   const front = new Map<string, string>();
   for (const raw of lines.slice(1, end)) {
     if (!raw.trim()) continue;
-    const m = /^([a-z]+):\s*(.*)$/.exec(raw);
+    const m = /^([a-z-]+):\s*(.*)$/.exec(raw);
     if (!m || !FRONT_KEYS.includes(m[1])) {
       errors.push(`Frontmatter: línea no reconocida “${raw.trim()}”.`);
       continue;
@@ -123,6 +123,10 @@ export function parseFicha(md: string): { ficha?: Ficha; errors: string[] } {
   }
   const side: Side | null = get('lado') === 'blancas' ? 'white' : get('lado') === 'negras' ? 'black' : null;
   if (get('lado') && !side) errors.push(`Ficha ${id}: “lado” tiene que ser blancas o negras.`);
+  const rootRaw = get('nombrar-raiz').toLowerCase();
+  if (front.has('nombrar-raiz') && !['no', 'si', 'sí'].includes(rootRaw)) {
+    errors.push(`Ficha ${id}: “nombrar-raiz” tiene que ser si o no.`);
+  }
   const order = Number(get('orden'));
   if (get('orden') && !Number.isInteger(order)) errors.push(`Ficha ${id}: “orden” tiene que ser un entero.`);
   const levels: FichaLevel[] = [];
@@ -249,6 +253,7 @@ export function parseFicha(md: string): { ficha?: Ficha; errors: string[] } {
     eco: get('eco'),
     levels,
     summary: get('resumen'),
+    nameAtStart: rootRaw !== 'no',
     start,
     basics,
     ideas,
