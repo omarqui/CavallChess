@@ -595,8 +595,7 @@ export function FichaScreen({ id, tab }: { id: string; tab: FichaTab }) {
     >
       <header>
         <BackLink to={`/biblioteca?lado=${f.side}`}>Biblioteca</BackLink>
-        <div className="mt-2" />
-        <Tip id="ficha">
+        <Tip id="ficha" className="mb-1 mt-3">
           Las trampas se entrenan como cualquier línea: cuando el rival cae, te toca castigarlo. Tus apuntes son tuyos y no se pisan.
         </Tip>
         <h1 className="mt-0.5 font-book text-[30px] font-semibold leading-[1.1] tracking-tight">{f.name}</h1>

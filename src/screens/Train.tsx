@@ -236,11 +236,6 @@ function TrainView({
         </span>
       </header>
 
-      <div className="px-4">
-        <Tip id="entrenar">
-          Tocá el tablero para saltar la línea. «Pista» te da la idea sin decir la jugada, y «Fue un error de dedo» anula un fallo.
-        </Tip>
-      </div>
       <div className="px-2 sm:px-4">
         <Board
           epd={boardEpd}
@@ -279,6 +274,10 @@ function TrainView({
             <div className="mt-4 text-[15px]">
               <MoveLine moves={step.line} />
             </div>
+            {/* Debajo del tablero y los controles: mostrarlo o cerrarlo no mueve el tablero. */}
+            <Tip id="entrenar" className="mt-4">
+              Tocá el tablero para saltar la línea. «Pista» te da la idea sin decir la jugada, y «Fue un error de dedo» anula un fallo.
+            </Tip>
           </>
         )}
       </div>
