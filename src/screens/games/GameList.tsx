@@ -1,11 +1,11 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useId, useState } from 'react';
 import { figurine } from '../../chess/position';
-import { countGames, gamesPage, type GameFilter, type OutcomeFilter } from '../../games/store';
+import { countGames, gamesPage, outcomeKind, type GameFilter, type OutcomeFilter } from '../../games/store';
 import type { GameRow } from '../../types';
 import { Button, Section, Segmented } from '../../ui/kit';
 import { href } from '../../ui/router';
-import { gamePath, moveNumber, OUTCOME_LABEL, plural, resultLabel, shownKind, timeClassLabel } from './format';
+import { gamePath, moveNumber, OUTCOME_LABEL, plural, resultLabel, timeClassLabel } from './format';
 
 const PAGE = 50;
 
@@ -96,7 +96,8 @@ export function GameList({ hasGames }: { hasGames: boolean }) {
 
 function GameItem({ game }: { game: GameRow }) {
   const o = game.outcome;
-  const kind = shownKind(o);
+  // Una fila vieja con endOfBook en la jugada 0 se muestra como fuera del repertorio, igual que la filtra la lista.
+  const kind = outcomeKind(o);
   const detail =
     o.kind === 'myDeviation'
       ? `Jugaste ${figurine(o.playedSan)} en vez de ${figurine(o.expectedSan)} (jugada ${moveNumber(o.ply)})`

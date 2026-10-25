@@ -208,14 +208,18 @@ test('partidas: historial, filtros y armar repertorio desde muchas', async ({ pa
   await page.getByRole('radio', { name: 'Todas' }).click();
   await expect(counter('6 partidas')).toBeVisible();
   // Arriba: actualizar, el historial y las herramientas; la lista va al final.
-  const showRows = () =>
-    page.getByRole('heading', { name: 'Tus partidas' }).evaluate((el) => el.scrollIntoView({ block: 'start' }));
+  const showSection = (name: string) =>
+    page.getByRole('heading', { name }).evaluate((el) => el.scrollIntoView({ block: 'start' }));
   await scrollMain('top');
   await shot(page, 'games-list-light');
-  await showRows();
+  await showSection('Con tu repertorio');
+  await shot(page, 'games-list-tools-light');
+  await showSection('Tus partidas');
   await shot(page, 'games-list-rows-light');
   await scheme('dark');
   await shot(page, 'games-list-rows-dark');
+  await showSection('Con tu repertorio');
+  await shot(page, 'games-list-tools-dark');
   await scrollMain('top');
   await shot(page, 'games-list-dark');
   await scheme('light');

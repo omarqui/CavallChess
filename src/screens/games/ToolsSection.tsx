@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { isBusy } from '../../games/lock';
 import { recalcGames } from '../../games/store';
 import { Section } from '../../ui/kit';
 import { navigate } from '../../ui/router';
 import { ActionList, ActionRow } from './ActionList';
 import { Feedback } from './Feedback';
-import { plural, sentence } from './format';
+import { plural, sentence, WAITING } from './format';
 import type { Job, RunJob } from './jobs';
 import { ProgressBox, type Progress } from './ProgressBox';
 
@@ -18,7 +19,7 @@ export function ToolsSection({ job, run }: { job: Job | null; run: RunJob }) {
     run('recalc', async () => {
       setResult(null);
       setError(null);
-      setProgress({ text: 'Recalculando…', value: null });
+      setProgress({ text: isBusy() ? WAITING : 'Recalculando…', value: null });
       try {
         const r = await recalcGames((done, total) =>
           setProgress({
@@ -39,14 +40,14 @@ export function ToolsSection({ job, run }: { job: Job | null; run: RunJob }) {
       <ActionList>
         <ActionRow
           title="Armar repertorio desde tus partidas"
-          hint="Tu jugada más repetida en cada posición y las respuestas que más te hacen. Lo revisás antes de guardar."
+          hint="Tu jugada más repetida y las respuestas que más te hacen; lo revisás antes de guardar."
           chevron
           disabled={!!job}
           onClick={() => navigate('/games/armar')}
         />
         <ActionRow
           title="Recalcular contra el repertorio actual"
-          hint="Cada partida se cruzó con el repertorio que tenías al bajarla. Si lo cambiaste, pone al día la lista y los huecos."
+          hint="Si cambiaste el repertorio, pone al día la lista y los huecos."
           disabled={!!job}
           onClick={() => void recalc()}
         />

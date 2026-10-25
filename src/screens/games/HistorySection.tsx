@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { archiveMonth } from '../../games/chesscom';
+import { isBusy } from '../../games/lock';
 import { loadOlderGames } from '../../games/sync';
 import type { Settings } from '../../types';
 import { Section } from '../../ui/kit';
 import { ActionList, ActionRow } from './ActionList';
 import { Feedback } from './Feedback';
-import { monthName, plural, sentence } from './format';
+import { monthName, plural, sentence, WAITING } from './format';
 import type { Job, RunJob } from './jobs';
 import { ProgressBox, type Progress } from './ProgressBox';
 
@@ -34,7 +35,8 @@ export function HistorySection({ settings, job, run }: { settings: Settings; job
       setResult(null);
       setError(null);
       setCancelling(false);
-      setProgress({ text: 'Buscando archivos…', value: null });
+      // Si la actualización automática (u otra carga) está corriendo, esta espera su turno: se dice así.
+      setProgress({ text: isBusy() ? WAITING : 'Buscando archivos…', value: null });
       let monthsToRead = 0;
       try {
         const r = await loadOlderGames({
@@ -42,18 +44,23 @@ export function HistorySection({ settings, job, run }: { settings: Settings; job
           signal: controller.signal,
           onProgress: (msg, done, total) => {
             monthsToRead = total;
-            if (done < total) {
+            if (total === 0) setProgress({ text: msg, value: null });
+            else if (done < total) {
               setProgress({ text: `${msg.replace(/…$/, '')} · ${done + 1} de ${total}`, value: (done / total) * 100 });
             }
           },
         });
+        const imported = `Sumaste ${plural(r.imported, 'partida', 'partidas')}.`;
         const left = r.remaining ? ` Quedan ${plural(r.remaining, 'mes más viejo', 'meses más viejos')}.` : '';
         setResult(
-          r.cancelled
-            ? `Cancelaste la carga. Sumaste ${plural(r.imported, 'partida', 'partidas')}.${left}`
-            : monthsToRead === 0
-              ? 'Ya tenías todo el historial cargado.'
-              : `Sumaste ${plural(r.imported, 'partida', 'partidas')}.${left}`,
+          // Cortada sin que tocaras "Cancelar": cambiaste de usuario (los meses que quedan eran de la otra cuenta).
+          r.cancelled && !controller.signal.aborted
+            ? `Cambiaste de usuario de Chess.com: la carga se cortó. ${imported}`
+            : r.cancelled
+              ? `Cancelaste la carga. ${imported}${left}`
+              : monthsToRead === 0
+                ? 'Ya tenías todo el historial cargado.'
+                : `${imported}${left}`,
         );
       } catch (e) {
         setError(sentence((e as Error).message));

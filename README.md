@@ -12,7 +12,7 @@ Las decisiones de diseño están en [PLAN.md](PLAN.md).
 - **Repertorio por posición.** Un grafo por color; las transposiciones se resuelven solas. Una jugada propia por posición, todas las del rival que quieras.
 - **Importación** de PGN (pegado o archivo) y de estudios de Lichess por URL, con vista previa: choques con lo que ya tenés, variantes propias ignoradas y nombre de apertura por capítulo.
 - **Entrenamiento** guiado por tarjetas: la app reproduce la línea, vos jugás tu jugada y el rival responde con la que lleva a lo pendiente. Modo aprender para las nuevas, pista "¿por qué?", "fue un error de dedo", práctica a demanda por apertura.
-- **Partidas de Chess.com:** marca dónde te desviaste (la tarjeta vence ya, si la partida es de los últimos 30 días) y qué jugó el rival que no cubrías (lista de huecos). Cargás todo tu historial, filtrás la lista, abrís cada partida en la app para repasarla o sumar sus jugadas al repertorio, y podés armar un repertorio desde tus partidas.
+- **Partidas de Chess.com:** marca dónde te desviaste (la tarjeta vence ya, si la partida es de los últimos 30 días) y qué jugó el rival que no cubrías (lista de huecos). Cargás todo tu historial (con progreso y para cancelar), filtrás la lista por color y resultado, abrís cada partida en la app para repasar el desvío o sumar sus jugadas al repertorio, recalculás contra el repertorio actual y podés armar un repertorio desde tus partidas.
 - **Progreso:** dominio por apertura, racha diaria y líneas débiles.
 - **Editor:** árbol con transposiciones, notas, "cortar aquí", archivado con historial, Stockfish 19 y explorador de Lichess.
 

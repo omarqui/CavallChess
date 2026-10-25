@@ -2,12 +2,13 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useRef, useState } from 'react';
 import { db } from '../db/db';
 import { useGaps, useGraphs, useSettings } from '../db/hooks';
+import { isBusy } from '../games/lock';
 import { syncChesscom } from '../games/sync';
 import { Banner, Button, Screen, Section } from '../ui/kit';
 import { Tip } from '../ui/Tip';
 import { navigate } from '../ui/router';
 import { Feedback } from './games/Feedback';
-import { plural, sentence } from './games/format';
+import { plural, sentence, WAITING } from './games/format';
 import { GameList } from './games/GameList';
 import { GapItem } from './games/GapItem';
 import { HistorySection } from './games/HistorySection';
@@ -44,6 +45,9 @@ export function GamesScreen() {
   const sync = () =>
     run('sync', async () => {
       setError(null);
+      // La actualización automática del arranque puede estar corriendo: esta espera su turno ("Buscando archivos…"
+      // llega recién cuando empieza).
+      setStatus(isBusy() ? WAITING : null);
       try {
         const r = await syncChesscom(setStatus);
         setStatus(

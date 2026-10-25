@@ -26,6 +26,9 @@ export const monthName = (month: string) => {
   return new Date(y, m - 1, 1).toLocaleDateString('es', { month: 'long', year: 'numeric' });
 };
 
+/** Mientras otra carga tiene el candado de partidas (`isBusy`), la nueva espera su turno. */
+export const WAITING = 'Esperando que termine otra carga…';
+
 /** Un mensaje de error como oración: con punto final si no lo trae. */
 export const sentence = (msg: string) => {
   const t = msg.trim();
@@ -37,13 +40,6 @@ export const savedMessage = ({ mine, rival }: { mine: number; rival: number }) =
   mine + rival
     ? `Sumaste ${plural(mine + rival, 'jugada', 'jugadas')}, ${mine} para aprender.`
     : 'Ya tenías todo eso en tu repertorio.';
-
-/**
- * El tipo de resultado a mostrar: un `endOfBook` en la jugada 0 (filas guardadas antes de que `analyzeGame` lo
- * devolviera como `noBook`) es no tener repertorio de ese color, así que se muestra como fuera.
- */
-export const shownKind = (o: GameOutcome): GameOutcome['kind'] =>
-  o.kind === 'endOfBook' && o.ply === 0 ? 'noBook' : o.kind;
 
 /** Etiqueta de cada tipo de resultado contra el repertorio. */
 export const OUTCOME_LABEL: Record<GameOutcome['kind'], string> = {
