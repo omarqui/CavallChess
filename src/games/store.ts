@@ -49,8 +49,9 @@ export function gamesPage(f: GameFilter, offset: number, limit: number, d: Caval
   return ordered(f, d).offset(offset).limit(limit).toArray();
 }
 
+/** Cuenta sobre el mismo índice que las páginas, así el total y la suma de las páginas no pueden diferir. */
 export function countGames(f: GameFilter, d: CavallDB = db): Promise<number> {
-  return sinFiltro(f) ? d.games.count() : ordered(f, d).count();
+  return ordered(f, d).count();
 }
 
 const BATCH = 200;
