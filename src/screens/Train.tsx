@@ -340,17 +340,18 @@ function Note({ feedback }: { feedback: Feedback }) {
   const hasText = !!(edge.explanation || edge.hint);
   if (!hasText && !trap) return null;
   return (
-    <div className="mt-4">
+    // La jugada respondida encabeza la nota: el aviso de trampa y el texto son sobre esa jugada, no sobre la pregunta nueva.
+    <div className="mt-4 border-l-2 border-good pl-3">
+      <p className="text-sm text-muted">{figurine(edge.san)}</p>
       {trap && (
-        <Banner tone="good">
-          {trap.kind === 'favor' ? `Trampa: ${trap.name}. El rival cayó.` : `Evitaste la trampa: ${trap.name}.`}
-        </Banner>
+        <div className="mt-1.5">
+          <Banner tone="good">
+            {trap.kind === 'favor' ? `Trampa: ${trap.name}. El rival cayó.` : `Evitaste la trampa: ${trap.name}.`}
+          </Banner>
+        </div>
       )}
       {hasText && (
-        <div className={`${trap ? 'mt-3 ' : ''}border-l-2 border-good pl-3`}>
-          <p className="text-sm text-muted">{figurine(edge.san)}</p>
-          <p className="font-book text-[17px] leading-relaxed">{figurineText((edge.explanation ?? edge.hint)!)}</p>
-        </div>
+        <p className="mt-1.5 font-book text-[17px] leading-relaxed">{figurineText((edge.explanation ?? edge.hint)!)}</p>
       )}
     </div>
   );
