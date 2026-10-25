@@ -67,7 +67,7 @@ interface Gap { id: string; side: Side; epd: string; uci: string; san: string; c
 - **Cola:** primero vencidas (orden DFS), después nuevas (límite diario, 10 por defecto) alternando blancas y negras, cada color en orden DFS.
 - **Calificación automática:** acierto al primer intento = Good; acierto tras ver la pista = Hard; error = Again. Al fallar se muestra la correcta con flecha y hay que jugarla; la tarjeta vuelve al final de la sesión. "Fue un error de dedo" anula el fallo mientras no jugaste la correcta.
 - **Modo aprender:** una tarjeta nueva primero se **muestra** (jugada con flecha + explicación), y enseguida se **pide**.
-- **Trampas:** al responder una tarjeta marcada con `trap` aparece un aviso **después** de responder (para no regalar la táctica): "Trampa: *nombre* — el rival cayó" si venía de una trampa a favor, "Evitaste la trampa *nombre*" si era en contra. En el árbol del repertorio las jugadas marcadas llevan una insignia.
+- **Trampas:** al responder una tarjeta marcada con `trap` aparece un aviso **después** de responder (para no regalar la táctica): "Trampa: *nombre*. El rival cayó." si venía de una trampa a favor, "Evitaste la trampa: *nombre*." si era en contra. Si la respuesta fue un fallo, el aviso no felicita: "Caíste en la trampa: *nombre*. Ya viste la correcta." (en contra) o "Trampa: *nombre*. El rival cayó, pero no encontraste el castigo a la primera." (a favor). En el árbol del repertorio las jugadas marcadas llevan una insignia.
 - **Modo "¿por qué?":** botón de pista solo si la jugada tiene `hint`; tras responder se muestra la explicación completa y las flechas del PGN.
 - **Práctica:** a demanda por raíz nombrada (o todo el color), débiles primero. No registra notas; un fallo genera `forceDue`.
 
@@ -79,7 +79,7 @@ interface Gap { id: string; side: Side; epd: string; uci: string; san: string; c
 
 ### Biblioteca
 - **46 fichas** de aperturas (20 con blancas, 26 con negras), escritas a mano en Markdown en `content/biblioteca/{blancas,negras}/<id>.md`. Cada una trae: para empezar, ideas y planes, consejos, variantes (`básica` o `club`, algunas gambito) y trampas a favor y en contra. Todo el texto es original. El formato está en `content/biblioteca/README.md`.
-- **Catálogo** (`#/biblioteca`): selector blancas/negras, buscador (español, inglés, alias y ECO), lista agrupada con miniatura, chips de nivel, trampas y estado en tu repertorio (se calcula de los grafos, no se guarda).
+- **Catálogo** (`#/biblioteca`): selector blancas/negras, buscador (español, inglés, alias y ECO), lista agrupada con miniatura, chips de nivel, trampas y estado en tu repertorio (se calcula de los grafos, no se guarda). Los resultados de búsqueda mezclan colores, así que cada uno dice si es "Con blancas" o "Con negras". Si la biblioteca no carga, se avisa con "Reintentar".
 - **Ficha** (`#/biblioteca/<id>`): pestañas Resumen, Variantes, Trampas y Mis apuntes; acción fija "Agregar al repertorio" / "Completar en tu repertorio" con casillas por línea y la misma vista previa de importación. Al agregar, la ficha pone su nombre en la posición característica y cada variante el suyo, anidado (salvo `nombrar-raiz: no`, para posiciones genéricas como 1.e4). Las variantes básicas entran antes que las de club y las trampas al final, así que lo básico se aprende primero.
 - **Visor de línea:** tablero, jugadas y comentarios con figurines, flechas del PGN, "Analizar" con Stockfish y, en las trampas en contra, el recorrido "Qué pasa si caés".
 - **Mis apuntes:** una nota por ficha y una por línea, con guardado automático; las de líneas que una actualización quitó se conservan al final.
@@ -129,9 +129,9 @@ Los tres hitos están implementados, más la biblioteca de aperturas, la bienven
 
 ### Pruebas
 
-- `npm test`: 122 tests unitarios (más 3 que se saltan: motor y APIs reales) en 9 archivos: posiciones y transposiciones, importación PGN, grafo y archivado, FSRS y reproducción del log, cola diaria con alternancia de colores, sesión de entrenamiento y trampas, análisis de partidas, repositorio Dexie y respaldo v2, y la biblioteca (parser, validación y contenido de las 46 fichas, estado en el repertorio, notas, puerta de la bienvenida).
+- `npm test`: 152 tests unitarios (más 3 que se saltan: motor y APIs reales) en 10 archivos: posiciones y transposiciones, importación PGN, grafo y archivado, FSRS y reproducción del log, cola diaria con alternancia de colores, sesión de entrenamiento y trampas, análisis de partidas, repositorio Dexie y respaldo v2, la biblioteca (parser, validación y contenido de las 46 fichas, estado en el repertorio con alcanzabilidad y marcas de trampa, carga con error y reintento, notas) y la bienvenida (puerta y demo).
 - `MOTOR=1 npm run biblioteca:motor`: verificación de las fichas con Stockfish, fuera de CI.
-- `npm run e2e`: 14 flujos en viewport de iPhone: los 4 originales (importar → aprender → repasar → fallar → progreso → editor → ajustes → respaldo; repertorio con negras; motor; sets de piezas), 4 de la bienvenida y los tips, y 6 de la biblioteca (catálogo, ficha y agregar, notas, visor). `E2E_PORT` cambia el puerto del `vite preview` (4173 por defecto).
+- `npm run e2e`: 16 flujos en viewport de iPhone: 5 del entrenamiento y la app (importar → aprender → repasar → fallar → progreso → editor → ajustes → respaldo; repertorio con negras; motor; sets de piezas; aviso de una trampa a favor, con un fallo y a la primera), 4 de la bienvenida y los tips, y 7 de la biblioteca (catálogo y buscador, error de carga y reintento, ficha y agregar, notas, visor). `E2E_PORT` cambia el puerto del `vite preview` (4173 por defecto).
 - `LIVE=1 npm run test:live`: estudio público real de Lichess y partidas reales de Chess.com.
 
 ## Instalación
