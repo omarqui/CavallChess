@@ -203,6 +203,13 @@ describe('buscador por ECO con listas', () => {
     expect(searchFichas([con('C25-C29, C45')], 'C27')).toHaveLength(1);
     expect(searchFichas([con('C25-C29, C45')], 'C30')).toHaveLength(0);
   });
+  it('dos rangos separados por coma', () => {
+    const eco = 'A45-A48, D00-D02';
+    expect(searchFichas([con(eco)], 'D01')).toHaveLength(1);
+    expect(searchFichas([con(eco)], 'A47')).toHaveLength(1);
+    expect(searchFichas([con(eco)], 'B05')).toHaveLength(0);
+    expect(searchFichas([con(eco)], 'D03')).toHaveLength(0);
+  });
 });
 
 describe('texto de las fichas', () => {
